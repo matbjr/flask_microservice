@@ -1,8 +1,10 @@
-import numpy as np
-import json
-
 from flask import Flask
 from flask_cors import CORS
+import json
+
+from std import calculate_std
+from summation import calculate_summation
+from proportion import calculate_proportion
 
 app = Flask(__name__)
 CORS(app)
@@ -15,13 +17,19 @@ def welcome():
 
 @app.route('/std/<json_array>', methods=['POST', 'GET'])
 def compute_std(json_array):
+    print(json_array)
     return calculate_std(json.loads(json_array))
 
 
-def calculate_std(param):
-    user_list = list(param['elements'])
-    std_value = float(np.std(user_list))
-    return {'Std': round(std_value, 3)}
+@app.route('/summation/<json_array>', methods=['POST', 'GET'])
+def compute_summation(json_array):
+    return calculate_summation(json.loads(json_array))
 
 
-app.run(host='0.0.0.0', port=3000, threaded=True)
+@app.route('/proportion/<json_array>', methods=['POST', 'GET'])
+def compute_proportion(json_array):
+
+    return calculate_proportion(json.loads(json_array))
+
+
+app.run(host='0.0.0.0', port=8080, threaded=True)
