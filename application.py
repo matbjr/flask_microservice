@@ -32,4 +32,4 @@ def compute_proportion(json_array):
     return calculate_proportion(json.loads(json_array))
 
 
-app.run(host='0.0.0.0', port=8080, threaded=True)
+app.run(port=8082, threaded=True)
