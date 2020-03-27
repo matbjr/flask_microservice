@@ -22,26 +22,25 @@ def compute_kr20(json_array):
 def calculate_kr20(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
-    numQ = len(student_list[0]['itemresponses'])
+    numQ = len(student_list[0].values())
     pqList = []
     scoreList = []
 
     for k in range(0, numStudents):
-        if (numQ != len(student_list[k]['itemresponses'])):
+        if (numQ != len(student_list[k].values())):
             return {'Error': 'All student\'s item count must be the same'}
 
     for i in range(0, numQ):
         p = 0
         for k in range(0, numStudents):
-            p += student_list[k]['itemresponses'][i]
+            p += student_list[k].values()[i]
         p /= numStudents
         q = 1 - p
         pqList.append(p * q)
     pqSum = sum(pqList)
 
     for k in range(0, numStudents):
-        totalRight = sum(student_list[k]['itemresponses'])
-        score = totalRight / numQ
+        score = sum(student_list[k].values())
         scoreList.append(score)
     scoreSTD = np.std(scoreList)
 
@@ -49,4 +48,4 @@ def calculate_kr20(param):
     return {'kr20': round(kr20_value, 3)}
 
 
-app.run()
+# app.run()
