@@ -15,7 +15,7 @@ def calculate_kr20(param):
 
     for k in range(0, numStudents):
         if numQ != len(get_list(student_list, k)):
-            return {'Error': 'All student\'s item count must be the same'}
+            return {'Error': 'All students\' item count must be the same'}
 
     for i in range(0, numQ):
         p = 0
