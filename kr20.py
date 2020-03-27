@@ -23,20 +23,27 @@ def calculate_kr20(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
     numQ = len(student_list[0]['itemresponses'])
-    for k in range(0, numStudents):
-        if (numQ != len(student_list[k])):
-            return {'Error: All student\'s item count must be the same'}
     pqList = []
-    stdList = []
+    scoreList = []
+
+    for k in range(0, numStudents):
+        if (numQ != len(student_list[k]['itemresponses'])):
+            return {'Error': 'All student\'s item count must be the same'}
+
     for i in range(0, numQ):
         p = 0
         for k in range(0, numStudents):
             p += student_list[k]['itemresponses'][i]
         p /= numStudents
-        pqList.append(p * (1-p))
+        q = 1 - p
+        pqList.append(p * q)
+    pqSum = sum(pqList)
+
     for k in range(0, numStudents):
-        stdList.append(sum(student_list[k]['itemresponses']))
-    kr20_value = (numQ/(numQ - 1)) * (1 - (sum(pqList)/np.std(stdList)**2))
+        scoreList.append((sum(student_list[k]['itemresponses']))/numQ)
+    scoreSTD = np.std(scoreList)
+
+    kr20_value = (numQ /(numQ - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
     return {'kr20': round(kr20_value, 3)}
 
 
