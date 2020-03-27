@@ -48,4 +48,4 @@ def calculate_kr20(param):
     return {'kr20': round(kr20_value, 3)}
 
 
-# app.run()
+app.run()
