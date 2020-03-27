@@ -5,6 +5,7 @@ import json
 from std import calculate_std
 from summation import calculate_summation
 from proportion import calculate_proportion
+from kr20 import calculate_kr20
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +31,11 @@ def compute_summation(json_array):
 def compute_proportion(json_array):
 
     return calculate_proportion(json.loads(json_array))
+
+
+@app.route('/kr20/<json_array>', methods=['POST', 'GET'])
+def compute_kr20(json_array):
+    return calculate_kr20(json.loads(json_array))
 
 
 app.run(port=8082, threaded=True)
