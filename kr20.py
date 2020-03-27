@@ -40,7 +40,9 @@ def calculate_kr20(param):
     pqSum = sum(pqList)
 
     for k in range(0, numStudents):
-        scoreList.append((sum(student_list[k]['itemresponses']))/numQ)
+        totalRight = sum(student_list[k]['itemresponses'])
+        score = totalRight / numQ
+        scoreList.append(score)
     scoreSTD = np.std(scoreList)
 
     kr20_value = (numQ /(numQ - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
