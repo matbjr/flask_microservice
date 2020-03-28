@@ -91,7 +91,8 @@ if __name__ == '__main__':
 
     from application import call_service
     import json
-    param = {"elements": [4,5.6,7,0,22,-4.5]}
-    print(call_service(url='http://127.0.0.1:5000/', method='std/'))
+    param = json.dumps({"elements": [4,5.6,7,0,22,-4.5]})
+    print(call_service(url='http://visonics.net/', method='std/',
+                       param=param))
 
 

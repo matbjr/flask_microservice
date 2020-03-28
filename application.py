@@ -52,11 +52,14 @@ def call_service(url='localhost', method='', param='', resp_key=None):
     import requests
 
     resp = requests.get(url+method+param)
-    data = resp.json()
-    if resp_key:
-        return data.get(resp_key)
+    if resp.status_code == 200:
+        data = resp.json()
+        if resp_key:
+            return data.get(resp_key)
+        else:
+            return data
     else:
-        return data
+        return {'error': str(resp.status_code) + " " + resp.reason}
 
 
 if __name__ == '__main__':
