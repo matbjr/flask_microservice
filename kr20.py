@@ -1,4 +1,5 @@
-import numpy as np 
+# import numpy as np
+from statistics import pstdev
 
 
 def get_list(item, index):
@@ -30,7 +31,9 @@ def calculate_kr20(param):
         score = sum(get_list(student_list, k))
         scoreList.append(score)
 
-    scoreSTD = np.std(scoreList)
+    scoreSTD = pstdev(scoreList)
+
+    # need validation here
     kr20_value = (numQ /(numQ - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
 
     return {'KR20': round(kr20_value, 3)}
