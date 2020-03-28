@@ -48,5 +48,16 @@ def compute_kr20(json_array):
     return json.dumps(ans)
 
 
+def call_service(url='localhost', method='', param='', resp_key=None):
+    import requests
+
+    resp = requests.get(url+method+param)
+    data = resp.json()
+    if resp_key:
+        return data.get(resp_key)
+    else:
+        return data
+
+
 if __name__ == '__main__':
     app.run(threaded=True)
