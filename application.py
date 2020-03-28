@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 import json
 
 from std import calculate_std
@@ -8,7 +9,7 @@ from kr20 import calculate_kr20
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
-
+CORS(app)
 
 @app.route('/')
 def welcome():
