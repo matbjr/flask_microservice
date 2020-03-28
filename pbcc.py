@@ -8,7 +8,7 @@ def get_list(item, index):
     return list(item[index].values())[0]
 
 
-def calculate_pbcc(param, itemIndex):
+def calculate_pbcc(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
     numQ = len(get_list(student_list, 0))
