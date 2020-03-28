@@ -41,6 +41,7 @@ def calculate_pbcc(param, itemIndex):
         rightMean = mean(rightList)
         wrongMean = mean(wrongList)
         pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
+        pbcc = round(pbcc, 3)
         pbccList.append(pbcc)
         
     return {'pbcc': pbccList}
