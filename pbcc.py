@@ -5,10 +5,11 @@ from statistics import sqrt
 
 
 def get_list(item, index):
+
     return list(item[index].values())[0]
 
 
-def calculate_pbcc(param, itemIndex):
+def calculate_pbcc(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
     numQ = len(get_list(student_list, 0))
@@ -31,11 +32,11 @@ def calculate_pbcc(param, itemIndex):
         numWrong = 0 # Total number of students who got question i wrong
         for k in range(0, numStudents): # For each student k
             if get_list(student_list, k)[i] == 1: # If student k gets question i correct
-                score = sum(get_list(student_list, k))
+                score = sum(get_list(student_list, k)) / numQ
                 rightList.append(score) # Then add their score to the "right" list
                 numRight += 1
             elif get_list(student_list, k)[i] == 0: # If student k gets question i wrong 
-                score = sum(get_list(student_list, k))
+                score = sum(get_list(student_list, k)) / numQ
                 wrongList.append(score) # Then add their score to the "wrong" list
                 numWrong += 1 
         rightMean = mean(rightList)

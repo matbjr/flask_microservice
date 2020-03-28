@@ -6,6 +6,7 @@ from std import calculate_std
 from summation import calculate_summation
 from proportion import calculate_proportion
 from kr20 import calculate_kr20
+from pbcc import calculate_pbcc
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
@@ -44,6 +45,13 @@ def compute_proportion(json_array):
 def compute_kr20(json_array):
     inp = json.loads(json_array)
     ans = calculate_kr20(inp)
+    ans['input'] = inp
+    return json.dumps(ans)
+
+@app.route('/pbcc/<json_array>', methods=['POST', 'GET'])
+def compute_pbcc(json_array):
+    inp = json.loads(json_array)
+    ans = calculate_pbcc(inp)
     ans['input'] = inp
     return json.dumps(ans)
 
