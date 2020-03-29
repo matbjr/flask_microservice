@@ -48,6 +48,7 @@ def compute_kr20(json_array):
     ans['input'] = inp
     return json.dumps(ans)
 
+
 @app.route('/pbcc/<json_array>', methods=['POST', 'GET'])
 def compute_pbcc(json_array):
     inp = json.loads(json_array)

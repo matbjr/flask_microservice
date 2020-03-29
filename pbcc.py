@@ -1,7 +1,7 @@
 # import numpy as np
 from statistics import mean
 from statistics import pstdev
-from statistics import sqrt
+from math import sqrt
 
 
 def get_list(item, index):

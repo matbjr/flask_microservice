@@ -66,7 +66,7 @@ class TestFunctions:
                 {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
-        expected = [] # Need test values
+        expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
         pbcc = calculate_pbcc(data)['pbcc']
 
         assert pbcc == expected
