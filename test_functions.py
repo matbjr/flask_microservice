@@ -2,6 +2,7 @@ from std import calculate_std
 from summation import calculate_summation
 from proportion import calculate_proportion
 from kr20 import calculate_kr20
+from pbcc import calculate_pbcc
 
 
 class TestFunctions:
@@ -53,6 +54,22 @@ class TestFunctions:
         kr20_data = calculate_kr20(data)
 
         assert 'Error' in kr20_data
+
+    # testing the pbcc
+    def test_pbcc(self):
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = [] # Need test values
+        pbcc = calculate_pbcc(data)['pbcc']
+
+        assert pbcc == expected
 
     # testing the std
     def test_std(self):
