@@ -66,7 +66,7 @@ class TestFunctions:
                 {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
-        expected = [] # Need test values
+        expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
         pbcc = calculate_pbcc(data)['pbcc']
 
         assert pbcc == expected
@@ -106,7 +106,10 @@ if __name__ == '__main__':
     tf = TestFunctions()
     tf.test_kr20_low()
 
-    import requests
-    resp = requests.post('http://visonics.net/std/%7B%22elements%22:%20%5B4,%205.6,7,%200,%2022,4.5%5D%7D')
-    data = resp.json()
-    print(data.get('Std', 'Not Available'))
+    from application import call_service
+    import json
+    param = json.dumps({"elements": [4,5.6,7,0,22,-4.5]})
+    print(call_service(url='http://visonics.net/', method='std/',
+                       param=param))
+
+

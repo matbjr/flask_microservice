@@ -48,12 +48,27 @@ def compute_kr20(json_array):
     ans['input'] = inp
     return json.dumps(ans)
 
+
 @app.route('/pbcc/<json_array>', methods=['POST', 'GET'])
 def compute_pbcc(json_array):
     inp = json.loads(json_array)
     ans = calculate_pbcc(inp)
     ans['input'] = inp
     return json.dumps(ans)
+
+
+def call_service(url='localhost', method='', param='', resp_key=None):
+    import requests
+
+    resp = requests.get(url+method+param)
+    if resp.status_code == 200:
+        data = resp.json()
+        if resp_key:
+            return data.get(resp_key)
+        else:
+            return data
+    else:
+        return {'error': str(resp.status_code) + " " + resp.reason}
 
 
 if __name__ == '__main__':
