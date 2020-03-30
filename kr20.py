@@ -18,7 +18,7 @@ def calculate_kr20(param):
 
     for k in range(0, numStudents):
         if numQ != len(get_list(student_list, k)):
-            return {'Error': 'All students\' item count must be the same'}
+            return {'KR20': 'All students\' item count must be the same'}
 
     for i in range(0, numQ):
         p = 0
@@ -35,6 +35,9 @@ def calculate_kr20(param):
 
     # scoreSTD = get_std(scoreList)  # micro service call
     scoreSTD = pstdev(scoreList)
+
+    if scoreSTD <=0:
+        return {'KR20': 'Invalid data - No Std. Dev.'}
 
     # need validation here
     kr20_value = (numQ /(numQ - 1)) * (1 - (pqSum / (scoreSTD ** 2)))

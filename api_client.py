@@ -32,6 +32,11 @@ def get_kr20(scores: dict):
                  param=scores, resp_key='KR20')
 
 
+def get_pbcc(scores: dict):
+    return call_service(url=api_url, method='pbcc/',
+                 param=scores, resp_key='pbcc')
+
+
 if __name__ == '__main__':
 
     param = {"elements": [4, 5.6, 7, 0, 22, -4.5]}
@@ -40,7 +45,7 @@ if __name__ == '__main__':
 
     print(get_std(param['elements']))
 
-    data = {
+    data2 = {
         "students": [
             {"itemresponses": [1, 0, 1, 1, 0, 1]},
             {"itemresponses": [0, 1, 1, 1, 1, 1]},
@@ -50,4 +55,12 @@ if __name__ == '__main__':
         ]
     }
 
+    data = {
+        "students":  [
+            {"itemresponses": [ 1, 1, 1, 0 ]},
+            {"itemresponses": [ 0, 1, 0, 1 ]}
+         ]
+    }
+
     print(get_kr20(data))
+    print(get_pbcc(data))
