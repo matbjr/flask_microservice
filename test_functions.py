@@ -3,6 +3,7 @@ from summation import calculate_summation
 from proportion import calculate_proportion
 from kr20 import calculate_kr20
 from pbcc import calculate_pbcc
+from difficulty import calculate_difficulty
 
 
 class TestFunctions:
@@ -66,10 +67,26 @@ class TestFunctions:
                 {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
-        expected = [] # Need test values
+        expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
         pbcc = calculate_pbcc(data)['pbcc']
 
         assert pbcc == expected
+
+    # testing the difficulty
+    def test_difficulty(self):
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = [0.4, 0.6, 0.6, 0.6, 0.6, 0.8]
+        difficulty = calculate_difficulty(data)['difficulty']
+
+        assert difficulty == expected
 
     # testing the std
     def test_std(self):
@@ -108,7 +125,8 @@ if __name__ == '__main__':
 
     from application import call_service
     import json
-    param = {"elements": [4,5.6,7,0,22,-4.5]}
-    print(call_service(url='http://127.0.0.1:5000/', method='std/'))
+    param = json.dumps({"elements": [4,5.6,7,0,22,-4.5]})
+    print(call_service(url='http://visonics.net/', method='std/',
+                       param=param))
 
 
