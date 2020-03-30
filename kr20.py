@@ -1,6 +1,8 @@
 # import numpy as np
 from statistics import pstdev
 
+from api_client import get_std
+
 
 def get_list(item, index):
 
@@ -31,6 +33,7 @@ def calculate_kr20(param):
         score = sum(get_list(student_list, k))
         scoreList.append(score)
 
+    # scoreSTD = get_std(scoreList)  # micro service call
     scoreSTD = pstdev(scoreList)
 
     # need validation here

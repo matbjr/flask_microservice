@@ -102,14 +102,4 @@ class TestFunctions:
         assert prop == expected
 
 
-if __name__ == '__main__':
-    tf = TestFunctions()
-    tf.test_kr20_low()
-
-    from application import call_service
-    import json
-    param = json.dumps({"elements": [4,5.6,7,0,22,-4.5]})
-    print(call_service(url='http://visonics.net/', method='std/',
-                       param=param))
-
 
