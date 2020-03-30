@@ -7,6 +7,7 @@ from summation import calculate_summation
 from proportion import calculate_proportion
 from kr20 import calculate_kr20
 from pbcc import calculate_pbcc
+from difficulty import calculate_difficulty
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
@@ -54,6 +55,13 @@ def compute_kr20(json_array):
 def compute_pbcc(json_array):
     inp = json.loads(json_array)
     ans = calculate_pbcc(inp)
+    ans['input'] = inp
+    return json.dumps(ans)
+
+@app.route('/difficulty/<json_array>', methods=['POST', 'GET'])
+def compute_difficulty(json_array):
+    inp = json.loads(json_array)
+    ans = calculate_difficulty(inp)
     ans['input'] = inp
     return json.dumps(ans)
 
