@@ -58,6 +58,7 @@ def compute_pbcc(json_array):
     ans['input'] = inp
     return json.dumps(ans)
 
+
 @app.route('/difficulty/<json_array>', methods=['POST', 'GET'])
 def compute_difficulty(json_array):
     inp = json.loads(json_array)
