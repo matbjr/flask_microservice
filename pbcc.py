@@ -5,8 +5,9 @@ from math import sqrt
 
 
 def get_list(item, index):
-
-    return list(item[index].values())[0]
+    ir = item[index]['itemresponses']
+    irList = [int(i) for i in ir.split(',')]
+    return irList
 
 
 def calculate_pbcc(param):
