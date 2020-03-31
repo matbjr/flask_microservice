@@ -12,11 +12,11 @@ class TestFunctions:
     def test_kr20(self):
         data = {
             "students": [
-                {"itemresponses": [1, 0, 1, 1, 0, 1]},
-                {"itemresponses": [0, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 1, 0, 0, 0, 1]},
-                {"itemresponses": [1, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
+                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
+                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
+                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
             ]
         }
         expected = 0.726
@@ -28,11 +28,11 @@ class TestFunctions:
     def test_kr20_low(self):
         data = {
             "students": [
-                {"student1": [1, 0, 1, 1, 0, 1]},
-                {"student2": [1, 0, 1, 1, 0, 1]},
-                {"student3": [1, 0, 1, 1, 0, 1]},
-                {"student4": [1, 0, 1, 1, 0, 1]},
-                {"student5": [1, 0, 1, 1, 0, 0]}
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":1}},
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":3}},
+                {"itemresponses": "1, 0, 1, 1, 0, 0","tableData":{"id":4}}
             ]
         }
         expected = 0
@@ -44,27 +44,27 @@ class TestFunctions:
     def test_kr20_invalid(self):
         data = {
             "students": [
-                {"student1": [1, 0, 1, 1, 0]},
-                {"student2": [0, 1, 1, 1, 1, 1]},
-                {"student3": [0, 1, 0, 0, 0, 1]},
-                {"student4": [1, 1, 1, 1, 1, 1]},
-                {"student5": [0, 0, 0, 0, 1, 0]}
+                {"itemresponses": "1, 0, 1, 1, 0","tableData":{"id":0}},
+                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
+                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
+                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
             ]
         }
 
         kr20_data = calculate_kr20(data)
 
-        assert 'Error' in kr20_data
+        assert 'item count must be the same' in kr20_data['KR20']
 
     # testing the pbcc
     def test_pbcc(self):
         data = {
             "students": [
-                {"itemresponses": [1, 0, 1, 1, 0, 1]},
-                {"itemresponses": [0, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 1, 0, 0, 0, 1]},
-                {"itemresponses": [1, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
+                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
+                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
+                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
             ]
         }
         expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
@@ -72,15 +72,31 @@ class TestFunctions:
 
         assert pbcc == expected
 
+    # pbcc missing data
+    def test_pbcc_invalid(self):
+        data = {
+            "students": [
+                {"itemresponses": "1, 0, 1, 1, 0","tableData":{"id":0}},
+                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
+                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
+                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+            ]
+        }
+
+        pbcc_data = calculate_pbcc(data)
+
+        assert 'Error' in pbcc_data
+
     # testing the difficulty
     def test_difficulty(self):
         data = {
             "students": [
-                {"itemresponses": [1, 0, 1, 1, 0, 1]},
-                {"itemresponses": [0, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 1, 0, 0, 0, 1]},
-                {"itemresponses": [1, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
+                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
+                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
+                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
+                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
             ]
         }
         expected = [0.4, 0.6, 0.6, 0.6, 0.6, 0.8]
@@ -118,15 +134,5 @@ class TestFunctions:
 
         assert prop == expected
 
-
-if __name__ == '__main__':
-    tf = TestFunctions()
-    tf.test_kr20_low()
-
-    from application import call_service
-    import json
-    param = json.dumps({"elements": [4,5.6,7,0,22,-4.5]})
-    print(call_service(url='http://visonics.net/', method='std/',
-                       param=param))
 
 

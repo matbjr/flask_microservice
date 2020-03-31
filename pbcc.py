@@ -2,11 +2,7 @@
 from statistics import mean
 from statistics import pstdev
 from math import sqrt
-
-
-def get_list(item, index):
-
-    return list(item[index].values())[0]
+from utils import get_list
 
 
 def calculate_pbcc(param):
@@ -38,9 +34,16 @@ def calculate_pbcc(param):
             elif get_list(student_list, k)[i] == 0: # If student k gets question i wrong 
                 score = sum(get_list(student_list, k)) / numQ
                 wrongList.append(score) # Then add their score to the "wrong" list
-                numWrong += 1 
-        rightMean = mean(rightList)
-        wrongMean = mean(wrongList)
+                numWrong += 1
+
+        rightMean = wrongMean = None
+        if len(rightList) > 0:
+            rightMean = mean(rightList)
+        if len(wrongList) > 0:
+            wrongMean = mean(wrongList)
+        if not rightMean or not wrongMean:
+            return {'pbcc': 'Invalid Data - No mean'}
+
         pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         pbcc = round(pbcc, 3)
         pbccList.append(pbcc)
