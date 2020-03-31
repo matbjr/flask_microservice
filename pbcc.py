@@ -2,12 +2,7 @@
 from statistics import mean
 from statistics import pstdev
 from math import sqrt
-
-
-def get_list(item, index):
-    ir = item[index]['itemresponses']
-    irList = [int(i) for i in ir.split(',')]
-    return irList
+from utils import get_list
 
 
 def calculate_pbcc(param):

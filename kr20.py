@@ -1,13 +1,8 @@
 # import numpy as np
 from statistics import pstdev
+from utils import get_list
 
 from api_client import get_std
-
-
-def get_list(item, index):
-    ir = item[index]['itemresponses']
-    irList = [int(i) for i in ir.split(',')]
-    return irList
 
 
 def calculate_kr20(param):
