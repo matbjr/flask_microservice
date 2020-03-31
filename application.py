@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
 
+
 @app.route('/')
 def welcome():
     return json.dumps({'message': 'Welcome from Reliability Measures!'})
@@ -57,26 +58,13 @@ def compute_pbcc(json_array):
     ans['input'] = inp
     return json.dumps(ans)
 
+
 @app.route('/difficulty/<json_array>', methods=['POST', 'GET'])
 def compute_difficulty(json_array):
     inp = json.loads(json_array)
     ans = calculate_difficulty(inp)
     ans['input'] = inp
     return json.dumps(ans)
-
-
-def call_service(url='localhost', method='', param='', resp_key=None):
-    import requests
-
-    resp = requests.get(url+method+param)
-    if resp.status_code == 200:
-        data = resp.json()
-        if resp_key:
-            return data.get(resp_key)
-        else:
-            return data
-    else:
-        return {'error': str(resp.status_code) + " " + resp.reason}
 
 
 if __name__ == '__main__':
