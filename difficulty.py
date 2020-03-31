@@ -1,12 +1,7 @@
 def get_list(item, index):
-<<<<<<< Updated upstream
-
-    return list(item[index].values())[0]
-=======
     ir = item[index]['itemresponses']
     irList = [int(i) for i in ir.split(',')]
     return irList
->>>>>>> Stashed changes
 
 
 def calculate_difficulty(param):

@@ -2,10 +2,6 @@
 from statistics import pstdev
 
 from api_client import get_std
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
 
 def get_list(item, index):

@@ -72,20 +72,6 @@ class TestFunctions:
 
         assert pbcc == expected
 
-<<<<<<< Updated upstream
-    # testing the pbcc
-    def test_pbcc_invalid(self):
-        data = {
-            "students": [
-                {"itemresponses": [1, 1, 1, 0]},
-                {"itemresponses": [0, 1, 0, 1]}
-            ]
-        }
-        expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
-        pbcc_data = calculate_pbcc(data)
-
-        assert 'Invalid' in pbcc_data['pbcc']
-=======
     # pbcc missing data
     def test_pbcc_invalid(self):
         data = {
@@ -101,25 +87,16 @@ class TestFunctions:
         pbcc_data = calculate_pbcc(data)
 
         assert 'Error' in pbcc_data
->>>>>>> Stashed changes
 
     # testing the difficulty
     def test_difficulty(self):
         data = {
             "students": [
-<<<<<<< Updated upstream
-                {"itemresponses": [1, 0, 1, 1, 0, 1]},
-                {"itemresponses": [0, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 1, 0, 0, 0, 1]},
-                {"itemresponses": [1, 1, 1, 1, 1, 1]},
-                {"itemresponses": [0, 0, 0, 0, 1, 0]}
-=======
                 {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
                 {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
                 {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
                 {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
                 {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
->>>>>>> Stashed changes
             ]
         }
         expected = [0.4, 0.6, 0.6, 0.6, 0.6, 0.8]
