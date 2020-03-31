@@ -4,7 +4,7 @@ from utils import get_list
 
 from api_client import get_std
 
-
+# Error somewhere in kr20 calculation
 def calculate_kr20(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
