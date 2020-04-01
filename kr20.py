@@ -1,14 +1,10 @@
 # import numpy as np
 from statistics import pstdev
+from utils import get_list
 
 from api_client import get_std
 
-
-def get_list(item, index):
-
-    return list(item[index].values())[0]
-
-
+# Error somewhere in kr20 calculation
 def calculate_kr20(param):
     student_list = list(param['students'])
     numStudents = len(student_list)
