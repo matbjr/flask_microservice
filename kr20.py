@@ -1,8 +1,8 @@
-# import numpy as np
 from statistics import pstdev
 from utils import get_list
 
 from api_client import get_std
+
 
 # Error somewhere in kr20 calculation
 def calculate_kr20(param):

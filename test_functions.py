@@ -12,15 +12,11 @@ class TestFunctions:
     def test_kr20(self):
         data = {
             "students": [
-                # {"itemresponses": [1, 0, 1, 1, 0, 1]},
-                # {"itemresponses": [0, 1, 1, 1, 1, 1]},
-                # {"itemresponses": [0, 1, 0, 0, 0, 1]},
-                # {"itemresponses": [1, 1, 1, 1, 1, 1]},
-                # {"itemresponses": [0, 0, 0, 0, 1, 0]}
-                {"itemresponses": [1, 0, 1]},
-                {"itemresponses": [1, 0, 1]},
-                {"itemresponses": [0, 1, 0]},
-                {"itemresponses": [0, 1, 0]}
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
         # expected = 0.726
