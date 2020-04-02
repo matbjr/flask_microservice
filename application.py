@@ -9,6 +9,7 @@ from kr20 import calculate_kr20
 from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
 from scores import calculate_scores
+from average import calculate_average
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
@@ -71,6 +72,13 @@ def compute_difficulty(json_array):
 def compute_scores(json_array):
     inp = json.loads(json_array)
     ans = calculate_scores(inp)
+    ans['input'] = inp
+    return json.dumps(ans)
+
+@app.route('/average/<json_array>', methods=['POST', 'GET'])
+def compute_average(json_array):
+    inp = json.loads(json_array)
+    ans = calculate_average(inp)
     ans['input'] = inp
     return json.dumps(ans)
 

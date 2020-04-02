@@ -5,6 +5,7 @@ from kr20 import calculate_kr20
 from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
 from scores import calculate_scores
+from average import calculate_average
 
 
 class TestFunctions:
@@ -121,6 +122,22 @@ class TestFunctions:
         scores = calculate_scores(data)['scores']
 
         assert scores == expected
+
+    # testing the average
+    def test_average(self):
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = 0.6
+        average = calculate_average(data)['average']
+
+        assert average == expected
 
     # testing the std
     def test_std(self):
