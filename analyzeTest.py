@@ -40,9 +40,6 @@ def analyze_test(param):
         for k in responses: # For every item ID
             studentResponses.append(responses[k][i]) # Create a list of the students responses sorted by item ID
         sortedResponses.append(studentResponses)
-    
-    numStudents = len(sortedResponses)
-    numItems = len(sortedResponses[0])
 
     # Call microservices:
     valKR20 = calculate_kr20(sortedResponses, numStudents, numItems)

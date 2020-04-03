@@ -12,7 +12,7 @@ from analyzeTest import analyze_test
 class TestFunctions:
 
 
-    #testing analyze test
+    # testing analyze test
     def test_analyzeTest(self):
         data = { 
             "examInfo": 
@@ -100,7 +100,7 @@ class TestFunctions:
         assert difficulty == expected
 
 
-    # # testing the scores
+    # testing the scores
     def test_scores(self):
         sortedData = [[1, 0, 1, 1, 0, 1], [0, 1, 1, 1, 1, 1], [0, 1, 0, 0, 0, 1]]
 
@@ -110,7 +110,7 @@ class TestFunctions:
         assert scores == expected
 
 
-    # # testing the average
+    # testing the average
     def test_average(self):
         sortedData = [[1, 0, 1, 1, 0, 1], [0, 1, 1, 1, 1, 1], [0, 1, 0, 0, 0, 1]]
 
