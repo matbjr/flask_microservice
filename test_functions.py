@@ -168,6 +168,3 @@ class TestFunctions:
         prop = calculate_proportion(data)['Proportion']
 
         assert prop == expected
-
-
-
