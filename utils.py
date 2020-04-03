@@ -1,9 +1,6 @@
 from statistics import pstdev
 from api_client import get_std
 
-def get_list(item, index):
-    
-    return list(item[index].values())[0]
 
 def get_item_std(item, numStudents):
     scoreList = []

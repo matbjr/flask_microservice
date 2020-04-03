@@ -4,8 +4,7 @@ from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
 
-# from utils import get_list
-# Having issues using imported get_list from utils.py
+
 def get_list(item, index):
     return list(item[index]['itemresponses'])
 
@@ -55,3 +54,4 @@ def analyze_test(param):
     analysis = (valKR20, valPBCC, valDifficulty, valScores, valAvg)
 
     return {'analysis': analysis}
+    # TO DO: store pbcc and difficulty by item id (pass id list as parameter?)
