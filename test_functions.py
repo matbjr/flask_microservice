@@ -4,6 +4,8 @@ from proportion import calculate_proportion
 from kr20 import calculate_kr20
 from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
+from scores import calculate_scores
+from average import calculate_average
 
 
 class TestFunctions:
@@ -12,27 +14,28 @@ class TestFunctions:
     def test_kr20(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
-                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
-                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
-                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
         expected = 0.726
         kr20 = calculate_kr20(data)['KR20']
 
         assert kr20 == expected
+        
 
     # almost same scores
     def test_kr20_low(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":1}},
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":3}},
-                {"itemresponses": "1, 0, 1, 1, 0, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [1, 0, 1, 1, 0, 0]}
             ]
         }
         expected = 0
@@ -40,15 +43,15 @@ class TestFunctions:
 
         assert kr20 == expected
 
-    # missing data
+    # kr20 missing data
     def test_kr20_invalid(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0","tableData":{"id":0}},
-                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
-                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
-                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
 
@@ -60,11 +63,11 @@ class TestFunctions:
     def test_pbcc(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
-                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
-                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
-                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
         expected = [0.353, 0.278, 0.53, 0.53, 0.151, 0.402]
@@ -76,11 +79,11 @@ class TestFunctions:
     def test_pbcc_invalid(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0","tableData":{"id":0}},
-                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
-                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
-                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
 
@@ -92,17 +95,49 @@ class TestFunctions:
     def test_difficulty(self):
         data = {
             "students": [
-                {"itemresponses": "1, 0, 1, 1, 0, 1","tableData":{"id":0}},
-                {"itemresponses": "0, 1, 1, 1, 1, 1","tableData":{"id":1}},
-                {"itemresponses": "0, 1, 0, 0, 0, 1","tableData":{"id":2}},
-                {"itemresponses": "1, 1, 1, 1, 1, 1","tableData":{"id":3}},
-                {"itemresponses": "0, 0, 0, 0, 1, 0","tableData":{"id":4}}
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
             ]
         }
         expected = [0.4, 0.6, 0.6, 0.6, 0.6, 0.8]
         difficulty = calculate_difficulty(data)['difficulty']
 
         assert difficulty == expected
+
+    # testing the scores
+    def test_scores(self):
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = [0.667, 0.833, 0.333, 1, 0.167]
+        scores = calculate_scores(data)['scores']
+
+        assert scores == expected
+
+    # testing the average
+    def test_average(self):
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = 0.6
+        average = calculate_average(data)['average']
+
+        assert average == expected
 
     # testing the std
     def test_std(self):
@@ -133,6 +168,3 @@ class TestFunctions:
         prop = calculate_proportion(data)['Proportion']
 
         assert prop == expected
-
-
-

@@ -1,4 +1,3 @@
-# import numpy as np
 from statistics import pstdev
 from utils import get_list
 
