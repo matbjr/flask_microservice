@@ -1,40 +1,23 @@
-from statistics import pstdev
-from utils import get_list
+from utils import get_item_std
 
-from api_client import get_std
-
-
-def calculate_kr20(param):
-    student_list = list(param['students'])
-    numStudents = len(student_list)
-    numQ = len(get_list(student_list, 0))
+def calculate_kr20(param, numStudents, numItems):
+    sortedResponses = param
     pqList = []
-    scoreList = []
+    scoreSTD = get_item_std(sortedResponses, numStudents)
 
-    for k in range(0, numStudents):
-        if numQ != len(get_list(student_list, k)):
-            return {'KR20': 'All students\' item count must be the same'}
+    if scoreSTD <=0:
+        return {'KR20': 'Invalid data - No Std. Dev.'}
 
-    for i in range(0, numQ):
+    for i in range(0, numItems):
         p = 0
         for k in range(0, numStudents):
-            p += get_list(student_list, k)[i]
+            p += sortedResponses[k][i]
         p /= numStudents
         q = 1 - p
         pqList.append(p * q)
     pqSum = sum(pqList)
 
-    for k in range(0, numStudents):
-        score = sum(get_list(student_list, k))
-        scoreList.append(score)
-
-    # scoreSTD = get_std(scoreList)  # micro service call
-    scoreSTD = pstdev(scoreList)
-
-    if scoreSTD <=0:
-        return {'KR20': 'Invalid data - No Std. Dev.'}
-
     # need validation here
-    kr20_value = (numQ /(numQ - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
+    kr20_value = (numItems /(numItems - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
 
     return {'KR20': round(kr20_value, 3)}

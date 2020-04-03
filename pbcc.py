@@ -1,52 +1,15 @@
-# import numpy as np
 from statistics import mean
-from statistics import pstdev
 from math import sqrt
-# from utils import get_list
 
-# Having issues using imported get_list from utils.py
-def get_list(item, index):
-    return list(item[index]['itemresponses'])
+from utils import get_item_std
 
-
-def calculate_pbcc(param):
-    student_list = list(param['studentList'])
-    responseList = get_list(student_list,0)
-    numStudents = len(student_list)
-    numItems = len(responseList)
-    idList = []
-    responses = {}
-    scoreList = []
+def calculate_pbcc(param, numStudents, numItems):
+    sortedResponses = param
     pbccList = []
+    scoreSTD = get_item_std(sortedResponses, numStudents)
 
-    for i in range(0, numItems): # Put all item IDs into a list
-        idList.append(responseList[i]['itemid'])
-
-    idList.sort()
-    for i in idList: # Create a dictionary with the item IDs as keys
-        responses[i] = []
-    
-    for i in range(0, numStudents): # For each student i
-        for k in range(0, numItems): # For each question k
-            for j in responses: # For each item ID j
-                if get_list(student_list, i)[k]['itemid'] == j: # If item IDs match, add response to dictionary
-                    responses[j].append(get_list(student_list, i)[k]['response'])
-
-    sortedResponses = []
-    for i in range(0, numStudents): # For each student
-        studentResponses = []
-        for k in responses: # For every item ID
-            studentResponses.append(responses[k][i]) # Create a list of the students responses sorted by item ID
-        sortedResponses.append(studentResponses)
-
-    for i in range(0, numStudents): # Check if item count is consistent
-        if numItems != len(sortedResponses[i]):
-            return {'Error': 'All students\' item count must be the same'}
-
-    for i in range(0, numStudents): # Get standard deviation of scores
-        score = sum(sortedResponses[i])
-        scoreList.append(score)
-    scoreSTD = pstdev(scoreList)
+    if scoreSTD <=0:
+        return {'PBCC': 'Invalid data - No Std. Dev.'}
 
     for i in range(0, numItems): # For each question i
         rightList = [] # Scores of students who got question i right
@@ -63,7 +26,7 @@ def calculate_pbcc(param):
                 wrongList.append(score) # Then add their score to the "wrong" list
                 numWrong += 1
 
-        # rightMean = wrongMean = None <-- Causing errors
+        # rightMean = wrongMean = None # <-- Causing errors
         if len(rightList) == 1:
             rightMean = rightList[0]
         elif len(rightList) > 1:
@@ -78,10 +41,5 @@ def calculate_pbcc(param):
         pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         pbcc = round(pbcc, 3)
         pbccList.append(pbcc)
-
-    k = 0
-    for i in idList:
-        responses[i] = pbccList[k]
-        k += 1
         
-    return {'pbcc': responses}
+    return {'pbcc': pbccList}
