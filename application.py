@@ -61,19 +61,15 @@ def compute_pbcc(json_data):
 def compute_difficulty(json_data):
     return process_request(json_data, calculate_difficulty)
 
-@app.route('/scores/<json_array>', methods=['POST', 'GET'])
-def compute_scores(json_array):
-    inp = json.loads(json_array)
-    ans = calculate_scores(inp)
-    ans['input'] = inp
-    return json.dumps(ans)
 
-@app.route('/average/<json_array>', methods=['POST', 'GET'])
-def compute_average(json_array):
-    inp = json.loads(json_array)
-    ans = calculate_average(inp)
-    ans['input'] = inp
-    return json.dumps(ans)
+@app.route('/scores/<json_data>', methods=['POST', 'GET'])
+def compute_scores(json_data):
+    return process_request(json_data, calculate_scores)
+
+
+@app.route('/average/<json_data>', methods=['POST', 'GET'])
+def compute_average(json_data):
+    return process_request(json_data, calculate_average)
 
 
 if __name__ == '__main__':
