@@ -16,7 +16,7 @@ app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
 
 
-def process_request(json_data: str, fn: function):
+def process_request(json_data: str, fn: function): # Error?
     try:
         inp = json.loads(json_data)
         ans = fn(inp)
@@ -70,6 +70,11 @@ def compute_scores(json_data):
 @app.route('/average/<json_data>', methods=['POST', 'GET'])
 def compute_average(json_data):
     return process_request(json_data, calculate_average)
+
+
+@app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
+def get_analysis(json_data):
+    return process_request(json_data, get_analysis)
 
 
 if __name__ == '__main__':
