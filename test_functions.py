@@ -118,3 +118,47 @@ class TestFunctions:
         average = calculate_average(sortedData, 3, 6)['average']
 
         assert average == expected
+
+        data = {
+            "students": [
+                {"itemresponses": [1, 0, 1, 1, 0, 1]},
+                {"itemresponses": [0, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 1, 0, 0, 0, 1]},
+                {"itemresponses": [1, 1, 1, 1, 1, 1]},
+                {"itemresponses": [0, 0, 0, 0, 1, 0]}
+            ]
+        }
+        expected = 0.6
+        average = calculate_average(data)['average']
+
+        assert average == expected
+
+    # testing the std
+    def test_std(self):
+        data = {
+            "elements": [4, 5.6, 7, 0, 22, -4.5]
+        }
+        expected = 8.234
+        std = calculate_std(data)['Std']
+
+        assert std == expected
+
+    # testing the summation
+    def test_summation(self):
+        data = {
+            "elements": [4, 5.6, 7, 0, 22, -4.5]
+        }
+        expected = 34.1
+        sm = calculate_summation(data)['Sum']
+
+        assert sm == expected
+
+    # testing the Proportion
+    def test_proportion(self):
+        data = {
+            "twoElements": [4, 5.6, 7, 0, 22, -4.5]
+        }
+        expected = 0.714
+        prop = calculate_proportion(data)['Proportion']
+
+        assert prop == expected

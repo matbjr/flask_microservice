@@ -12,6 +12,10 @@ def get_item_std(item, numStudents):
 
     return scoreSTD
 
+def get_list(item, index):
+    
+    return list(item[index].values())[0]
+
 
 # JSON object for literals and constants
 # will be hosted in some cloud storage
