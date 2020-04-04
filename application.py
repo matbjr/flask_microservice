@@ -72,5 +72,10 @@ def compute_average(json_data):
     return process_request(json_data, calculate_average)
 
 
+@app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
+def get_analysis(json_data):
+    return process_request(json_data, get_analysis)
+
+
 if __name__ == '__main__':
     app.run(threaded=True)
