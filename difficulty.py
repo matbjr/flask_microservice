@@ -1,6 +1,13 @@
-def calculate_difficulty(param, numStudents, numItems):
-    sortedResponses = param
+from utils import get_sorted_responses
+from utils import get_id_list
+
+def calculate_difficulty(param):
+    sortedResponses = get_sorted_responses(param)
+    numStudents = len(sortedResponses)
+    numItems = len (sortedResponses[0])
+    idList = get_id_list(param)
     difficultyList = []
+    difficultyDict = {}
 
     for i in range(0, numItems): # For each question i
         numRight = 0
@@ -10,5 +17,10 @@ def calculate_difficulty(param, numStudents, numItems):
         difficulty = numRight / numStudents
         difficulty = round(difficulty, 3)
         difficultyList.append(difficulty)
+
+    k = 0
+    for i in idList:
+        difficultyDict[i] = difficultyList[k]
+        k += 1
         
-    return {'difficulty': difficultyList}
+    return {'difficulty': difficultyDict}

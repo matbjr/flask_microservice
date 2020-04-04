@@ -2,14 +2,20 @@ from statistics import mean
 from math import sqrt
 
 from utils import get_item_std
+from utils import get_sorted_responses
+from utils import get_id_list
 
-def calculate_pbcc(param, numStudents, numItems):
-    sortedResponses = param
-    pbccList = []
+def calculate_pbcc(param):
+    sortedResponses = get_sorted_responses(param)
+    numStudents = len(sortedResponses)
+    numItems = len (sortedResponses[0])
+    idList = get_id_list(param)
     scoreSTD = get_item_std(sortedResponses, numStudents)
+    pbccList = []
+    pbccDict = {}
 
     if scoreSTD <=0:
-        return {'PBCC': 'Invalid data - No Std. Dev.'}
+        return {'Error': 'Invalid data - No Std. Dev.'}
 
     for i in range(0, numItems): # For each question i
         rightList = [] # Scores of students who got question i right
@@ -41,5 +47,11 @@ def calculate_pbcc(param, numStudents, numItems):
         pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         pbcc = round(pbcc, 3)
         pbccList.append(pbcc)
+    
+    k = 0
+    for i in idList:
+        pbccDict[i] = pbccList[k]
+        k += 1
+    
         
-    return {'pbcc': pbccList}
+    return {'pbcc': pbccDict}

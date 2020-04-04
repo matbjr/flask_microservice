@@ -1,12 +1,15 @@
 from utils import get_item_std
+from utils import get_sorted_responses
 
-def calculate_kr20(param, numStudents, numItems):
-    sortedResponses = param
+def calculate_kr20(param):
+    sortedResponses = get_sorted_responses(param)
+    numStudents = len(sortedResponses)
+    numItems = len (sortedResponses[0])
     pqList = []
     scoreSTD = get_item_std(sortedResponses, numStudents)
 
     if scoreSTD <=0:
-        return {'KR20': 'Invalid data - No Std. Dev.'}
+        return {'Error': 'Invalid data - No Std. Dev.'}
 
     for i in range(0, numItems):
         p = 0

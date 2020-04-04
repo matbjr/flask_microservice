@@ -10,14 +10,13 @@ from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
-from analyzeTest import analyze_test
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
 
 
-def process_request(json_data: str, fn: function):
+def process_request(json_data: str, fn: function): # Error?
     try:
         inp = json.loads(json_data)
         ans = fn(inp)
@@ -71,11 +70,6 @@ def compute_scores(json_data):
 @app.route('/average/<json_data>', methods=['POST', 'GET'])
 def compute_average(json_data):
     return process_request(json_data, calculate_average)
-
-
-@app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
-def test_analyze(json_data):
-    return process_request(json_data, analyze_test)
 
 
 if __name__ == '__main__':
