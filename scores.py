@@ -1,19 +1,17 @@
-from utils import get_list
+from utils import get_sorted_responses,  get_service_config
 
 
 def calculate_scores(param):
-    student_list = list(param['students'])
-    numStudents = len(student_list)
-    numQ = len(get_list(student_list, 0))
+    service_key = get_service_config(4)
+    sortedResponses = get_sorted_responses(param)
+    numStudents = len(sortedResponses)
+    numItems = len (sortedResponses[0])
     scoreList = []
 
-    for i in range(0, numStudents): # For each student i
-        numRight = 0
-        for k in range(0, numQ): # For each question k
-            studentAnswer = get_list(student_list, i)[k]
-            numRight += studentAnswer
-        score = numRight / numQ
+    for i in range(0, numStudents):
+        numRight = sum(sortedResponses[i])
+        score = numRight / numItems
         score = round(score, 3)
         scoreList.append(score)
         
-    return {'scores': scoreList}
+    return {service_key: scoreList}
