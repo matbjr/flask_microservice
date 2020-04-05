@@ -20,12 +20,12 @@ CORS(app)
 
 def process_request(json_data: str, fn):
     """
-    A function to convert a jsan formatted string to dict and
+    A function to convert a JSON formatted string to dict and
     then call the passed function and return the response.
 
-    :param json_data: str (in json format)
+    :param json_data: str (in JSON format)
     :param fn: a function to call
-    :return: str, a json formatted string
+    :return: str, a JSON formatted string
     """
 
     try:
