@@ -1,7 +1,8 @@
-from utils import get_sorted_responses
-from utils import get_id_list
+from utils import get_sorted_responses, get_id_list, get_service_config
+
 
 def calculate_difficulty(param):
+    service_key = get_service_config(3)
     sortedResponses = get_sorted_responses(param)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
@@ -23,4 +24,4 @@ def calculate_difficulty(param):
         difficultyDict[i] = difficultyList[k]
         k += 1
         
-    return {'difficulty': difficultyDict}
+    return {service_key: difficultyDict}

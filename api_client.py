@@ -1,6 +1,7 @@
 import json
+from utils import get_config
 
-api_url = 'http://visonics.net/rm/'
+api_url = get_config('service_url')
 
 
 def call_service(url='localhost', method='', param=None, resp_key=None):
@@ -24,12 +25,12 @@ def call_service(url='localhost', method='', param=None, resp_key=None):
 
 def get_std(scores: list):
     return call_service(url=api_url, method='std/',
-                 param={"elements": scores}, resp_key='Std')
+                 param={"elements": scores}, resp_key='std')
 
 
 def get_kr20(scores: dict):
     return call_service(url=api_url, method='kr20/',
-                 param=scores, resp_key='KR20')
+                 param=scores, resp_key='kr20')
 
 
 def get_pbcc(scores: dict):
