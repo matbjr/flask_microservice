@@ -10,16 +10,27 @@ from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
+from analyze_test import analyze_test_scores
+
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
 
 
-def process_request(json_data: str, fn: function): # Error?
+def process_request(json_data: str, fn):
+    """
+    A function to convert a jsan formatted string to dict and
+    then call the passed function and return the response.
+
+    :param json_data: str (in json format)
+    :param fn: a function to call
+    :return: str, a json formatted string
+    """
+
     try:
         inp = json.loads(json_data)
-        ans = fn(inp)
+        ans = fn(inp)  # calling function 'fn'
         ans['input'] = inp
     except Exception as exc:
         ans = {'error': str(exc), 'input': json_data}
@@ -54,7 +65,7 @@ def compute_kr20(json_data):
 
 @app.route('/pbcc/<json_data>', methods=['POST', 'GET'])
 def compute_pbcc(json_data):
-    return process_request(json_data, calculate_proportion)
+    return process_request(json_data, calculate_pbcc)
 
 
 @app.route('/difficulty/<json_data>', methods=['POST', 'GET'])
@@ -74,7 +85,7 @@ def compute_average(json_data):
 
 @app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
 def get_analysis(json_data):
-    return process_request(json_data, get_analysis)
+    return process_request(json_data, analyze_test_scores)
 
 
 if __name__ == '__main__':

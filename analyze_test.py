@@ -3,9 +3,11 @@ from pbcc import calculate_pbcc
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
+from utils import get_service_config
 
 
-def analyze_test(param):
+def analyze_test_scores(param):
+    service_key = get_service_config(6)
     # use microservice calls here when all are hosted
     valKR20 = calculate_kr20(param)
     valPBCC = calculate_pbcc(param)
@@ -13,4 +15,6 @@ def analyze_test(param):
     valScores = calculate_scores(param)
     valAverage = calculate_average(param)
 
-    return {'analysis': (valKR20, valPBCC, valDifficulty, valScores, valAverage)}
+    # list of all results
+    return {service_key: [valKR20, valPBCC, valDifficulty,
+                         valScores, valAverage]}

@@ -1,15 +1,16 @@
-from utils import get_item_std
-from utils import get_sorted_responses
+from utils import get_item_std, get_sorted_responses, get_service_config
+
 
 def calculate_kr20(param):
+    service_key = get_service_config(1)
     sortedResponses = get_sorted_responses(param)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     pqList = []
     scoreSTD = get_item_std(sortedResponses, numStudents)
 
-    if scoreSTD <=0:
-        return {'Error': 'Invalid data - No Std. Dev.'}
+    if scoreSTD <= 0:
+        return {service_key: 'Invalid data - No Std. Dev.'}
 
     for i in range(0, numItems):
         p = 0
@@ -23,4 +24,4 @@ def calculate_kr20(param):
     # need validation here
     kr20_value = (numItems /(numItems - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
 
-    return {'KR20': round(kr20_value, 3)}
+    return {service_key: round(kr20_value, 3)}
