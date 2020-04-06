@@ -12,6 +12,7 @@ from scores import calculate_scores
 from average import calculate_average
 from analyze_test import analyze_test_scores
 from weighted_scores import calculate_weighted_scores
+from weighted_average import calculate_weighted_average
 
 
 app = Flask(__name__)
@@ -92,6 +93,11 @@ def get_analysis(json_data):
 @app.route('/weightedScores/<json_data>', methods=['POST', 'GET'])
 def compute_weighted_scores(json_data):
     return process_request(json_data, calculate_weighted_scores)
+
+
+@app.route('/weightedAverage/<json_data>', methods=['POST', 'GET'])
+def compute_weighted_avg(json_data):
+    return process_request(json_data, calculate_weighted_average)
 
 
 if __name__ == '__main__':
