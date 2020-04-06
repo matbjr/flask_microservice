@@ -126,6 +126,13 @@ config = {
             'description': 'The whole test analysis with all results',
             'type': 'list of items'
         },
+        {
+            'id': 7,
+            'name': 'Weighted Scores',
+            'short_name': 'weighted',
+            'description': 'Weighted test scores',
+            'type': 'list of floats'
+        }
     ]
 }
 
