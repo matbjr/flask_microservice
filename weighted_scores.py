@@ -2,7 +2,7 @@ from utils import get_sorted_responses,  get_service_config
 from difficulty import calculate_difficulty
 
 
-def calculate_weighted(param):
+def calculate_weighted_scores(param):
     service_key = get_service_config(7)
     sortedResponses = get_sorted_responses(param)
     numStudents = len(sortedResponses)

@@ -128,10 +128,17 @@ config = {
         },
         {
             'id': 7,
-            'name': 'Weighted Scores',
-            'short_name': 'weighted',
+            'name': 'Weighted scores',
+            'short_name': 'weighted_s',
             'description': 'Weighted test scores',
             'type': 'list of floats'
+        },
+        {
+            'id': 8,
+            'name': 'Weighted average',
+            'short_name': 'weighted_avg',
+            'description': 'Weighted average',
+            'type': 'float'
         }
     ]
 }

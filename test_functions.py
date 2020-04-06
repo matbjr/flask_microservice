@@ -4,7 +4,7 @@ from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
 from analyze_test import analyze_test_scores
-from weighted_scores import calculate_weighted
+from weighted_scores import calculate_weighted_scores
 
 
 class TestFunctions:
@@ -121,6 +121,6 @@ class TestFunctions:
     def test_weighted(self):
 
         expected = [0.727, 0.909, 0.455]
-        scores = calculate_weighted(self.data)['weighted']
+        scores = calculate_weighted_scores(self.data)['weighted_s']
 
         assert scores == expected
