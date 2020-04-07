@@ -1,6 +1,8 @@
-from flask import Flask
-from flask_cors import CORS
+from flask import Flask, jsonify
+from flask_cors import cross_origin
 import json
+from utils import get_config
+from sample import sample
 
 from std import calculate_std
 from summation import calculate_summation
@@ -18,7 +20,6 @@ from excludes import get_excludes
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
-CORS(app)
 
 
 def process_request(json_data: str, fn):
@@ -34,16 +35,18 @@ def process_request(json_data: str, fn):
     try:
         inp = json.loads(json_data)
         ans = fn(inp)  # calling function 'fn'
-        ans['input'] = inp
+        ans['Input'] = inp
     except Exception as exc:
         ans = {'error': str(exc), 'input': json_data}
 
-    return json.dumps(ans)
+    return jsonify(ans)
 
 
 @app.route('/')
+@cross_origin()
 def welcome():
-    return json.dumps({'message': 'Welcome from Reliability Measures!'})
+    return jsonify({'message': 'Welcome from Reliability Measures!',
+                    'version': get_config('application_version')})
 
 
 @app.route('/std/<json_data>', methods=['POST', 'GET'])
@@ -87,6 +90,7 @@ def compute_average(json_data):
 
 
 @app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
+@cross_origin()
 def get_analysis(json_data):
     return process_request(json_data, analyze_test_scores)
 
@@ -106,5 +110,13 @@ def compute_excludes(json_data):
     return process_request(json_data, get_excludes)
 
 
+@app.route('/sample', methods=['POST', 'GET'])
+@cross_origin()
+def get_sample_analysis():
+    return process_request(json.dumps(sample), analyze_test_scores)
+
+
 if __name__ == '__main__':
-    app.run(threaded=True)
+    print("Starting service")
+    app.run(host="0.0.0.0", port=8000, threaded=True)
+
