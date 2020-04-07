@@ -1,13 +1,13 @@
-from pbcc import calculate_pbcc
+from idr import calculate_idr
 from utils import get_service_config
 
 
-def get_excludes(param):
+def get_exclude_recos(param):
     service_key = get_service_config(9)
-    pbcc_dict = list(calculate_pbcc(param).values())[0]
+    idr_dict = list(calculate_idr(param).values())[0]
     exclude_list = []
-    for i in pbcc_dict:
-        if pbcc_dict[i] < 0: # <-- some threshhold
+    for i in idr_dict:
+        if idr_dict[i] <= 0.09:
             exclude_list.append(i)
         
     return {service_key: exclude_list}

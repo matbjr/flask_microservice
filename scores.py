@@ -11,7 +11,7 @@ def calculate_scores(param):
     for i in range(0, numStudents):
         numRight = sum(sortedResponses[i])
         score = numRight / numItems
-        score = round(score, 3)
+        score = round(score * 100, 1)
         scoreList.append(score)
         
     return {service_key: scoreList}

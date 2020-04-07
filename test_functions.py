@@ -1,12 +1,14 @@
 from kr20 import calculate_kr20
-from pbcc import calculate_pbcc
+from idr import calculate_idr
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
-from analyze_test import analyze_test_scores
+from analyze_test import analyze_test
 from weighted_scores import calculate_weighted_scores
 from weighted_average import calculate_weighted_average
-from excludes import get_excludes
+from excludes import get_exclude_recos
+from difficulty_average import calculate_difficulty_average
+from idr_average import calculate_idr_average
 
 
 class TestFunctions:
@@ -69,14 +71,18 @@ class TestFunctions:
 
     # testing analyze_test
     def test_analyze(self):
-        expected = [{'kr20': 0.343}, {
-            'pbcc': {1: 0.049, 2: -0.049, 3: 0.245, 4: 0.245, 5: 0.196,
-                     6: 0.0}}, {
-                        'difficulty': {1: 0.333, 2: 0.667, 3: 0.667, 4: 0.667,
-                                       5: 0.333, 6: 1.0}},
-                    {'scores': [0.667, 0.833, 0.333]}, {'average': 0.611}]
+        expected = [{'kr20': 0.343},
+                    {'idr': {1: 0.049, 2: -0.049, 3: 0.245, 4: 0.245, 5: 0.196, 6: 0.0}},
+                    {'difficulty': {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0}},
+                    {'scores': [66.7, 83.3, 33.3]},
+                    {'average': 61.1},
+                    {'weighted_s': [57.1, 71.4, 14.3]},
+                    {'weighted_avg': 47.6},
+                    {'exclude': [1, 2, 6]},
+                    {'diff_avg': 0.389},
+                    {'idr_avg': 0.114}]
 
-        analysis = analyze_test_scores(self.data)['analysis']
+        analysis = analyze_test(self.data)['analysis']
 
         assert analysis == expected
 
@@ -88,17 +94,17 @@ class TestFunctions:
 
         assert kr20 == expected
 
-    # testing the pbcc
-    def test_pbcc(self):
+    # testing the idr
+    def test_idr(self):
         expected = {1: 0.049, 2: -0.049, 3: 0.245, 4: 0.245, 5: 0.196, 6: 0.0}
-        pbcc = calculate_pbcc(self.data)['pbcc']
+        idr = calculate_idr(self.data)['idr']
 
-        assert pbcc == expected
+        assert idr == expected
 
     # testing the difficulty
     def test_difficulty(self):
 
-        expected = {1: 0.333, 2: 0.667, 3: 0.667, 4: 0.667, 5: 0.333, 6: 1.0}
+        expected = {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0}
         difficulty = calculate_difficulty(self.data)['difficulty']
 
         assert difficulty == expected
@@ -106,7 +112,7 @@ class TestFunctions:
     # testing the scores
     def test_scores(self):
 
-        expected = [0.667, 0.833, 0.333]
+        expected = [66.7, 83.3, 33.3]
         scores = calculate_scores(self.data)['scores']
 
         assert scores == expected
@@ -114,7 +120,7 @@ class TestFunctions:
     # testing the average
     def test_average(self):
 
-        expected = 0.611
+        expected = 61.1
         average = calculate_average(self.data)['average']
 
         assert average == expected
@@ -122,23 +128,39 @@ class TestFunctions:
     # testing the weighted scores
     def test_weighted_scores(self):
 
-        expected = [0.727, 0.909, 0.455]
-        scores = calculate_weighted_scores(self.data)['weighted_s']
+        expected = [57.1, 71.4, 14.3]
+        weighted_scores = calculate_weighted_scores(self.data)['weighted_s']
 
-        assert scores == expected
+        assert weighted_scores == expected
 
     # testing the weighted average
     def test_weighted_avg(self):
 
-        expected = 0.697
-        average = calculate_weighted_average(self.data)['weighted_avg']
+        expected = 47.6
+        weighted_average = calculate_weighted_average(self.data)['weighted_avg']
 
-        assert average == expected
+        assert weighted_average == expected
 
     # testing the get excludes
-    def test_get_excludes(self):
+    def test_get_exclude_recos(self):
 
-        expected = [2]
-        average = get_excludes(self.data)['exclude']
+        expected = [1, 2, 6]
+        excludes = get_exclude_recos(self.data)['exclude']
 
-        assert average == expected
+        assert excludes == expected
+
+    # testing the avg difficulty
+    def test_difficulty_avg(self):
+
+        expected = 0.389
+        diff_avg = calculate_difficulty_average(self.data)['diff_avg']
+
+        assert diff_avg == expected
+
+    # testing the avg idr
+    def test_idr_avg(self):
+
+        expected = 0.114
+        idr_avg = calculate_idr_average(self.data)['idr_avg']
+
+        assert idr_avg == expected

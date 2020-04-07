@@ -6,14 +6,16 @@ from std import calculate_std
 from summation import calculate_summation
 from proportion import calculate_proportion
 from kr20 import calculate_kr20
-from pbcc import calculate_pbcc
+from idr import calculate_idr
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
-from analyze_test import analyze_test_scores
+from analyze_test import analyze_test
 from weighted_scores import calculate_weighted_scores
 from weighted_average import calculate_weighted_average
-from excludes import get_excludes
+from excludes import get_exclude_recos
+from difficulty_average import calculate_difficulty_average
+from idr_average import calculate_idr_average
 
 
 app = Flask(__name__)
@@ -66,9 +68,9 @@ def compute_kr20(json_data):
     return process_request(json_data, calculate_kr20)
 
 
-@app.route('/pbcc/<json_data>', methods=['POST', 'GET'])
-def compute_pbcc(json_data):
-    return process_request(json_data, calculate_pbcc)
+@app.route('/idr/<json_data>', methods=['POST', 'GET'])
+def compute_idr(json_data):
+    return process_request(json_data, calculate_idr)
 
 
 @app.route('/difficulty/<json_data>', methods=['POST', 'GET'])
@@ -88,7 +90,7 @@ def compute_average(json_data):
 
 @app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
 def get_analysis(json_data):
-    return process_request(json_data, analyze_test_scores)
+    return process_request(json_data, analyze_test)
 
 
 @app.route('/weightedScores/<json_data>', methods=['POST', 'GET'])
@@ -103,7 +105,17 @@ def compute_weighted_avg(json_data):
 
 @app.route('/excludes/<json_data>', methods=['POST', 'GET'])
 def compute_excludes(json_data):
-    return process_request(json_data, get_excludes)
+    return process_request(json_data, get_exclude_recos)
+
+
+@app.route('/difficulty_avg/<json_data>', methods=['POST', 'GET'])
+def compute_diff_avg(json_data):
+    return process_request(json_data, calculate_difficulty_average)
+
+
+@app.route('/idr_avg/<json_data>', methods=['POST', 'GET'])
+def compute_idr_avg(json_data):
+    return process_request(json_data, calculate_idr_average)
 
 
 if __name__ == '__main__':

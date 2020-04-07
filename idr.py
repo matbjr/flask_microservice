@@ -4,15 +4,15 @@ from math import sqrt
 from utils import get_item_std, get_sorted_responses, get_id_list, \
     get_service_config
 
-def calculate_pbcc(param):
+def calculate_idr(param):
     service_key = get_service_config(2)
     sortedResponses = get_sorted_responses(param)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     idList = get_id_list(param)
     scoreSTD = get_item_std(sortedResponses, numStudents)
-    pbccList = []
-    pbccDict = {}
+    idrList = []
+    idrDict = {}
 
     if scoreSTD <=0:
         return {service_key: 'Invalid data - No Std. Dev.'}
@@ -44,13 +44,13 @@ def calculate_pbcc(param):
         if not rightMean or not wrongMean:
             return {service_key: 'Invalid Data - No mean'}
 
-        pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
-        pbcc = round(pbcc, 3)
-        pbccList.append(pbcc)
+        idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
+        idr = round(idr, 3)
+        idrList.append(idr)
     
     k = 0
     for i in idList:
-        pbccDict[i] = pbccList[k]
+        idrDict[i] = idrList[k]
         k += 1
 
-    return {service_key: pbccDict}
+    return {service_key: idrDict}
