@@ -42,7 +42,7 @@ def get_sorted_responses(param):
 
     idList = get_id_list(param)
 
-    for i in idList: # Create a dictionary with the item IDs as keys
+    for i in idList:  # Create a dictionary with the item IDs as keys
         responses[i] = []
     
     for i in range(0, numStudents): # For each student i
@@ -76,10 +76,10 @@ config = {
     'cloud_host': 'xxx',
     'cloud_host_credentials':'yyyy',
     'application_id': 'rm_01',
-    'application_version': '0.0.1',
+    'application_version': '0.0.2',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
-    'service_url': 'http://visonics.net/rm/',
+    'service_url': 'http://api.reliabilitymeasures.com/',
     'services': [
         # use the shot_name key for service path and in response key.
         # Must follow Python/JS variable rules
@@ -94,8 +94,8 @@ config = {
         {
             'id': 2,
             'name': 'Item discrimination',
-            'short_name': 'pbcc',
-            'description': 'Item discrimination',
+            'short_name': 'IDr',
+            'description': 'Item discrimination, Point biserial correlation coefficient',
             'type': 'list of floats'
         },
         {
@@ -128,24 +128,24 @@ config = {
         },
         {
             'id': 7,
-            'name': 'weighted_scores',
-            'short_name': 'weighted_s',
+            'name': 'Weighted Scores',
+            'short_name': 'weighted_scores',
             'description': 'Weighted test scores',
             'type': 'list of floats'
         },
         {
             'id': 8,
-            'name': 'weighted_average',
+            'name': 'Weighted Average',
             'short_name': 'weighted_avg',
-            'description': 'Weighted average',
+            'description': 'Weighted Average of Weighted test scores',
             'type': 'float'
         },
         {
             'id': 9,
             'name': 'exclude_items',
             'short_name': 'exclude',
-            'description': 'Items to exclude based on pbcc',
-            'type': 'list of ints' # item id might not be only ints?
+            'description': 'Items to exclude based on IDr',
+            'type': 'list of ints'  # item id might not be only ints?
         }
     ]
 }

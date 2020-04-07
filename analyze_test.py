@@ -23,4 +23,6 @@ def analyze_test_scores(param):
 
     # list of all results
     return {service_key: [valKR20, valPBCC, valDifficulty,
-                         valScores, valAverage, valWeightedS, valWeightedAvg, valExcludes]}
+                          valScores, valAverage, valWeightedS,
+                          valWeightedAvg, valExcludes]
+           }
