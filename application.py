@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 import json
 from utils import get_config
 from sample import sample
@@ -20,6 +20,7 @@ from excludes import get_excludes
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
+CORS(app)
 
 
 def process_request(json_data: str, fn):
@@ -118,5 +119,5 @@ def get_sample_analysis():
 
 if __name__ == '__main__':
     print("Starting service")
-    app.run(host="0.0.0.0", port=8000, threaded=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True)
 

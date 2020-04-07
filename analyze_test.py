@@ -22,7 +22,12 @@ def analyze_test_scores(param):
     valExcludes = get_excludes(param)
 
     # list of all results
-    return {service_key: [valKR20, valPBCC, valDifficulty,
-                          valScores, valAverage, valWeightedS,
-                          valWeightedAvg, valExcludes]
-           }
+    result = dict()
+    items = [valKR20, valPBCC, valDifficulty,
+             valScores, valAverage, valWeightedS,
+             valWeightedAvg, valExcludes]
+    for item in items:
+        result.update(item)
+
+    return {service_key: result}
+
