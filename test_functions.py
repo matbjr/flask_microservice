@@ -6,6 +6,7 @@ from average import calculate_average
 from analyze_test import analyze_test_scores
 from weighted_scores import calculate_weighted_scores
 from weighted_average import calculate_weighted_average
+from excludes import get_excludes
 
 
 class TestFunctions:
@@ -131,5 +132,13 @@ class TestFunctions:
 
         expected = 0.697
         average = calculate_weighted_average(self.data)['weighted_avg']
+
+        assert average == expected
+
+    # testing the get excludes
+    def test_get_excludes(self):
+
+        expected = [2]
+        average = get_excludes(self.data)['exclude']
 
         assert average == expected
