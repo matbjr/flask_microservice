@@ -94,7 +94,7 @@ config = {
         {
             'id': 2,
             'name': 'Item discrimination',
-            'short_name': 'IDr',
+            'short_name': 'idr',
             'description': 'Item discrimination, Point biserial correlation coefficient',
             'type': 'list of floats'
         },
@@ -144,8 +144,22 @@ config = {
             'id': 9,
             'name': 'exclude_items',
             'short_name': 'exclude',
-            'description': 'Items to exclude based on IDr',
-            'type': 'list of ints'  # item id might not be only ints?
+            'description': 'Items to exclude based on idr',
+            'type': 'list of item ids'
+        },
+        {
+            'id': 10,
+            'name': 'difficulty_average',
+            'short_name': 'diff_avg',
+            'description': 'The average difficulty',
+            'type': 'float'
+        },
+        {
+            'id': 11,
+            'name': 'discrimination_average',
+            'short_name': 'idr_avg',
+            'description': 'The average item discrimination',
+            'type': 'float'
         }
     ]
 }

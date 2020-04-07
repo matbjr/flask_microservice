@@ -15,7 +15,7 @@ def calculate_difficulty(param):
         for k in range(0, numStudents): # For each student k
             studentAnswer = sortedResponses[k][i]
             numRight += studentAnswer
-        difficulty = numRight / numStudents
+        difficulty = 1 - numRight / numStudents
         difficulty = round(difficulty, 3)
         difficultyList.append(difficulty)
 

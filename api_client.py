@@ -33,9 +33,9 @@ def get_kr20(scores: dict):
                  param=scores, resp_key='kr20')
 
 
-def get_pbcc(scores: dict):
-    return call_service(url=api_url, method='pbcc/',
-                 param=scores, resp_key='pbcc')
+def get_idr(scores: dict):
+    return call_service(url=api_url, method='idr/',
+                 param=scores, resp_key='idr')
 
 
 if __name__ == '__main__':
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     }
 
     print(get_kr20(data))
-    print(get_pbcc(data))
+    print(get_idr(data))

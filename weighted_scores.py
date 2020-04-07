@@ -17,7 +17,7 @@ def calculate_weighted_scores(param):
             if sortedResponses[i][k] == 1:
                 weighted += difficulty_list[k]
         weighted /= difficulty_sum
-        weighted = round(weighted, 3)
+        weighted = round(weighted * 100, 1)
         weighted_scores.append(weighted)
         
     return {service_key: weighted_scores}
