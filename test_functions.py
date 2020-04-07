@@ -4,6 +4,9 @@ from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
 from analyze_test import analyze_test_scores
+from weighted_scores import calculate_weighted_scores
+from weighted_average import calculate_weighted_average
+from excludes import get_excludes
 
 
 class TestFunctions:
@@ -113,5 +116,29 @@ class TestFunctions:
 
         expected = 0.611
         average = calculate_average(self.data)['average']
+
+        assert average == expected
+
+    # testing the weighted scores
+    def test_weighted_scores(self):
+
+        expected = [0.727, 0.909, 0.455]
+        scores = calculate_weighted_scores(self.data)['weighted_s']
+
+        assert scores == expected
+
+    # testing the weighted average
+    def test_weighted_avg(self):
+
+        expected = 0.697
+        average = calculate_weighted_average(self.data)['weighted_avg']
+
+        assert average == expected
+
+    # testing the get excludes
+    def test_get_excludes(self):
+
+        expected = [2]
+        average = get_excludes(self.data)['exclude']
 
         assert average == expected

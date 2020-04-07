@@ -126,6 +126,27 @@ config = {
             'description': 'The whole test analysis with all results',
             'type': 'list of items'
         },
+        {
+            'id': 7,
+            'name': 'weighted_scores',
+            'short_name': 'weighted_s',
+            'description': 'Weighted test scores',
+            'type': 'list of floats'
+        },
+        {
+            'id': 8,
+            'name': 'weighted_average',
+            'short_name': 'weighted_avg',
+            'description': 'Weighted average',
+            'type': 'float'
+        },
+        {
+            'id': 9,
+            'name': 'exclude_items',
+            'short_name': 'exclude',
+            'description': 'Items to exclude based on pbcc',
+            'type': 'list of ints' # item id might not be only ints?
+        }
     ]
 }
 

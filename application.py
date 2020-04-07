@@ -11,6 +11,9 @@ from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
 from analyze_test import analyze_test_scores
+from weighted_scores import calculate_weighted_scores
+from weighted_average import calculate_weighted_average
+from excludes import get_excludes
 
 
 app = Flask(__name__)
@@ -86,6 +89,21 @@ def compute_average(json_data):
 @app.route('/analyzeTest/<json_data>', methods=['POST', 'GET'])
 def get_analysis(json_data):
     return process_request(json_data, analyze_test_scores)
+
+
+@app.route('/weightedScores/<json_data>', methods=['POST', 'GET'])
+def compute_weighted_scores(json_data):
+    return process_request(json_data, calculate_weighted_scores)
+
+
+@app.route('/weightedAverage/<json_data>', methods=['POST', 'GET'])
+def compute_weighted_avg(json_data):
+    return process_request(json_data, calculate_weighted_average)
+
+
+@app.route('/excludes/<json_data>', methods=['POST', 'GET'])
+def compute_excludes(json_data):
+    return process_request(json_data, get_excludes)
 
 
 if __name__ == '__main__':

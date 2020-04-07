@@ -8,4 +8,4 @@ def calculate_average(param):
     numStudents = len(scoreList)
     average = sum(scoreList) / numStudents
         
-    return {service_key: average}
+    return {service_key: round(average, 3)}
