@@ -8,4 +8,4 @@ def calculate_weighted_average(param):
     numStudents = len(weighted_scores)
     weighted_average = sum(weighted_scores) / numStudents
         
-    return {service_key: round(weighted_average, 3)}
+    return {service_key: round(weighted_average, 1)}
