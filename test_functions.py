@@ -9,6 +9,9 @@ from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
+from excludes import get_excludes
+from utils import get_service_config
+
 
 
 class TestFunctions:
@@ -18,13 +21,13 @@ class TestFunctions:
     # self.data is a class variable that can be used through out the class
     def setup(self):
         self.data = {
-            "exam_info":
+            "exam":
             { 
                 "name": "test1"
             },
             "student_list": [
                 { 
-                    "grad_year": "2022",
+                  "grad_year": "2022",
                   "id": 1234,
                   "first_name": "John",
                   "last_name": "Smith",
@@ -83,14 +86,13 @@ class TestFunctions:
                     {'idr_avg': 0.114}]
 
         analysis = analyze_test(self.data)['analysis']
-
         assert analysis == expected
 
     # testing the kr_20
     def test_kr20(self):
 
         expected = 0.343
-        kr20 = calculate_kr20(self.data)['kr20']
+        kr20 = calculate_kr20(self.data)[get_service_config(1)]
 
         assert kr20 == expected
 
@@ -106,7 +108,6 @@ class TestFunctions:
 
         expected = {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0}
         difficulty = calculate_difficulty(self.data)['difficulty']
-
         assert difficulty == expected
 
     # testing the scores
@@ -114,7 +115,6 @@ class TestFunctions:
 
         expected = [66.7, 83.3, 33.3]
         scores = calculate_scores(self.data)['scores']
-
         assert scores == expected
 
     # testing the average
