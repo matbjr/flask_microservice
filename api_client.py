@@ -1,7 +1,7 @@
 from typing import Any
 import json
 from config import get_config
-from sample import sample
+from sample import sample, sample2
 
 api_url = get_config('test_url')
 
@@ -14,6 +14,7 @@ def call_service(url='localhost', method='', resp_key=None, **options: Any):
 
     resp = requests.get(url + method, params=params)
     if resp.status_code == 200:
+        print(resp.content)
         data = resp.json()
         if resp_key:
             return data.get(resp_key)
@@ -40,9 +41,13 @@ def get_idr(scores: dict):
 
 if __name__ == '__main__':
 
-    param = json.dumps(sample)
+
+    resp = call_service(url=api_url, method='', resp_key=None)
+    print(json.dumps(resp, indent=4))
+
+    param = json.dumps(sample2)
     resp = call_service(url=api_url, method='analyzeTest/', resp_key=None,
-                 input=param)
+                        jsonify=0, input=param)
     print(json.dumps(resp, indent=4))
 
     resp = call_service(url=api_url, method='sample', resp_key=None)

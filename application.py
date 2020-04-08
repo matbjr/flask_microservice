@@ -34,18 +34,21 @@ def process_request(fn, json_data=None):
     :param json_data: str (optional in JSON format)
     :return: str, a JSON formatted string
     """
-
+    pretty_json = 1
     try:
+        pretty_json = request.args.get('jsonify', pretty_json)
         if not json_data:
             json_data = request.args.get('input') or request.args.get('json')
-        print(json_data)
+        print(pretty_json, json_data)
         inp = json.loads(json_data)
         ans = fn(inp)  # calling function 'fn'
         ans['Input'] = inp
     except Exception as exc:
         ans = {'error': str(exc), 'input': json_data}
-
-    return jsonify(ans)
+    if pretty_json == 1:
+        return jsonify(ans)
+    else:
+        return json.dumps(ans)
 
 
 @app.route('/')
