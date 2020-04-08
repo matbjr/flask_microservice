@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import cross_origin, CORS
 import json
 from config import get_config
-from sample import sample
+from sample import sample, sample2
 
 from std import calculate_std
 from summation import calculate_summation
@@ -36,10 +36,10 @@ def process_request(fn, json_data=None):
     """
     pretty_json = 1
     try:
-        pretty_json = request.args.get('jsonify', pretty_json)
+        pretty_json = request.args.get('pretty', pretty_json)
         if not json_data:
             json_data = request.args.get('input') or request.args.get('json')
-        print(pretty_json, json_data)
+        # print(pretty_json, json_data)
         inp = json.loads(json_data)
         ans = fn(inp)  # calling function 'fn'
         ans['Input'] = inp
@@ -51,11 +51,15 @@ def process_request(fn, json_data=None):
         return json.dumps(ans)
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 @cross_origin()
 def welcome():
-    return jsonify({'message': 'Welcome from Reliability Measures!',
-                    'version': get_config('application_version')})
+    return jsonify(
+        {
+            'message': 'Welcome from Reliability Measures!',
+            'version': get_config('application_version')
+        }
+    )
 
 
 @app.route('/std/', methods=['POST', 'GET'])
@@ -75,7 +79,7 @@ def compute_proportion():
 
 @app.route('/kr20/', methods=['POST', 'GET'])
 def compute_kr20():
-    return process_request( calculate_kr20)
+    return process_request(calculate_kr20)
 
 
 @app.route('/idr/', methods=['POST', 'GET'])

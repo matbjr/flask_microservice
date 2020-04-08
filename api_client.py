@@ -3,7 +3,7 @@ import json
 from config import get_config
 from sample import sample, sample2
 
-api_url = get_config('test_url')
+api_url = get_config('service_url')
 
 
 def call_service(url='localhost', method='', resp_key=None, **options: Any):
@@ -12,7 +12,7 @@ def call_service(url='localhost', method='', resp_key=None, **options: Any):
     params = {}
     params.update(options)
 
-    resp = requests.get(url + method, params=params)
+    resp = requests.post(url + method, params=params)
     if resp.status_code == 200:
         print(resp.content)
         data = resp.json()
@@ -31,7 +31,7 @@ def get_std(scores: list):
 
 def get_kr20(scores: dict):
     return call_service(url=api_url, method='kr20/',
-                 param=scores, resp_key='kr20')
+                 resp_key='kr20', pretty=1, input=param)
 
 
 def get_idr(scores: dict):
@@ -41,14 +41,15 @@ def get_idr(scores: dict):
 
 if __name__ == '__main__':
 
-
     resp = call_service(url=api_url, method='', resp_key=None)
     print(json.dumps(resp, indent=4))
 
-    param = json.dumps(sample2)
-    resp = call_service(url=api_url, method='analyzeTest/', resp_key=None,
-                        jsonify=0, input=param)
+    resp = call_service(url=api_url, method='sample', resp_key=None, pretty=1)
     print(json.dumps(resp, indent=4))
 
-    resp = call_service(url=api_url, method='sample', resp_key=None)
+    param = json.dumps(sample2)
+    resp = call_service(url=api_url, method='kr20/', resp_key=None,
+                        pretty=1, input=param)
     print(json.dumps(resp, indent=4))
+
+
