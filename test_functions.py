@@ -9,9 +9,7 @@ from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
-from excludes import get_excludes
 from utils import get_service_config
-
 
 
 class TestFunctions:
@@ -74,18 +72,19 @@ class TestFunctions:
 
     # testing analyze_test
     def test_analyze(self):
-        expected = [{'kr20': 0.343},
-                    {'idr': {1: 0.049, 2: -0.049, 3: 0.245, 4: 0.245, 5: 0.196, 6: 0.0}},
-                    {'difficulty': {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0}},
-                    {'scores': [66.7, 83.3, 33.3]},
-                    {'average': 61.1},
-                    {'weighted_s': [57.1, 71.4, 14.3]},
-                    {'weighted_avg': 47.6},
-                    {'exclude': [1, 2, 6]},
-                    {'diff_avg': 0.389},
-                    {'idr_avg': 0.114}]
+        expected = {'analysis': {'kr20': 0.343,
+                                 'idr': {1: 0.049, 2: -0.049, 3: 0.245,
+                                         4: 0.245, 5: 0.196, 6: 0.0},
+                                 'difficulty': {1: 0.667, 2: 0.333, 3: 0.333,
+                                                4: 0.333, 5: 0.667
+                                     , 6: 0.0}, 'scores': [66.7, 83.3, 33.3],
+                                 'average': 61.1,
+                                 'weighted_scores': [57.1, 71.4, 14.3],
+                                 'weighted_avg': 47.6, 'exclude': [2],
+                                 'diff_avg': 0.389, 'idr_avg': 0.114}
+                    }
 
-        analysis = analyze_test(self.data)['analysis']
+        analysis = analyze_test(self.data)
         assert analysis == expected
 
     # testing the kr_20
@@ -129,7 +128,7 @@ class TestFunctions:
     def test_weighted_scores(self):
 
         expected = [57.1, 71.4, 14.3]
-        weighted_scores = calculate_weighted_scores(self.data)['weighted_s']
+        weighted_scores = calculate_weighted_scores(self.data)['weighted_scores']
 
         assert weighted_scores == expected
 
@@ -144,7 +143,7 @@ class TestFunctions:
     # testing the get excludes
     def test_get_exclude_recos(self):
 
-        expected = [1, 2, 6]
+        expected = [2]
         excludes = get_exclude_recos(self.data)['exclude']
 
         assert excludes == expected

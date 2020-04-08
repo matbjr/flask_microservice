@@ -25,9 +25,14 @@ def analyze_test(param):
     val_diff_avg = calculate_difficulty_average(param)
     val_idr_avg = calculate_idr_average(param)
 
-    # list of all results
-    return {service_key: [val_kr20, val_idr, val_difficulty,
-                         val_scores, val_average, val_weighted_s, 
-                         val_weighted_avg, val_excludes, val_diff_avg, 
-                         val_idr_avg]}
+    # join all results
+    result = dict()
+    items = [val_kr20, val_idr, val_difficulty,
+             val_scores, val_average, val_weighted_s,
+             val_weighted_avg, val_excludes, val_diff_avg,
+             val_idr_avg]
+    for item in items:
+        result.update(item)
+
+    return {service_key: result}
 

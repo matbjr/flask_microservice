@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 import json
 from utils import get_config
 from sample import sample
@@ -22,6 +22,7 @@ from idr_average import calculate_idr_average
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
+CORS(app)
 
 
 def process_request(json_data: str, fn):
@@ -125,10 +126,10 @@ def compute_idr_avg(json_data):
 @app.route('/sample', methods=['POST', 'GET'])
 @cross_origin()
 def get_sample_analysis():
-    return process_request(json.dumps(sample), analyze_test_scores)
+    return process_request(json.dumps(sample), analyze_test)
 
 
 if __name__ == '__main__':
     print("Starting service")
-    app.run(host="0.0.0.0", port=8000, threaded=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True)
 
