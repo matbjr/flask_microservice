@@ -126,7 +126,7 @@ def compute_idr_avg(json_data):
 @app.route('/sample', methods=['POST', 'GET'])
 @cross_origin()
 def get_sample_analysis():
-    return process_request(json.dumps(sample), analyze_test_scores)
+    return process_request(json.dumps(sample), analyze_test)
 
 
 if __name__ == '__main__':
