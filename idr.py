@@ -1,8 +1,9 @@
 from statistics import mean
 from math import sqrt
 
-from utils import get_item_std, get_sorted_responses, get_id_list, \
-    get_service_config
+from utils import get_item_std, get_sorted_responses, get_id_list
+from config import get_service_config
+
 
 def calculate_idr(param):
     service_key = get_service_config(2)

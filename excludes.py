@@ -1,5 +1,5 @@
 from idr import calculate_idr
-from utils import get_service_config
+from config import get_service_config
 
 
 def get_exclude_recos(param):

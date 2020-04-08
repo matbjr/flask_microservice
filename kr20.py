@@ -1,4 +1,5 @@
-from utils import get_item_std, get_sorted_responses, get_service_config
+from utils import get_item_std, get_sorted_responses
+from config import get_service_config
 
 
 def calculate_kr20(param):

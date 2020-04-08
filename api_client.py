@@ -1,18 +1,18 @@
+from typing import Any
 import json
-from utils import get_config
+from config import get_config
+from sample import sample
 
-api_url = get_config('service_url')
+api_url = get_config('test_url')
 
 
-def call_service(url='localhost', method='', param=None, resp_key=None):
+def call_service(url='localhost', method='', resp_key=None, **options: Any):
     import requests
 
-    if isinstance(param, dict):
-        param = json.dumps(param)
-    if param is None or not isinstance(param, str):
-        param = ''
+    params = {}
+    params.update(options)
 
-    resp = requests.get(url + method + param)
+    resp = requests.get(url + method, params=params)
     if resp.status_code == 200:
         data = resp.json()
         if resp_key:
@@ -40,28 +40,10 @@ def get_idr(scores: dict):
 
 if __name__ == '__main__':
 
-    param = {"elements": [4, 5.6, 7, 0, 22, -4.5]}
-    print(call_service(url=api_url, method='std/',
-                       param=param))
+    param = json.dumps(sample)
+    resp = call_service(url=api_url, method='analyzeTest/', resp_key=None,
+                 input=param)
+    print(json.dumps(resp, indent=4))
 
-    print(get_std(param['elements']))
-
-    data2 = {
-        "students": [
-            {"itemresponses": [1, 0, 1, 1, 0, 1]},
-            {"itemresponses": [0, 1, 1, 1, 1, 1]},
-            {"itemresponses": [0, 1, 0, 0, 0, 1]},
-            {"itemresponses": [1, 1, 1, 1, 1, 1]},
-            {"itemresponses": [0, 0, 0, 0, 1, 0]}
-        ]
-    }
-
-    data = {
-        "students":  [
-            {"itemresponses": [ 1, 1, 1, 0 ]},
-            {"itemresponses": [ 0, 1, 0, 1 ]}
-         ]
-    }
-
-    print(get_kr20(data))
-    print(get_idr(data))
+    resp = call_service(url=api_url, method='sample', resp_key=None)
+    print(json.dumps(resp, indent=4))

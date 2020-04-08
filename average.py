@@ -1,5 +1,5 @@
 from scores import calculate_scores
-from utils import get_service_config
+from config import get_service_config
 
 
 def calculate_average(param):

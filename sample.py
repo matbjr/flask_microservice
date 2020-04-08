@@ -776,6 +776,6 @@ sample = {
         }
     ],
     "exam": {
-        "name": "KR20 Example"
+        "name": "20 items & 9 students Exam"
     }
 }
