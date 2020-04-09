@@ -18,6 +18,7 @@ from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
+from num_correct import calculate_num_correct
 
 
 app = Flask(__name__)
@@ -132,6 +133,11 @@ def compute_diff_avg():
 @app.route('/idr_avg/', methods=['POST', 'GET'])
 def compute_idr_avg():
     return process_request( calculate_idr_average)
+
+
+@app.route('/num_correct/', methods=['POST', 'GET'])
+def compute_num_correct():
+    return process_request( calculate_num_correct)
 
 
 @app.route('/sample', methods=['POST', 'GET'])

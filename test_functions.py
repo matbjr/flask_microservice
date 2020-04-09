@@ -9,6 +9,7 @@ from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
+from num_correct import calculate_num_correct
 from config import get_service_config
 
 
@@ -81,7 +82,8 @@ class TestFunctions:
                                  'average': 61.1,
                                  'weighted_scores': [57.1, 71.4, 14.3],
                                  'weighted_avg': 47.6, 'exclude': [2],
-                                 'diff_avg': 0.389, 'idr_avg': 0.114}
+                                 'diff_avg': 0.389, 'idr_avg': 0.114, 
+                                 'num_correct': {1: 1, 2: 2, 3: 2, 4: 2, 5: 1, 6: 3}}
                     }
 
         analysis = analyze_test(self.data)
@@ -163,3 +165,11 @@ class TestFunctions:
         idr_avg = calculate_idr_average(self.data)['idr_avg']
 
         assert idr_avg == expected
+
+    # testing the num correct
+    def test_num_correct(self):
+
+        expected = {1: 1, 2: 2, 3: 2, 4: 2, 5: 1, 6: 3}
+        num_correct = calculate_num_correct(self.data)['num_correct']
+
+        assert num_correct == expected

@@ -90,6 +90,13 @@ config = {
             'short_name': 'idr_avg',
             'description': 'The average item discrimination',
             'type': 'float'
+        },
+        {
+            'id': 12,
+            'name': 'number_of_correct_responses',
+            'short_name': 'num_correct',
+            'description': 'The absolute number of an item\'s correct responses',
+            'type': 'list of ints'
         }
     ]
 }
