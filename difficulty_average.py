@@ -1,5 +1,5 @@
 from difficulty import calculate_difficulty
-from utils import get_service_config
+from config import get_service_config
 
 
 def calculate_difficulty_average(param):

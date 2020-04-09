@@ -1,5 +1,5 @@
 from weighted_scores import calculate_weighted_scores
-from utils import get_service_config
+from config import get_service_config
 
 
 def calculate_weighted_average(param):

@@ -1,4 +1,5 @@
-from utils import get_sorted_responses, get_id_list, get_service_config
+from utils import get_sorted_responses, get_id_list
+from config import get_service_config
 
 
 def calculate_difficulty(param):

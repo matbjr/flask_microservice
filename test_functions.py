@@ -9,7 +9,7 @@ from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
-from utils import get_service_config
+from config import get_service_config
 
 
 class TestFunctions:

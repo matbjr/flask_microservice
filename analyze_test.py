@@ -3,7 +3,7 @@ from idr import calculate_idr
 from difficulty import calculate_difficulty
 from scores import calculate_scores
 from average import calculate_average
-from utils import get_service_config
+from config import get_service_config
 from weighted_scores import calculate_weighted_scores
 from weighted_average import calculate_weighted_average
 from excludes import get_exclude_recos

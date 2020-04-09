@@ -1,4 +1,5 @@
-from utils import get_sorted_responses,  get_service_config
+from utils import get_sorted_responses
+from config import get_service_config
 
 
 def calculate_scores(param):
