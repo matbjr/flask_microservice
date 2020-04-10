@@ -19,6 +19,7 @@ def get_list(item, index):
 
 def get_id_list(param):
     student_list = list(param[get_keyword_value('student_list')])
+    exclude_list = list(param[get_keyword_value('exclude_items')])
     numStudents = len(student_list)
     idList = []
     responseList = []
@@ -27,9 +28,10 @@ def get_id_list(param):
         responseList.append(get_list(student_list, i))
         
     for i in responseList:
-        for k in range(0, len(i)):
-            if i[k][get_keyword_value('item_id')] not in idList:
-                idList.append(i[k][get_keyword_value('item_id')])
+        for k in i:
+            curr_id = k[get_keyword_value('item_id')]
+            if curr_id not in idList and curr_id not in exclude_list:
+                idList.append(curr_id)
     
     idList.sort()
 
@@ -51,10 +53,10 @@ def get_sorted_responses(param):
     
     for i in responseList: # For each student response list i
         checklist = idList.copy()
-        for k in range(0, len(i)): # For each question k
+        for k in i: # For each question k
             for j in responses: # For each item ID j
-                if i[k][get_keyword_value('item_id')] == j: # If item IDs match, add response to dictionary
-                    responses[j].append(i[k][get_keyword_value('response')])
+                if k[get_keyword_value('item_id')] == j: # If item IDs match, add response to dictionary
+                    responses[j].append(k[get_keyword_value('response')])
                     checklist.remove(j)
 
         if len(checklist) != 0:

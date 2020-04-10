@@ -68,7 +68,8 @@ class TestFunctions:
                         {"item_id": 6, "response": 1}
                     ]
                 }
-            ]
+            ],
+            'exclude_items':[]
         }
 
     # testing analyze_test

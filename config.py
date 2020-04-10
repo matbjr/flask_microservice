@@ -25,6 +25,7 @@ config = {
             'student_list': 'student_list',
             'item_id': 'item_id',
             'response': 'response',
+            'exclude_items': 'exclude_items',
 
             'exclude_threshold_1': 0.09,
             'exclude_threshold_2': 0,
