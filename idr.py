@@ -2,8 +2,7 @@ from statistics import mean
 from math import sqrt
 
 from utils import get_item_std, get_sorted_responses, get_id_list
-from config import get_service_config
-from key_map import get_keyword_value
+from config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):

@@ -1,6 +1,5 @@
 from idr import calculate_idr
-from config import get_service_config
-from key_map import get_keyword_value
+from config import get_service_config, get_keyword_value
 
 
 def get_exclude_recos(param):

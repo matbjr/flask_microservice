@@ -1,5 +1,5 @@
 from statistics import pstdev
-from key_map import get_keyword_value
+from config import get_keyword_value
 
 
 def get_item_std(item, numStudents):

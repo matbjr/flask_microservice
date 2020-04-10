@@ -10,6 +10,21 @@ config = {
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
     'test_url': 'http://localhost:5000/',
+    'keywords': {
+            'item_responses': 'item_responses',
+            'student_list': 'student_list',
+            'item_id': 'item_id',
+            'response': 'response',
+
+            'exclude_threshold_1': 0.09,
+            'exclude_threshold_2': 0,
+            'exclude_length_1': 0.5,
+            'exclude_length_2': 0.8,
+            'bad_exam': 'bad_exam',
+
+            'bad_std': 'Invalid data - No Std. Dev.',
+            'bad_mean': 'Invalid data - No mean'
+    },  
     'services': [
         # use the shot_name key for service path and in response key.
         # Must follow Python/JS variable rules
@@ -98,10 +113,14 @@ config = {
             'description': 'The absolute number of an item\'s correct responses',
             'type': 'list of ints'
         }
-    ]
+    ] 
 }
 
 # more to follow
+
+
+def get_keyword_value(key):
+    return config['keywords'][key]
 
 
 def get_service_config(service_id):
