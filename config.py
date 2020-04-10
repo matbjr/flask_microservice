@@ -5,7 +5,7 @@ config = {
     'cloud_host': 'xxx',
     'cloud_host_credentials':'yyyy',
     'application_id': 'rm_01',
-    'application_version': '0.1.1',
+    'application_version': '0.1.2',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
@@ -90,6 +90,13 @@ config = {
             'short_name': 'idr_avg',
             'description': 'The average item discrimination',
             'type': 'float'
+        },
+        {
+            'id': 12,
+            'name': 'number_of_correct_responses',
+            'short_name': 'num_correct',
+            'description': 'The absolute number of an item\'s correct responses',
+            'type': 'list of ints'
         }
     ]
 }
