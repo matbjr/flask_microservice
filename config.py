@@ -15,11 +15,26 @@ cloud_provider = {
 # default
 config = {
     'application_id': 'rm_01',
-    'application_version': '0.1.1',
+    'application_version': '0.1.3',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
     'test_url': 'http://localhost:5000/',
+    'keywords': {
+            'item_responses': 'item_responses',
+            'student_list': 'student_list',
+            'item_id': 'item_id',
+            'response': 'response',
+
+            'exclude_threshold_1': 0.09,
+            'exclude_threshold_2': 0,
+            'exclude_length_1': 0.5,
+            'exclude_length_2': 0.8,
+            'bad_exam': 'bad_exam',
+
+            'bad_std': 'Invalid data - No Std. Dev.',
+            'bad_mean': 'Invalid data - No mean'
+    },  
     'services': [
         # use the shot_name key for service path and in response key.
         # Must follow Python/JS variable rules
@@ -100,11 +115,22 @@ config = {
             'short_name': 'idr_avg',
             'description': 'The average item discrimination',
             'type': 'float'
+        },
+        {
+            'id': 12,
+            'name': 'number_of_correct_responses',
+            'short_name': 'num_correct',
+            'description': 'The absolute number of an item\'s correct responses',
+            'type': 'list of ints'
         }
-    ]
+    ] 
 }
 
 # more to follow
+
+
+def get_keyword_value(key):
+    return config['keywords'][key]
 
 
 def get_service_config(service_id):
