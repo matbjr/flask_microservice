@@ -1,5 +1,6 @@
 from utils import get_item_std, get_sorted_responses
 from config import get_service_config
+from key_map import get_keyword_value
 
 
 def calculate_kr20(param):
@@ -11,7 +12,7 @@ def calculate_kr20(param):
     scoreSTD = get_item_std(sortedResponses, numStudents)
 
     if scoreSTD <= 0:
-        return {service_key: 'Invalid data - No Std. Dev.'}
+        return {service_key: get_keyword_value('bad_std')}
 
     for i in range(0, numItems):
         p = 0

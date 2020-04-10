@@ -1,4 +1,5 @@
 from statistics import pstdev
+from key_map import get_keyword_value
 
 
 def get_item_std(item, numStudents):
@@ -13,43 +14,52 @@ def get_item_std(item, numStudents):
 
 
 def get_list(item, index):
-    return list(item[index]['item_responses'])
+    return list(item[index][get_keyword_value('item_responses')])
 
 
 def get_id_list(param):
-    student_list = list(param['student_list'])
-    responseList = get_list(student_list, 0)
-    numItems = len(responseList)
+    student_list = list(param[get_keyword_value('student_list')])
+    numStudents = len(student_list)
     idList = []
-
-    for i in range(0, numItems): # Put all item IDs into a list
-        idList.append(responseList[i]['item_id'])
+    responseList = []
+    
+    for i in range(0, numStudents):
+        responseList.append(get_list(student_list, i))
+        
+    for i in responseList:
+        for k in range(0, len(i)):
+            if i[k][get_keyword_value('item_id')] not in idList:
+                idList.append(i[k][get_keyword_value('item_id')])
+    
     idList.sort()
 
     return idList
 
 
 def get_sorted_responses(param):
-    student_list = list(param['student_list'])
-    responseList = get_list(student_list, 0)
+    student_list = list(param[get_keyword_value('student_list')])
     numStudents = len(student_list)
-    numItems = len(responseList)
-    responses = {}
-
-    for i in range(0, numStudents): # Check if item count is consistent
-        if numItems != len(get_list(student_list, i)):
-            return {'error': 'All students\' item count must be the same'}
-
     idList = get_id_list(param)
+    responseList = []
+    responses = {}
+    
+    for i in range(0, numStudents):
+        responseList.append(get_list(student_list, i))
 
     for i in idList:  # Create a dictionary with the item IDs as keys
         responses[i] = []
     
-    for i in range(0, numStudents): # For each student i
-        for k in range(0, numItems): # For each question k
+    for i in responseList: # For each student response list i
+        checklist = idList.copy()
+        for k in range(0, len(i)): # For each question k
             for j in responses: # For each item ID j
-                if get_list(student_list, i)[k]['item_id'] == j: # If item IDs match, add response to dictionary
-                    responses[j].append(get_list(student_list, i)[k]['response'])
+                if i[k][get_keyword_value('item_id')] == j: # If item IDs match, add response to dictionary
+                    responses[j].append(i[k][get_keyword_value('response')])
+                    checklist.remove(j)
+
+        if len(checklist) != 0:
+            for i in checklist:
+                responses[i].append(0)
 
     sortedResponses = []
     for i in range(0, numStudents): # For each student
