@@ -1,9 +1,19 @@
+from providers.cloud_handler import get_config_file
+
+
 # JSON object for literals and constants
 # will be hosted in some cloud storage
 # all keys are lower case, Use underscore for longer keys
+
+# need to read from env
+cloud_provider = {
+    'cloud_host': 'dropbox',
+    'cloud_config_file': 'config.json',
+    'cloud_access_key': 'vDuiM-56ZzsAAAAAAAAHJGw5MRrhkkeJZ0AJhft11_SCePhuuP2XCVGY3pMGvLBn',
+}
+
+# default
 config = {
-    'cloud_host': 'xxx',
-    'cloud_host_credentials':'yyyy',
     'application_id': 'rm_01',
     'application_version': '0.1.1',
     'application_name': 'Reliability Measures microservices',
@@ -103,3 +113,11 @@ def get_service_config(service_id):
 
 def get_config(config_key):
     return config.get(config_key)
+
+
+def get_config_from_cloud(cloud_provider):
+    try:
+        config = get_config_file(cloud_provider)
+    except Exception as exc:
+        print("Config Exception!")
+
