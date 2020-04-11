@@ -11,7 +11,7 @@ def get_assumptions(param):
         checklist = idList.copy()
         for k in i[get_keyword_value('item_responses')]: # For each question k
             for j in idList: # For each item ID j
-                if k[get_keyword_value('item_id')] == j: # If item IDs match, add response to dictionary
+                if k[get_keyword_value('item_id')] == j: # If item IDs match
                     checklist.remove(j)
 
         if len(checklist) != 0:

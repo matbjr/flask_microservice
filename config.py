@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     'application_id': 'rm_01',
-    'application_version': '0.1.3',
+    'application_version': '0.1.4',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
