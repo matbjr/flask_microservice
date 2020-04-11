@@ -2,10 +2,10 @@ from statistics import pstdev
 from config import get_keyword_value
 
 
-def get_item_std(item, numStudents):
+def get_item_std(item):
     scoreList = []
-    for i in range(0, numStudents):
-        score = sum(item[i])
+    for i in item:
+        score = sum(i)
         scoreList.append(score)
     # scoreSTD = get_std(scoreList)  # micro service call
     scoreSTD = pstdev(scoreList)

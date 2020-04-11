@@ -8,7 +8,7 @@ def calculate_kr20(param):
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     pqList = []
-    scoreSTD = get_item_std(sortedResponses, numStudents)
+    scoreSTD = get_item_std(sortedResponses)
 
     if scoreSTD <= 0:
         return {service_key: get_keyword_value('bad_std')}
