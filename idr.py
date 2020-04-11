@@ -11,7 +11,7 @@ def calculate_idr(param):
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     idList = get_id_list(param)
-    scoreSTD = get_item_std(sortedResponses, numStudents)
+    scoreSTD = get_item_std(sortedResponses)
     idrList = []
     idrDict = {}
 

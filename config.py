@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     'application_id': 'rm_01',
-    'application_version': '0.1.3',
+    'application_version': '0.1.4',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
@@ -25,6 +25,8 @@ config = {
             'student_list': 'student_list',
             'item_id': 'item_id',
             'response': 'response',
+            'exclude_items': 'exclude_items',
+            'id': 'id',
 
             'exclude_threshold_1': 0.09,
             'exclude_threshold_2': 0,
@@ -122,6 +124,13 @@ config = {
             'short_name': 'num_correct',
             'description': 'The absolute number of an item\'s correct responses',
             'type': 'list of ints'
+        },
+        {
+            'id': 13,
+            'name': 'student_response_assumptions',
+            'short_name': 'assumptions',
+            'description': 'The assumption of the score 0 for items that the student does not have a response for',
+            'type': 'dictionary of item ids'
         }
     ] 
 }
