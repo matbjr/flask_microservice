@@ -11,6 +11,7 @@ from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
+from utils import get_id_list
 from config import get_service_config
 
 
@@ -186,3 +187,66 @@ class TestFunctions:
         assumption = get_assumptions(self.data)['assumptions']
 
         assert assumption == expected
+
+    
+    # testing with excludes
+    def test_with_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                }
+            ],
+            'exclude_items':[2]
+        }
+
+        expected = [1]
+        id_list = get_id_list(data)
+
+        assert id_list == expected
+
+
+    # testing without excludes
+    def test_without_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                }
+            ]
+        }
+
+        expected = [1, 2]
+        id_list = get_id_list(data)
+
+        assert id_list == expected

@@ -15,12 +15,9 @@ def get_item_std(item):
 
 def get_id_list(param):
     student_list = list(param[get_keyword_value('student_list')])
-    exclude_list = []
+    exclude_list = list(param.get(get_keyword_value('exclude_items'), []))
     idList = []
     responseList = []
-
-    if param.get(get_keyword_value('exclude_items')) != None:
-        exclude_list = list(param.get(get_keyword_value('exclude_items')))
     
     for i in student_list:
         responseList.append(i[get_keyword_value('item_responses')])
