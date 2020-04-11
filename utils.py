@@ -13,19 +13,14 @@ def get_item_std(item, numStudents):
     return scoreSTD
 
 
-def get_list(item, index):
-    return list(item[index][get_keyword_value('item_responses')])
-
-
 def get_id_list(param):
     student_list = list(param[get_keyword_value('student_list')])
     exclude_list = list(param[get_keyword_value('exclude_items')])
-    numStudents = len(student_list)
     idList = []
     responseList = []
     
-    for i in range(0, numStudents):
-        responseList.append(get_list(student_list, i))
+    for i in student_list:
+        responseList.append(i[get_keyword_value('item_responses')])
         
     for i in responseList:
         for k in i:
@@ -45,8 +40,8 @@ def get_sorted_responses(param):
     responseList = []
     responses = {}
     
-    for i in range(0, numStudents):
-        responseList.append(get_list(student_list, i))
+    for i in student_list:
+        responseList.append(i[get_keyword_value('item_responses')])
 
     for i in idList:  # Create a dictionary with the item IDs as keys
         responses[i] = []
