@@ -79,9 +79,9 @@ class TestFunctions:
         expected = {'analysis': {'kr20': -1.167,
                                  'idr': {1: 0.0, 2: 0.0, 3: 0.082, 4: 0.082, 5: 0.082, 6: 0.0, 7: -0.082},
                                  'difficulty': {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0, 7: 0.667}, 
-                                 'scores': [57.1, 71.4, 42.9],
+                                 'scores': {1234: 57.1, 1235: 71.4, 1236: 42.9},
                                  'average': 57.1,
-                                 'weighted_scores': [44.4, 55.5, 33.3],
+                                 'weighted_scores': {1234: 44.4, 1235: 55.5, 1236: 33.3},
                                  'weighted_avg': 44.4, 
                                  'exclude': [7],
                                  'diff_avg': 0.429, 
@@ -118,7 +118,7 @@ class TestFunctions:
     # testing the scores
     def test_scores(self):
 
-        expected = [57.1, 71.4, 42.9]
+        expected = {1234: 57.1, 1235: 71.4, 1236: 42.9}
         scores = calculate_scores(self.data)['scores']
         assert scores == expected
 
@@ -133,7 +133,7 @@ class TestFunctions:
     # testing the weighted scores
     def test_weighted_scores(self):
 
-        expected = [44.4, 55.5, 33.3]
+        expected = {1234: 44.4, 1235: 55.5, 1236: 33.3}
         weighted_scores = calculate_weighted_scores(self.data)['weighted_scores']
 
         assert weighted_scores == expected
