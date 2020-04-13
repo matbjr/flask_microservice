@@ -2,7 +2,7 @@ from statistics import mean
 from math import sqrt
 
 from utils import get_item_std, get_sorted_responses, get_id_list
-from config import get_service_config
+from config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):
@@ -11,12 +11,12 @@ def calculate_idr(param):
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     idList = get_id_list(param)
-    scoreSTD = get_item_std(sortedResponses, numStudents)
+    scoreSTD = get_item_std(sortedResponses)
     idrList = []
     idrDict = {}
 
     if scoreSTD <=0:
-        return {service_key: 'Invalid data - No Std. Dev.'}
+        return {service_key: get_keyword_value('bad_std')}
 
     for i in range(0, numItems): # For each question i
         rightList = [] # Scores of students who got question i right
@@ -33,7 +33,6 @@ def calculate_idr(param):
                 wrongList.append(score) # Then add their score to the "wrong" list
                 numWrong += 1
 
-        # rightMean = wrongMean = None # <-- Causing errors
         if len(rightList) == 1:
             rightMean = rightList[0]
         elif len(rightList) > 1:
@@ -43,7 +42,7 @@ def calculate_idr(param):
         elif len(wrongList) > 1:
             wrongMean = mean(wrongList)
         if not rightMean or not wrongMean:
-            return {service_key: 'Invalid Data - No mean'}
+            return {service_key: get_keyword_value('bad_mean')}
 
         idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         idr = round(idr, 3)

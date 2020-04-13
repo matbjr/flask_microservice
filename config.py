@@ -1,15 +1,42 @@
+from providers.cloud_handler import get_config_file
+
+
 # JSON object for literals and constants
 # will be hosted in some cloud storage
 # all keys are lower case, Use underscore for longer keys
+
+# need to read from env
+cloud_provider = {
+    'cloud_host': 'dropbox',
+    'cloud_config_file': 'config.json',
+    'cloud_access_key': 'vDuiM-56ZzsAAAAAAAAHJGw5MRrhkkeJZ0AJhft11_SCePhuuP2XCVGY3pMGvLBn',
+}
+
+# default
 config = {
-    'cloud_host': 'xxx',
-    'cloud_host_credentials':'yyyy',
     'application_id': 'rm_01',
-    'application_version': '0.1.2',
+    'application_version': '0.1.4',
     'application_name': 'Reliability Measures microservices',
     'application_short_name': 'rm_microservices',
     'service_url': 'http://api.reliabilitymeasures.com/',
     'test_url': 'http://localhost:5000/',
+    'keywords': {
+            'item_responses': 'item_responses',
+            'student_list': 'student_list',
+            'item_id': 'item_id',
+            'response': 'response',
+            'exclude_items': 'exclude_items',
+            'id': 'id',
+
+            'exclude_threshold_1': 0.09,
+            'exclude_threshold_2': 0,
+            'exclude_length_1': 0.5,
+            'exclude_length_2': 0.8,
+            'bad_exam': 'bad_exam',
+
+            'bad_std': 'Invalid data - No Std. Dev.',
+            'bad_mean': 'Invalid data - No mean'
+    },  
     'services': [
         # use the shot_name key for service path and in response key.
         # Must follow Python/JS variable rules
@@ -97,11 +124,22 @@ config = {
             'short_name': 'num_correct',
             'description': 'The absolute number of an item\'s correct responses',
             'type': 'list of ints'
+        },
+        {
+            'id': 13,
+            'name': 'student_response_assumptions',
+            'short_name': 'assumptions',
+            'description': 'The assumption of the score 0 for items that the student does not have a response for',
+            'type': 'dictionary of item ids'
         }
-    ]
+    ] 
 }
 
 # more to follow
+
+
+def get_keyword_value(key):
+    return config['keywords'][key]
 
 
 def get_service_config(service_id):
@@ -110,3 +148,11 @@ def get_service_config(service_id):
 
 def get_config(config_key):
     return config.get(config_key)
+
+
+def get_config_from_cloud(cloud_provider):
+    try:
+        config = get_config_file(cloud_provider)
+    except Exception as exc:
+        print("Config Exception!")
+

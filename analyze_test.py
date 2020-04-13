@@ -10,6 +10,7 @@ from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
+from assumptions import get_assumptions
 
 
 def analyze_test(param):
@@ -26,13 +27,14 @@ def analyze_test(param):
     val_diff_avg = calculate_difficulty_average(param)
     val_idr_avg = calculate_idr_average(param)
     val_num_correct = calculate_num_correct(param)
+    val_assumptions = get_assumptions(param)
 
     # join all results
     result = dict()
     items = [val_kr20, val_idr, val_difficulty,
              val_scores, val_average, val_weighted_s,
              val_weighted_avg, val_excludes, val_diff_avg,
-             val_idr_avg, val_num_correct]
+             val_idr_avg, val_num_correct, val_assumptions]
     for item in items:
         result.update(item)
 

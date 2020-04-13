@@ -19,6 +19,7 @@ from excludes import get_exclude_recos
 from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
+from assumptions import get_assumptions
 
 
 app = Flask(__name__)
@@ -138,6 +139,11 @@ def compute_idr_avg():
 @app.route('/num_correct/', methods=['POST', 'GET'])
 def compute_num_correct():
     return process_request( calculate_num_correct)
+
+
+@app.route('/assumptions/', methods=['POST', 'GET'])
+def compute_assumptions():
+    return process_request( get_assumptions)
 
 
 @app.route('/sample', methods=['POST', 'GET'])
