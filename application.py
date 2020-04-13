@@ -20,6 +20,7 @@ from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
+from analyze_graduationyears import analyze_gradyears
 
 
 app = Flask(__name__)
@@ -144,6 +145,11 @@ def compute_num_correct():
 @app.route('/assumptions/', methods=['POST', 'GET'])
 def compute_assumptions():
     return process_request( get_assumptions)
+
+
+@app.route('/analyze_grad_years/', methods=['POST', 'GET'])
+def get_grad_year_analysis():
+    return process_request( analyze_gradyears)
 
 
 @app.route('/sample', methods=['POST', 'GET'])

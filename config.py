@@ -27,6 +27,7 @@ config = {
             'response': 'response',
             'exclude_items': 'exclude_items',
             'id': 'id',
+            'graduationyear': 'graduationyear',
 
             'exclude_threshold_1': 0.09,
             'exclude_threshold_2': 0,
@@ -34,6 +35,7 @@ config = {
             'exclude_length_2': 0.8,
             'bad_exam': 'bad_exam',
 
+            'bad_data': 'Invalid data - Not enough students',
             'bad_std': 'Invalid data - No Std. Dev.',
             'bad_mean': 'Invalid data - No mean'
     },  
@@ -131,6 +133,13 @@ config = {
             'short_name': 'assumptions',
             'description': 'The assumption of the score 0 for items that the student does not have a response for',
             'type': 'dictionary of item ids'
+        },
+        {
+            'id': 14,
+            'name': 'analysis_by_graduation_year',
+            'short_name': 'grad_year_analysis',
+            'description': 'Analysis of students\' responses based on their graduation year',
+            'type': 'dictionary of exam analyses'
         }
     ] 
 }
