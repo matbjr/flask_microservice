@@ -5,7 +5,7 @@ def get_assumptions(param):
     service_key = get_service_config(13)
     student_list = list(param[get_keyword_value("student_list")])
     idList = get_id_list(param)
-    assumptions = {}
+    assumptions_dict = {}
     
     for i in student_list: # For each student i
         checklist = idList.copy()
@@ -15,6 +15,6 @@ def get_assumptions(param):
                     checklist.remove(j)
 
         if len(checklist) != 0:
-            assumptions[i[get_keyword_value("id")]] = checklist.copy()
-    
-    return {service_key: assumptions}
+            assumptions_dict[i[get_keyword_value("id")]] = checklist.copy()
+
+    return {service_key: assumptions_dict}
