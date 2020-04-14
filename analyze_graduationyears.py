@@ -17,7 +17,8 @@ def analyze_gradyears(param):
     service_key = get_service_config(14)
     assumptions_key = get_service_config(13)
     assumptions = get_assumptions(param)[assumptions_key]
-    students_dict = sort_students_by_grad_year(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(param)}
+    students_dict = sort_students_by_grad_year(student_list)
     grad_analysis = {}
 
     for i in students_dict:
