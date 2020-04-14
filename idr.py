@@ -16,7 +16,7 @@ def calculate_idr(param):
     idrDict = {}
 
     if scoreSTD <=0:
-        return {service_key: get_keyword_value('bad_std')}
+        return {service_key: get_keyword_value("bad_std")}
 
     for i in range(0, numItems): # For each question i
         rightList = [] # Scores of students who got question i right
@@ -42,7 +42,7 @@ def calculate_idr(param):
         elif len(wrongList) > 1:
             wrongMean = mean(wrongList)
         if not rightMean or not wrongMean:
-            return {service_key: get_keyword_value('bad_mean')}
+            return {service_key: get_keyword_value("bad_mean")}
 
         idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         idr = round(idr, 3)

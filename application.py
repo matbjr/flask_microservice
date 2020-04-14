@@ -20,6 +20,7 @@ from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
+from analyze_graduationyears import analyze_gradyears
 
 
 app = Flask(__name__)
@@ -46,7 +47,7 @@ def process_request(fn, json_data=None):
         ans = fn(inp)  # calling function 'fn'
         ans['Input'] = inp
     except Exception as exc:
-        ans = {'error': str(exc), 'input': json_data}
+        ans = {"error": str(exc), 'input': json_data}
     if pretty_json == 1:
         return jsonify(ans)
     else:
@@ -58,8 +59,8 @@ def process_request(fn, json_data=None):
 def welcome():
     return jsonify(
         {
-            'message': 'Welcome from Reliability Measures!',
-            'version': get_config('application_version')
+            "message": "Welcome from Reliability Measures!",
+            "version": get_config('application_version')
         }
     )
 
@@ -144,6 +145,11 @@ def compute_num_correct():
 @app.route('/assumptions/', methods=['POST', 'GET'])
 def compute_assumptions():
     return process_request( get_assumptions)
+
+
+@app.route('/analyze_grad_years/', methods=['POST', 'GET'])
+def get_grad_year_analysis():
+    return process_request( analyze_gradyears)
 
 
 @app.route('/sample', methods=['POST', 'GET'])
