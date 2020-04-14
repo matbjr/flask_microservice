@@ -21,7 +21,7 @@ def call_service(url='localhost', method='', resp_key=None, **options: Any):
         else:
             return data
     else:
-        return {'error': str(resp.status_code) + " " + resp.reason}
+        return {"error": str(resp.status_code) + " " + resp.reason}
 
 
 def get_std(scores: list):

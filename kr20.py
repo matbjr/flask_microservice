@@ -11,7 +11,7 @@ def calculate_kr20(param):
     scoreSTD = get_item_std(sortedResponses)
 
     if scoreSTD <= 0:
-        return {service_key: get_keyword_value('bad_std')}
+        return {service_key: get_keyword_value("bad_std")}
 
     for i in range(0, numItems):
         p = 0
