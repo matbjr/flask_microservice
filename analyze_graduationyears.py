@@ -22,9 +22,9 @@ def analyze_gradyears(param):
 
     for i in students_dict:
         curr_students = students_dict[i]
-        student_list = curr_students[get_keyword_value('student_list')]
+        student_list = curr_students[get_keyword_value("student_list")]
         if len(student_list) <= 1:
-            grad_analysis[i] = get_keyword_value('bad_data')
+            grad_analysis[i] = get_keyword_value("bad_data")
             continue
 
         val_kr20 = calculate_kr20(curr_students)
@@ -42,7 +42,7 @@ def analyze_gradyears(param):
         curr_assumptions = dict()
         for k in assumptions:
             for j in student_list:
-                if k == j[get_keyword_value('id')]:
+                if k == j[get_keyword_value("id")]:
                     curr_assumptions[k] = assumptions[k]
         val_assumptions = {assumptions_key: curr_assumptions}
 
