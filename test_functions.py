@@ -29,7 +29,7 @@ class TestFunctions:
             },
             "student_list": [
                 { 
-                  "graduationyear": "2022",
+                  "grad_year": "2022",
                   "id": 1234,
                   "first_name": "John",
                   "last_name": "Smith",
@@ -43,7 +43,7 @@ class TestFunctions:
                         {"item_id": 6, "response": 1}
                     ]
                 },
-                { "graduationyear": "2022",
+                { "grad_year": "2022",
                   "id": 1235,
                   "first_name": "Jane",
                   "last_name": "Smath",
@@ -57,7 +57,7 @@ class TestFunctions:
                         {"item_id": 6, "response": 1}
                     ]
                 },
-                { "graduationyear": "2024",
+                { "grad_year": "2024",
                   "id": 1236,
                   "first_name": "Jake",
                   "last_name": "Jakey",
@@ -232,6 +232,39 @@ class TestFunctions:
 
         assert analysis == expected
 
+    # testing with no grad year
+    def test_no_grad_year(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                },
+                { 
+                  "id": 2,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                },
+                { 
+                  "id": 3,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                }
+            ]
+        }
+
+        expected = "No graduation years found"
+        analysis = analyze_gradyears(data)["grad_year_analysis"]
+
+        assert analysis == expected
+
     
     # testing with item excludes
     def test_with_excludes(self):
@@ -365,8 +398,7 @@ class TestFunctions:
                         {"item_id": 2, "response": 1},
                     ]
                 }
-            ],
-            "exclude_students":[]
+            ]
         }
 
         expected = [{"id": 1,
