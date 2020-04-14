@@ -1,5 +1,5 @@
 from config import get_service_config, get_keyword_value
-from utils import sort_students_by_grad_year
+from utils import sort_students_by_grad_year, get_student_list
 from kr20 import calculate_kr20
 from idr import calculate_idr
 from difficulty import calculate_difficulty
@@ -22,7 +22,7 @@ def analyze_gradyears(param):
 
     for i in students_dict:
         curr_students = students_dict[i]
-        student_list = curr_students[get_keyword_value("student_list")]
+        student_list = get_student_list(curr_students)
         if len(student_list) <= 1:
             grad_analysis[i] = get_keyword_value("bad_data")
             continue

@@ -1,10 +1,11 @@
-from utils import get_item_std, get_sorted_responses
+from utils import get_item_std, get_sorted_responses, get_student_list
 from config import get_service_config, get_keyword_value
 
 
 def calculate_kr20(param):
     service_key = get_service_config(1)
-    sortedResponses = get_sorted_responses(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(param)}
+    sortedResponses = get_sorted_responses(student_list)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     pqList = []

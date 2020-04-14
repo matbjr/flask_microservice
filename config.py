@@ -28,6 +28,7 @@ config = {
             "exclude_items": "exclude_items",
             "id": "id",
             "graduationyear": "graduationyear",
+            "exclude_students": "exclude_students",
 
             "exclude_threshold_1": 0.09,
             "exclude_threshold_2": 0,

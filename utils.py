@@ -14,7 +14,7 @@ def get_item_std(item):
 
 
 def get_id_list(param):
-    student_list = list(param[get_keyword_value("student_list")])
+    student_list = get_student_list(param)
     exclude_list = list(param.get(get_keyword_value("exclude_items"), []))
     idList = []
     responseList = []
@@ -69,7 +69,7 @@ def get_sorted_responses(param):
 
 
 def get_grad_year_list(param):
-    student_list = list(param[get_keyword_value("student_list")])
+    student_list = get_student_list(param)
     grad_year_list = []
         
     for i in student_list:
@@ -104,3 +104,14 @@ def sort_students_by_grad_year(param):
                 responses_by_grad_year[i][get_keyword_value("student_list")].append(student_list[k])
 
     return responses_by_grad_year
+
+
+def get_student_list(param):
+    student_list = list(param[get_keyword_value("student_list")])
+    exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
+    
+    for i in student_list:
+        if i[get_keyword_value("id")] in exclude_students:
+            student_list.remove(i)
+
+    return student_list
