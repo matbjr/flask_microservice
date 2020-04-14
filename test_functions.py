@@ -12,7 +12,7 @@ from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
 from analyze_graduationyears import analyze_gradyears
-from utils import get_id_list
+from utils import get_id_list, get_student_list
 from config import get_service_config
 
 
@@ -74,7 +74,7 @@ class TestFunctions:
                 }
             ],
             "exclude_items":[],
-            "exlude_students":[]
+            "exclude_students":[]
         }
 
     # testing analyze_test
@@ -96,9 +96,9 @@ class TestFunctions:
                                         "kr20": -2.333, 
                                         "idr": {1: -0.036, 2: 0.036, 3: 0.0, 4: 0.0, 5: 0.036, 6: 0.0, 7: 0.0}, 
                                         "difficulty": {1: 0.5, 2: 0.5,3: 0.0, 4: 0.0, 5: 0.5, 6: 0.0, 7: 1.0}, 
-                                        "scores": [57.1, 71.4], 
+                                        "scores": {1234: 57.1, 1235: 71.4}, 
                                         "average": 64.2, 
-                                        "weighted_scores": [20.0, 40.0],
+                                        "weighted_scores": {1234: 20.0, 1235: 40.0},
                                         "weighted_avg": 30.0,
                                         "exclude": [1],
                                         "diff_avg": 0.357,
@@ -141,6 +141,8 @@ class TestFunctions:
 
         expected = {1234: 57.1, 1235: 71.4, 1236: 42.9}
         scores = calculate_scores(self.data)["scores"]
+
+        assert scores == expected
 
     # testing the average
     def test_average(self):
@@ -214,9 +216,9 @@ class TestFunctions:
                         "kr20": -2.333, 
                         "idr": {1: -0.036, 2: 0.036, 3: 0.0, 4: 0.0, 5: 0.036, 6: 0.0, 7: 0.0}, 
                         "difficulty": {1: 0.5, 2: 0.5,3: 0.0, 4: 0.0, 5: 0.5, 6: 0.0, 7: 1.0}, 
-                        "scores": [57.1, 71.4], 
+                        "scores": {1234: 57.1, 1235: 71.4}, 
                         "average": 64.2, 
-                        "weighted_scores": [20.0, 40.0],
+                        "weighted_scores": {1234: 20.0, 1235: 40.0},
                         "weighted_avg": 30.0,
                         "exclude": [1],
                         "diff_avg": 0.357,
@@ -231,23 +233,26 @@ class TestFunctions:
         assert analysis == expected
 
     
-    # testing with excludes
+    # testing with item excludes
     def test_with_excludes(self):
         data = {
             "student_list": [
                 {
+                  "id": 1,
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
                     ]
                 },
                 { 
+                  "id": 2,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
                     ]
                 },
                 { 
+                  "id": 3,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
@@ -263,23 +268,26 @@ class TestFunctions:
         assert id_list == expected
 
 
-    # testing without excludes
+    # testing without item excludes
     def test_without_excludes(self):
         data = {
             "student_list": [
                 {
+                  "id": 1,
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
                     ]
                 },
                 { 
+                  "id": 2,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
                     ]
                 },
                 { 
+                  "id": 3,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
@@ -292,3 +300,81 @@ class TestFunctions:
         id_list = get_id_list(data)
 
         assert id_list == expected
+
+
+    # testing with student excludes
+    def test_student_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                },
+                { 
+                  "id": 2,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                },
+                { 
+                  "id": 3,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                }
+            ],
+            "exclude_students":[2]
+        }
+
+        expected = [{"id": 1,
+                    "item_responses": [{"item_id": 1, "response": 1},{"item_id": 2, "response": 0}]},
+                    {"id": 3,
+                    "item_responses": [{"item_id": 1, "response": 0},{"item_id": 2, "response": 1}]}]
+        stud_list = get_student_list(data)
+
+        assert stud_list == expected
+
+
+    # testing with student excludes
+    def test_student_no_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                },
+                { 
+                  "id": 2,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                },
+                { 
+                  "id": 3,
+                  "item_responses": [
+                        {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 1},
+                    ]
+                }
+            ],
+            "exclude_students":[]
+        }
+
+        expected = [{"id": 1,
+                    "item_responses": [{"item_id": 1, "response": 1}, {"item_id": 2, "response": 0}]},
+                    {"id": 2,
+                    "item_responses": [{"item_id": 1, "response": 0}, {"item_id": 2, "response": 1},]},
+                    {"id": 3,
+                    "item_responses": [{"item_id": 1, "response": 0}, {"item_id": 2, "response": 1}]}]
+        stud_list = get_student_list(data)
+
+        assert stud_list == expected
