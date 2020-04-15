@@ -18,4 +18,7 @@ def get_assumptions(param):
         if len(checklist) != 0:
             assumptions_dict[i[get_keyword_value("id")]] = checklist.copy()
 
+    if not assumptions_dict:
+        return {service_key: get_keyword_value("no_assumptions")}
+
     return {service_key: assumptions_dict}

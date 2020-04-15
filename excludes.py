@@ -20,7 +20,7 @@ def get_exclude_recos(param):
             if idr_dict[i] < get_keyword_value("exclude_threshold_2"):
                 exclude_list.append(i)
     
-    if len(exclude_list) >= len(idr_dict)*get_keyword_value("exclude_length_2"):
-        return {service_key: get_keyword_value("bad_exam")}
+    # if len(exclude_list) >= len(idr_dict)*get_keyword_value("exclude_length_2"):
+    #     return {service_key: get_keyword_value("bad_exam")}
         
     return {service_key: exclude_list}

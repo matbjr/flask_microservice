@@ -35,8 +35,10 @@ def calculate_idr(param):
                 wrongList.append(score) # Then add their score to the "wrong" list
                 numWrong += 1
 
-        rightMean = 0
-        wrongMean = 0
+        if numRight == numStudents or numWrong == numStudents:
+            idrList.append(0)
+            continue
+
         if len(rightList) == 1:
             rightMean = rightList[0]
         elif len(rightList) > 1:
@@ -45,8 +47,8 @@ def calculate_idr(param):
             wrongMean = wrongList[0]
         elif len(wrongList) > 1:
             wrongMean = mean(wrongList)
-        # if not rightMean or not wrongMean:
-        #     return {service_key: get_keyword_value("bad_mean")}
+        if not rightMean or not wrongMean:
+            return {service_key: get_keyword_value("bad_mean")}
 
         idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         idr = round(idr, 3)

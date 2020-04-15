@@ -39,7 +39,8 @@ config = {
             "bad_data": "Invalid data - Not enough students",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
-            "no_grad_year": "No graduation years found"
+            "no_grad_year": "No graduation years found",
+            "no_assumptions": "No student response assumptions were made"
     },  
     "services": [
         # use the shot_name key for service path and in response key.

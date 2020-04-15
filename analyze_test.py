@@ -44,4 +44,3 @@ def analyze_test(param):
         result.update(item)
 
     return {service_key: result}
-

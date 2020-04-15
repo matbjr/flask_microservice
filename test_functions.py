@@ -264,7 +264,6 @@ class TestFunctions:
         analysis = analyze_grad_years(data)["grad_year_analysis"]
 
         assert analysis == expected
-
     
     # testing with item excludes
     def test_with_excludes(self):
@@ -275,6 +274,8 @@ class TestFunctions:
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 0}
                     ]
                 },
                 { 
@@ -282,24 +283,36 @@ class TestFunctions:
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 1}
                     ]
                 },
                 { 
                   "id": 3,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                { 
+                  "id": 4,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 0}
                     ]
                 }
             ],
-            "exclude_items":[2]
+            "exclude_items": [4]
         }
 
-        expected = [1]
+        expected = [1,2,3]
         id_list = get_id_list(data)
 
         assert id_list == expected
-
 
     # testing without item excludes
     def test_without_excludes(self):
@@ -334,16 +347,17 @@ class TestFunctions:
 
         assert id_list == expected
 
-
-    # testing with student excludes
-    def test_student_excludes(self):
-        data = {
+    # testing item exclude calcs
+    def test_item_excludes_difference(self):
+        data_1 = {
             "student_list": [
                 {
                   "id": 1,
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 0}
                     ]
                 },
                 { 
@@ -351,37 +365,40 @@ class TestFunctions:
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 1}
                     ]
                 },
                 { 
                   "id": 3,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                { 
+                  "id": 4,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 0}
                     ]
                 }
             ],
-            "exclude_students":[2]
+            "exclude_items": [4]
         }
-
-        expected = [{"id": 1,
-                    "item_responses": [{"item_id": 1, "response": 1},{"item_id": 2, "response": 0}]},
-                    {"id": 3,
-                    "item_responses": [{"item_id": 1, "response": 0},{"item_id": 2, "response": 1}]}]
-        stud_list = get_student_list(data)
-
-        assert stud_list == expected
-
-
-    # testing with student excludes
-    def test_student_no_excludes(self):
-        data = {
+        data_2 = {
             "student_list": [
                 {
                   "id": 1,
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 0}
                     ]
                 },
                 { 
@@ -389,27 +406,36 @@ class TestFunctions:
                   "item_responses": [
                         {"item_id": 1, "response": 0},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 1}
                     ]
                 },
                 { 
                   "id": 3,
                   "item_responses": [
                         {"item_id": 1, "response": 0},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                { 
+                  "id": 4,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 1},
+                        {"item_id": 3, "response": 0},
+                        {"item_id": 4, "response": 0}
                     ]
                 }
-            ]
+            ],
+            "exclude_items": [1,3]
         }
 
-        expected = [{"id": 1,
-                    "item_responses": [{"item_id": 1, "response": 1}, {"item_id": 2, "response": 0}]},
-                    {"id": 2,
-                    "item_responses": [{"item_id": 1, "response": 0}, {"item_id": 2, "response": 1},]},
-                    {"id": 3,
-                    "item_responses": [{"item_id": 1, "response": 0}, {"item_id": 2, "response": 1}]}]
-        stud_list = get_student_list(data)
+        idr_1 = calculate_idr(data_1)
+        idr_2 = calculate_idr(data_2)
 
-        assert stud_list == expected
+        assert idr_1 != idr_2
 
 
      # test update input
@@ -435,7 +461,6 @@ class TestFunctions:
         updated = update_input(data)
 
         assert updated == expected
-
 
     # test analysis with no grad year, student id, or item id
     def test_optional_inputs(self):
