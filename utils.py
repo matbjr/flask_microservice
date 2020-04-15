@@ -14,7 +14,7 @@ def get_item_std(item):
 
 
 def get_id_list(param):
-    student_list = list(param[get_keyword_value("student_list")])
+    student_list = get_student_list(param)
     exclude_list = list(param.get(get_keyword_value("exclude_items"), []))
     idList = []
     responseList = []
@@ -69,13 +69,14 @@ def get_sorted_responses(param):
 
 
 def get_grad_year_list(param):
-    student_list = list(param[get_keyword_value("student_list")])
+    student_list = get_student_list(param)
     grad_year_list = []
         
     for i in student_list:
-        curr_grad_year = i[get_keyword_value("graduationyear")]
-        if curr_grad_year not in grad_year_list:
-            grad_year_list.append(curr_grad_year)
+        curr_grad_year = i.get(get_keyword_value("grad_year"))
+        if curr_grad_year != None:
+            if curr_grad_year not in grad_year_list:
+                grad_year_list.append(curr_grad_year)
     
     grad_year_list.sort()
 
@@ -100,7 +101,18 @@ def sort_students_by_grad_year(param):
             for j in id_list:
                 if j not in curr_item_ids:
                     student_list[k][get_keyword_value("item_responses")].append({get_keyword_value("item_id"): j, get_keyword_value("response"): 0})
-            if student_list[k][get_keyword_value("graduationyear")] == i:
+            if student_list[k][get_keyword_value("grad_year")] == i:
                 responses_by_grad_year[i][get_keyword_value("student_list")].append(student_list[k])
 
     return responses_by_grad_year
+
+
+def get_student_list(param):
+    student_list = list(param[get_keyword_value("student_list")])
+    exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
+    
+    for i in student_list:
+        if i[get_keyword_value("id")] in exclude_students:
+            student_list.remove(i)
+
+    return student_list

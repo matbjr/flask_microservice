@@ -1,11 +1,11 @@
 from config import get_service_config, get_keyword_value
-from utils import get_sorted_responses
+from utils import get_sorted_responses, get_student_list
 from difficulty import calculate_difficulty
 
 
 def calculate_weighted_scores(param):
     service_key = get_service_config(7)
-    student_list = list(param[get_keyword_value('student_list')])
+    student_list = get_student_list(param)
     sortedResponses = get_sorted_responses(param)
     numItems = len (sortedResponses[0])
     difficulty_list = list(list(calculate_difficulty(param).values())[0].values())

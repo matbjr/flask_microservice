@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import cross_origin, CORS
 import json
+import sys
+
 from config import get_config
 from sample import sample, sample2
 
@@ -60,7 +62,8 @@ def welcome():
     return jsonify(
         {
             "message": "Welcome from Reliability Measures!",
-            "version": get_config('application_version')
+            "version": get_config('application_version'),
+            'pyhton_version': sys.version.split()[0]
         }
     )
 

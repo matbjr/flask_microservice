@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     "application_id": "rm_01",
-    "application_version": "0.1.4",
+    "application_version": "0.1.5",
     "application_name": "Reliability Measures microservices",
     "application_short_name": "rm_microservices",
     "service_url": "http://api.reliabilitymeasures.com/",
@@ -27,7 +27,8 @@ config = {
             "response": "response",
             "exclude_items": "exclude_items",
             "id": "id",
-            "graduationyear": "graduationyear",
+            "grad_year": "grad_year",
+            "exclude_students": "exclude_students",
 
             "exclude_threshold_1": 0.09,
             "exclude_threshold_2": 0,
@@ -37,7 +38,8 @@ config = {
 
             "bad_data": "Invalid data - Not enough students",
             "bad_std": "Invalid data - No Std. Dev.",
-            "bad_mean": "Invalid data - No mean"
+            "bad_mean": "Invalid data - No mean",
+            "no_grad_year": "No graduation years found"
     },  
     "services": [
         # use the shot_name key for service path and in response key.

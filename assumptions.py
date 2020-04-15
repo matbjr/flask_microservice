@@ -1,9 +1,9 @@
 from config import get_keyword_value, get_service_config
-from utils import get_id_list
+from utils import get_id_list, get_student_list
 
 def get_assumptions(param):
     service_key = get_service_config(13)
-    student_list = list(param[get_keyword_value("student_list")])
+    student_list = get_student_list(param)
     idList = get_id_list(param)
     assumptions_dict = {}
     

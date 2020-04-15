@@ -1,13 +1,14 @@
 from statistics import mean
 from math import sqrt
 
-from utils import get_item_std, get_sorted_responses, get_id_list
+from utils import get_item_std, get_sorted_responses, get_id_list, get_student_list
 from config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):
     service_key = get_service_config(2)
-    sortedResponses = get_sorted_responses(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(param)}
+    sortedResponses = get_sorted_responses(student_list)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
     idList = get_id_list(param)
