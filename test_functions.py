@@ -11,8 +11,8 @@ from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
-from analyze_graduationyears import analyze_gradyears
-from utils import get_id_list, get_student_list
+from analyze_grad_years import analyze_grad_years
+from utils import get_id_list, get_student_list, update_input
 from config import get_service_config
 
 
@@ -228,7 +228,7 @@ class TestFunctions:
                         },
                     "2024": "Invalid data - Not enough students"
                     }
-        analysis = analyze_gradyears(self.data)["grad_year_analysis"]
+        analysis = analyze_grad_years(self.data)["grad_year_analysis"]
 
         assert analysis == expected
 
@@ -261,7 +261,7 @@ class TestFunctions:
         }
 
         expected = "No graduation years found"
-        analysis = analyze_gradyears(data)["grad_year_analysis"]
+        analysis = analyze_grad_years(data)["grad_year_analysis"]
 
         assert analysis == expected
 
@@ -410,3 +410,85 @@ class TestFunctions:
         stud_list = get_student_list(data)
 
         assert stud_list == expected
+
+
+     # test update input
+    def test_update_input(self):
+        data = {
+            "student_list": [
+                {
+                  "item_responses": [
+                        {"response": 1},
+                        {"response": 0},
+                    ]
+                }]}
+
+        expected = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                    ]
+                }]}
+        updated = update_input(data)
+
+        assert updated == expected
+
+
+    # test analysis with no grad year, student id, or item id
+    def test_optional_inputs(self):
+        data = {
+            "student_list": [
+                {
+                  "item_responses": [
+                        {"response": 1},
+                        {"response": 0},
+                        {"response": 0}
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"response": 0},
+                        {"response": 1},
+                        {"response": 1}
+                    ]
+                },
+                { 
+                  "item_responses": [
+                        {"response": 0},
+                        {"response": 1},
+                    ]
+                }
+            ]
+        }
+
+        expected = {'analysis': {
+                        'assumptions': {3: [3]},
+                        'average': 44.4,
+                        'diff_avg': 0.556,
+                        'difficulty': {1: 0.667,
+                                    2: 0.333,
+                                    3: 0.667},
+                        'exclude': [1],
+                        'grad_year_analysis': 'No graduation years found',
+                        'idr': {1: -0.037,
+                                2: 0.037,
+                                3: 0.074},
+                        'idr_avg': 0.025,
+                        'kr20': -3.0,
+                        'num_correct': {1: 1,
+                                        2: 2,
+                                        3: 1},
+                        'scores': {1: 33.3,
+                                2: 66.7,
+                                3: 33.3},
+                        'weighted_avg': 40.0,
+                        'weighted_scores': {1: 40.0,
+                                            2: 60.0,
+                                            3: 20.0}},
+                    }
+        analysis = analyze_test(data)
+
+        assert analysis == expected

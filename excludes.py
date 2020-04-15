@@ -1,10 +1,12 @@
 from idr import calculate_idr
 from config import get_service_config, get_keyword_value
+from utils import update_input
 
 
 def get_exclude_recos(param):
     service_key = get_service_config(9)
-    idr_dict = list(calculate_idr(param).values())[0]
+    inp = update_input(param)
+    idr_dict = list(calculate_idr(inp).values())[0]
     exclude_list = []
     for i in idr_dict:
         if idr_dict[i] <= get_keyword_value("exclude_threshold_1"):

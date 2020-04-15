@@ -1,14 +1,15 @@
-from utils import get_sorted_responses, get_id_list, get_student_list
+from utils import get_sorted_responses, get_id_list, get_student_list, update_input
 from config import get_service_config, get_keyword_value
 
 
 def calculate_num_correct(param):
     service_key = get_service_config(12)
-    student_list = {get_keyword_value("student_list"): get_student_list(param)}
+    inp = update_input(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
     sortedResponses = get_sorted_responses(student_list)
     numStudents = len(sortedResponses)
     numItems = len (sortedResponses[0])
-    idList = get_id_list(param)
+    idList = get_id_list(inp)
     num_correct_list = []
     num_correct_dict = {}
 

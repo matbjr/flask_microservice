@@ -116,3 +116,23 @@ def get_student_list(param):
             student_list.remove(i)
 
     return student_list
+
+
+def update_input(param):
+    inp = param
+    student_list = list(param[get_keyword_value("student_list")])
+
+    for i in range(0, len(student_list)):
+        curr_stud = student_list[i].get(get_keyword_value("id"))
+        if curr_stud == None:
+            student_list[i][(get_keyword_value("id"))] = i+1
+
+    for i in range(0, len(student_list)):
+        curr_responses = student_list[i][get_keyword_value("item_responses")]
+        for k in range(0, len(curr_responses)):
+            curr_item = curr_responses[k].get(get_keyword_value("item_id"))
+            if curr_item == None:
+                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = k+1
+
+    inp[get_keyword_value("student_list")] = student_list
+    return inp

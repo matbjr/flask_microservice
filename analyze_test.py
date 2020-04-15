@@ -1,4 +1,5 @@
 from config import get_service_config
+from utils import update_input
 from kr20 import calculate_kr20
 from idr import calculate_idr
 from difficulty import calculate_difficulty
@@ -11,25 +12,26 @@ from difficulty_average import calculate_difficulty_average
 from idr_average import calculate_idr_average
 from num_correct import calculate_num_correct
 from assumptions import get_assumptions
-from analyze_graduationyears import analyze_gradyears
+from analyze_grad_years import analyze_grad_years
 
 
 def analyze_test(param):
     service_key = get_service_config(6)
+    inp = update_input(param)
     # use microservice calls here when all are hosted
-    val_kr20 = calculate_kr20(param)
-    val_idr = calculate_idr(param)
-    val_difficulty = calculate_difficulty(param)
-    val_scores = calculate_scores(param)
-    val_average = calculate_average(param)
-    val_weighted_s = calculate_weighted_scores(param)
-    val_weighted_avg = calculate_weighted_average(param)
-    val_excludes = get_exclude_recos(param)
-    val_diff_avg = calculate_difficulty_average(param)
-    val_idr_avg = calculate_idr_average(param)
-    val_num_correct = calculate_num_correct(param)
-    val_assumptions = get_assumptions(param)
-    val_grad_year_analysis = analyze_gradyears(param)
+    val_kr20 = calculate_kr20(inp)
+    val_idr = calculate_idr(inp)
+    val_difficulty = calculate_difficulty(inp)
+    val_scores = calculate_scores(inp)
+    val_average = calculate_average(inp)
+    val_weighted_s = calculate_weighted_scores(inp)
+    val_weighted_avg = calculate_weighted_average(inp)
+    val_excludes = get_exclude_recos(inp)
+    val_diff_avg = calculate_difficulty_average(inp)
+    val_idr_avg = calculate_idr_average(inp)
+    val_num_correct = calculate_num_correct(inp)
+    val_assumptions = get_assumptions(inp)
+    val_grad_year_analysis = analyze_grad_years(inp)
 
     # join all results
     result = dict()
