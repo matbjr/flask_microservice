@@ -7,6 +7,8 @@ def get_exclude_recos(param):
     service_key = get_service_config(9)
     inp = update_input(param)
     idr_dict = list(calculate_idr(inp).values())[0]
+    if idr_dict == get_keyword_value("bad_mean"):
+        return {service_key: get_keyword_value("bad_mean")}
     exclude_list = []
     for i in idr_dict:
         if idr_dict[i] <= get_keyword_value("exclude_threshold_1"):

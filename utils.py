@@ -24,7 +24,7 @@ def get_id_list(param):
         
     for i in responseList:
         for k in i:
-            curr_id = k[get_keyword_value("item_id")]
+            curr_id = int(k[get_keyword_value("item_id")])
             if curr_id not in idList and curr_id not in exclude_list:
                 idList.append(curr_id)
     
@@ -112,7 +112,7 @@ def get_student_list(param):
     exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
     
     for i in student_list:
-        if i[get_keyword_value("id")] in exclude_students:
+        if int(i[get_keyword_value("id")]) in exclude_students:
             student_list.remove(i)
 
     return student_list
