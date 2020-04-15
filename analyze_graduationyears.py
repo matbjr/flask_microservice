@@ -1,5 +1,5 @@
 from config import get_service_config, get_keyword_value
-from utils import sort_students_by_grad_year, get_student_list
+from utils import sort_students_by_grad_year, get_student_list, get_grad_year_list
 from kr20 import calculate_kr20
 from idr import calculate_idr
 from difficulty import calculate_difficulty
@@ -19,7 +19,11 @@ def analyze_gradyears(param):
     assumptions = get_assumptions(param)[assumptions_key]
     student_list = {get_keyword_value("student_list"): get_student_list(param)}
     students_dict = sort_students_by_grad_year(student_list)
+    grad_year_list = get_grad_year_list(student_list)
     grad_analysis = {}
+
+    if grad_year_list == []:
+        return {service_key: get_keyword_value("no_grad_year")}
 
     for i in students_dict:
         curr_students = students_dict[i]
