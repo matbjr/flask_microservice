@@ -1,11 +1,12 @@
-from utils import get_sorted_responses, get_student_list
+from utils import get_sorted_responses, get_student_list, update_input
 from config import get_service_config, get_keyword_value
 
 
 def calculate_scores(param):
     service_key = get_service_config(4)
-    student_list = get_student_list(param)
-    sortedResponses = get_sorted_responses(param)
+    inp = update_input(param)
+    student_list = get_student_list(inp)
+    sortedResponses = get_sorted_responses(inp)
     numItems = len (sortedResponses[0])
     score_dict = {}
 

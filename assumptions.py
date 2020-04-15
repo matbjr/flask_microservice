@@ -1,10 +1,11 @@
 from config import get_keyword_value, get_service_config
-from utils import get_id_list, get_student_list
+from utils import get_id_list, get_student_list, update_input
 
 def get_assumptions(param):
     service_key = get_service_config(13)
-    student_list = get_student_list(param)
-    idList = get_id_list(param)
+    inp = update_input(param)
+    student_list = get_student_list(inp)
+    idList = get_id_list(inp)
     assumptions_dict = {}
     
     for i in student_list: # For each student i
@@ -16,5 +17,8 @@ def get_assumptions(param):
 
         if len(checklist) != 0:
             assumptions_dict[i[get_keyword_value("id")]] = checklist.copy()
+
+    if not assumptions_dict:
+        return {service_key: get_keyword_value("no_assumptions")}
 
     return {service_key: assumptions_dict}

@@ -14,8 +14,8 @@ def get_item_std(item):
 
 
 def get_id_list(param):
-    student_list = get_student_list(param)
-    exclude_list = list(param.get(get_keyword_value("exclude_items"), []))
+    inp = update_input(param)
+    student_list = get_student_list(inp)
     idList = []
     responseList = []
     
@@ -24,8 +24,8 @@ def get_id_list(param):
         
     for i in responseList:
         for k in i:
-            curr_id = k[get_keyword_value("item_id")]
-            if curr_id not in idList and curr_id not in exclude_list:
+            curr_id = int(k[get_keyword_value("item_id")])
+            if curr_id not in idList:
                 idList.append(curr_id)
     
     idList.sort()
@@ -34,9 +34,10 @@ def get_id_list(param):
 
 
 def get_sorted_responses(param):
-    student_list = list(param[get_keyword_value("student_list")])
+    inp = update_input(param)
+    student_list = get_student_list(inp)
     numStudents = len(student_list)
-    idList = get_id_list(param)
+    idList = get_id_list(inp)
     responseList = []
     responses = {}
     
@@ -69,7 +70,8 @@ def get_sorted_responses(param):
 
 
 def get_grad_year_list(param):
-    student_list = get_student_list(param)
+    inp = update_input(param)
+    student_list = get_student_list(inp)
     grad_year_list = []
         
     for i in student_list:
@@ -84,9 +86,10 @@ def get_grad_year_list(param):
 
 
 def sort_students_by_grad_year(param):
-    student_list = list(param[get_keyword_value("student_list")])
-    grad_year_list = get_grad_year_list(param)
-    id_list = get_id_list(param)
+    inp = update_input(param)
+    student_list = get_student_list(inp)
+    grad_year_list = get_grad_year_list(inp)
+    id_list = get_id_list(inp)
     responses_by_grad_year = {}
 
     for i in grad_year_list:
@@ -108,11 +111,47 @@ def sort_students_by_grad_year(param):
 
 
 def get_student_list(param):
-    student_list = list(param[get_keyword_value("student_list")])
-    exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
-    
-    for i in student_list:
-        if i[get_keyword_value("id")] in exclude_students:
-            student_list.remove(i)
+    inp = update_input(param)
+    student_list = list(inp[get_keyword_value("student_list")])
 
     return student_list
+
+
+def update_input(param):
+    inp = param
+    student_list = list(param[get_keyword_value("student_list")])
+    exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
+    exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
+    remove_students = []
+
+    for i in range(0, len(student_list)):
+        curr_stud = student_list[i].get(get_keyword_value("id"))
+        if curr_stud == None:
+            student_list[i][(get_keyword_value("id"))] = i+1
+
+    for i in range(0, len(student_list)):
+        curr_responses = student_list[i][get_keyword_value("item_responses")]
+        for k in range(0, len(curr_responses)):
+            curr_item = curr_responses[k].get(get_keyword_value("item_id"))
+            if curr_item == None:
+                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = k+1
+
+    for i in student_list:
+        if int(i[get_keyword_value("id")]) in exclude_students:
+            remove_students.append(i)
+    for i in remove_students:
+        student_list.remove(i)
+
+    for i in range(0, len(student_list)):
+        remove_items = []
+        curr_responses = student_list[i][get_keyword_value("item_responses")]
+        for k in curr_responses:
+            curr_item = k[get_keyword_value("item_id")]
+            if curr_item in exclude_items:
+                remove_items.append(k)
+        for k in remove_items:
+            curr_responses.remove(k)
+        student_list[i][get_keyword_value("item_responses")] = curr_responses
+
+    inp[get_keyword_value("student_list")] = student_list
+    return inp
