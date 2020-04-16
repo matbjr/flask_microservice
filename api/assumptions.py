@@ -1,5 +1,6 @@
-from config import get_keyword_value, get_service_config
-from utils import get_id_list, get_student_list, update_input
+from api.config import get_keyword_value, get_service_config
+from api.utils import get_id_list, get_student_list, update_input
+
 
 def get_assumptions(param):
     service_key = get_service_config(13)

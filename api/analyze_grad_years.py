@@ -1,17 +1,18 @@
-from config import get_service_config, get_keyword_value
-from utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
-from kr20 import calculate_kr20
-from idr import calculate_idr
-from difficulty import calculate_difficulty
-from scores import calculate_scores
-from average import calculate_average
-from weighted_scores import calculate_weighted_scores
-from weighted_average import calculate_weighted_average
-from excludes import get_exclude_recos
-from difficulty_average import calculate_difficulty_average
-from idr_average import calculate_idr_average
-from num_correct import calculate_num_correct
-from assumptions import get_assumptions
+from api.config import get_service_config, get_keyword_value
+from api.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
+from api.kr20 import calculate_kr20
+from api.idr import calculate_idr
+from api.difficulty import calculate_difficulty
+from api.scores import calculate_scores
+from api.average import calculate_average
+from api.weighted_scores import calculate_weighted_scores
+from api.weighted_average import calculate_weighted_average
+from api.excludes import get_exclude_recos
+from api.difficulty_average import calculate_difficulty_average
+from api.idr_average import calculate_idr_average
+from api.num_correct import calculate_num_correct
+from api.assumptions import get_assumptions
+
 
 def analyze_grad_years(param):
     service_key = get_service_config(14)
@@ -23,7 +24,7 @@ def analyze_grad_years(param):
     grad_year_list = get_grad_year_list(student_list)
     grad_analysis = {}
 
-    if grad_year_list == []:
+    if not grad_year_list:
         return {service_key: get_keyword_value("no_grad_year")}
 
     for i in students_dict:

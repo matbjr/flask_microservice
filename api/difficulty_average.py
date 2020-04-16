@@ -1,6 +1,6 @@
-from difficulty import calculate_difficulty
-from config import get_service_config
-from utils import update_input
+from api.difficulty import calculate_difficulty
+from api.config import get_service_config
+from api.utils import update_input
 
 
 def calculate_difficulty_average(param):

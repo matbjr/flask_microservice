@@ -1,6 +1,6 @@
-from idr import calculate_idr
-from config import get_service_config, get_keyword_value
-from utils import update_input
+from api.idr import calculate_idr
+from api.config import get_service_config, get_keyword_value
+from api.utils import update_input
 
 
 def get_exclude_recos(param):

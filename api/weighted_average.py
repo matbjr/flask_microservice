@@ -1,6 +1,6 @@
-from weighted_scores import calculate_weighted_scores
-from config import get_service_config
-from utils import update_input
+from api.weighted_scores import calculate_weighted_scores
+from api.config import get_service_config
+from api.utils import update_input
 
 
 def calculate_weighted_average(param):

@@ -1,18 +1,18 @@
-from config import get_service_config
-from utils import update_input
-from kr20 import calculate_kr20
-from idr import calculate_idr
-from difficulty import calculate_difficulty
-from scores import calculate_scores
-from average import calculate_average
-from weighted_scores import calculate_weighted_scores
-from weighted_average import calculate_weighted_average
-from excludes import get_exclude_recos
-from difficulty_average import calculate_difficulty_average
-from idr_average import calculate_idr_average
-from num_correct import calculate_num_correct
-from assumptions import get_assumptions
-from analyze_grad_years import analyze_grad_years
+from api.config import get_service_config
+from api.utils import update_input
+from api.kr20 import calculate_kr20
+from api.idr import calculate_idr
+from api.difficulty import calculate_difficulty
+from api.scores import calculate_scores
+from api.average import calculate_average
+from api.weighted_scores import calculate_weighted_scores
+from api.weighted_average import calculate_weighted_average
+from api.excludes import get_exclude_recos
+from api.difficulty_average import calculate_difficulty_average
+from api.idr_average import calculate_idr_average
+from api.num_correct import calculate_num_correct
+from api.assumptions import get_assumptions
+from api.analyze_grad_years import analyze_grad_years
 
 
 def analyze_test(param):
@@ -44,3 +44,17 @@ def analyze_test(param):
         result.update(item)
 
     return {service_key: result}
+
+
+if __name__ == '__main__':
+    from api.sample import sample, sample_result, sample_result2
+    import json
+
+    analysis = analyze_test(sample)
+    print(json.dumps(analysis))
+
+    sample["exclude_items"] = [2, 6, 9, 12, 15, 16, 17, 18]
+
+    analysis = analyze_test(sample)
+
+    print(json.dumps(analysis))

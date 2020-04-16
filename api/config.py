@@ -142,7 +142,8 @@ config = {
             "name": "analysis_by_graduation_year",
             "short_name": "grad_year_analysis",
             "description": "Analysis of students\" responses based on their graduation year",
-            "type": "dictionary of exam analyses"
+            "type": "dictionary of exam analyses",
+            "error_value": []
         }
     ] 
 }
@@ -154,8 +155,8 @@ def get_keyword_value(key):
     return config["keywords"][key]
 
 
-def get_service_config(service_id):
-    return config["services"][service_id]["short_name"]
+def get_service_config(service_id, field="short_name"):
+    return config["services"][service_id][field]
 
 
 def get_config(config_key):

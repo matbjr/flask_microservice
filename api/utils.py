@@ -1,5 +1,5 @@
 from statistics import pstdev
-from config import get_keyword_value
+from api.config import get_keyword_value
 
 
 def get_item_std(item):
@@ -35,6 +35,7 @@ def get_id_list(param):
 
 def get_sorted_responses(param):
     inp = update_input(param)
+    print(inp)
     student_list = get_student_list(inp)
     numStudents = len(student_list)
     idList = get_id_list(inp)
@@ -47,11 +48,12 @@ def get_sorted_responses(param):
     for i in idList:  # Create a dictionary with the item IDs as keys
         responses[i] = []
     
-    for i in responseList: # For each student response list i
+    for i in responseList:  # For each student response list i
         checklist = idList.copy()
         for k in i: # For each question k
             for j in responses: # For each item ID j
-                if k[get_keyword_value("item_id")] == j: # If item IDs match, add response to dictionary
+                # If item IDs match, add response to dictionary
+                if k[get_keyword_value("item_id")] == j:
                     responses[j].append(k[get_keyword_value("response")])
                     checklist.remove(j)
 
@@ -60,10 +62,11 @@ def get_sorted_responses(param):
                 responses[i].append(0)
 
     sortedResponses = []
-    for i in range(0, numStudents): # For each student
+    for i in range(0, numStudents):  # For each student
         studentResponses = []
         for k in responses: # For every item ID
-            studentResponses.append(responses[k][i]) # Create a list of the students responses sorted by item ID
+            # Create a list of the students responses sorted by item ID
+            studentResponses.append(responses[k][i])
         sortedResponses.append(studentResponses)
 
     return sortedResponses
@@ -126,14 +129,14 @@ def update_input(param):
 
     for i in range(0, len(student_list)):
         curr_stud = student_list[i].get(get_keyword_value("id"))
-        if curr_stud == None:
+        if curr_stud is None:
             student_list[i][(get_keyword_value("id"))] = i+1
 
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
             curr_item = curr_responses[k].get(get_keyword_value("item_id"))
-            if curr_item == None:
+            if curr_item is None:
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = k+1
 
     for i in student_list:

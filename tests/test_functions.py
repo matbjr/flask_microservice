@@ -1,19 +1,22 @@
-from kr20 import calculate_kr20
-from idr import calculate_idr
-from difficulty import calculate_difficulty
-from scores import calculate_scores
-from average import calculate_average
-from analyze_test import analyze_test
-from weighted_scores import calculate_weighted_scores
-from weighted_average import calculate_weighted_average
-from excludes import get_exclude_recos
-from difficulty_average import calculate_difficulty_average
-from idr_average import calculate_idr_average
-from num_correct import calculate_num_correct
-from assumptions import get_assumptions
-from analyze_grad_years import analyze_grad_years
-from utils import get_id_list, get_student_list, update_input
-from config import get_service_config
+import json
+
+from api.kr20 import calculate_kr20
+from api.idr import calculate_idr
+from api.difficulty import calculate_difficulty
+from api.scores import calculate_scores
+from api.average import calculate_average
+from api.analyze_test import analyze_test
+from api.weighted_scores import calculate_weighted_scores
+from api.weighted_average import calculate_weighted_average
+from api.excludes import get_exclude_recos
+from api.difficulty_average import calculate_difficulty_average
+from api.idr_average import calculate_idr_average
+from api.num_correct import calculate_num_correct
+from api.assumptions import get_assumptions
+from api.analyze_grad_years import analyze_grad_years
+from api.utils import get_id_list, get_student_list, update_input
+from api.config import get_service_config
+from api.sample import sample, sample_result, sample_result2
 
 
 class TestFunctions:
@@ -76,6 +79,15 @@ class TestFunctions:
             "exclude_items":[],
             "exclude_students":[]
         }
+
+    # testing analyze_test with sample data
+    def test_sample_analyze(self):
+        analysis = analyze_test(sample)
+        assert json.dumps(analysis) == json.dumps(sample_result)
+
+        sample["exclude_items"] = [2, 6, 9, 12, 15, 16, 17, 18]
+        analysis2 = analyze_test(sample)
+        assert json.dumps(analysis2) == json.dumps(sample_result2)
 
     # testing analyze_test
     def test_analyze(self):
@@ -436,7 +448,6 @@ class TestFunctions:
         idr_2 = calculate_idr(data_2)
 
         assert idr_1 != idr_2
-
 
      # test update input
     def test_update_input(self):
