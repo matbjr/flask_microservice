@@ -12,6 +12,7 @@ cloud_provider = {
     "cloud_access_key": "vDuiM-56ZzsAAAAAAAAHJGw5MRrhkkeJZ0AJhft11_SCePhuuP2XCVGY3pMGvLBn",
 }
 
+
 # default
 config = {
     "application_id": "rm_01",
