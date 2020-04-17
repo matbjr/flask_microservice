@@ -1,6 +1,6 @@
-from scores import calculate_scores
-from config import get_service_config
-from utils import update_input
+from api.scores import calculate_scores
+from api.config import get_service_config
+from api.utils import update_input
 
 
 def calculate_average(param):

@@ -1,8 +1,8 @@
 from statistics import mean
 from math import sqrt
 
-from utils import get_item_std, get_sorted_responses, get_id_list, get_student_list, update_input
-from config import get_service_config, get_keyword_value
+from api.utils import get_item_std, get_sorted_responses, get_id_list, get_student_list, update_input
+from api.config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):
@@ -53,7 +53,7 @@ def calculate_idr(param):
         idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
         idr = round(idr, 3)
         idrList.append(idr)
-    
+
     k = 0
     for i in idList:
         idrDict[i] = idrList[k]

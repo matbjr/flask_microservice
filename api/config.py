@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     "application_id": "rm_01",
-    "application_version": "0.1.5",
+    "application_version": "0.2.0",
     "application_name": "Reliability Measures microservices",
     "application_short_name": "rm_microservices",
     "service_url": "http://api.reliabilitymeasures.com/",
@@ -57,7 +57,8 @@ config = {
             "id": 2,
             "name": "Item discrimination",
             "short_name": "idr",
-            "description": "Item discrimination, Point biserial correlation coefficient",
+            "description": "Item discrimination, "
+                           "Point biserial correlation coefficient",
             "type": "list of floats"
         },
         {
@@ -127,21 +128,24 @@ config = {
             "id": 12,
             "name": "number_of_correct_responses",
             "short_name": "num_correct",
-            "description": "The absolute number of an item\"s correct responses",
+            "description": "The absolute number of an item\'s "
+                           "correct responses",
             "type": "list of ints"
         },
         {
             "id": 13,
             "name": "student_response_assumptions",
             "short_name": "assumptions",
-            "description": "The assumption of the score 0 for items that the student does not have a response for",
+            "description": "The assumption of the score 0 for items that "
+                           "the student does not have a response for",
             "type": "dictionary of item ids"
         },
         {
             "id": 14,
             "name": "analysis_by_graduation_year",
             "short_name": "grad_year_analysis",
-            "description": "Analysis of students\" responses based on their graduation year",
+            "description": "Analysis of students\' responses based on "
+                           "their graduation year",
             "type": "dictionary of exam analyses"
         }
     ] 
@@ -154,8 +158,8 @@ def get_keyword_value(key):
     return config["keywords"][key]
 
 
-def get_service_config(service_id):
-    return config["services"][service_id]["short_name"]
+def get_service_config(service_id, field="short_name"):
+    return config["services"][service_id][field]
 
 
 def get_config(config_key):
@@ -167,4 +171,3 @@ def get_config_from_cloud(cloud_provider):
         config = get_config_file(cloud_provider)
     except Exception as exc:
         print("Config Exception!")
-

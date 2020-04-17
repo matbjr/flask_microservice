@@ -3,26 +3,26 @@ from flask_cors import cross_origin, CORS
 import json
 import sys
 
-from config import get_config
-from sample import sample, sample2
+from api.config import get_config
+from api.sample import sample, sample2
 
-from std import calculate_std
-from summation import calculate_summation
-from proportion import calculate_proportion
-from kr20 import calculate_kr20
-from idr import calculate_idr
-from difficulty import calculate_difficulty
-from scores import calculate_scores
-from average import calculate_average
-from analyze_test import analyze_test
-from weighted_scores import calculate_weighted_scores
-from weighted_average import calculate_weighted_average
-from excludes import get_exclude_recos
-from difficulty_average import calculate_difficulty_average
-from idr_average import calculate_idr_average
-from num_correct import calculate_num_correct
-from assumptions import get_assumptions
-from analyze_grad_years import analyze_grad_years
+from api.std import calculate_std
+from api.summation import calculate_summation
+from api.proportion import calculate_proportion
+from api.kr20 import calculate_kr20
+from api.idr import calculate_idr
+from api.difficulty import calculate_difficulty
+from api.scores import calculate_scores
+from api.average import calculate_average
+from api.analyze_test import analyze_test
+from api.weighted_scores import calculate_weighted_scores
+from api.weighted_average import calculate_weighted_average
+from api.excludes import get_exclude_recos
+from api.difficulty_average import calculate_difficulty_average
+from api.idr_average import calculate_idr_average
+from api.num_correct import calculate_num_correct
+from api.assumptions import get_assumptions
+from api.analyze_grad_years import analyze_grad_years
 
 
 app = Flask(__name__)
@@ -63,7 +63,7 @@ def welcome():
         {
             "message": "Welcome from Reliability Measures!",
             "version": get_config('application_version'),
-            'pyhton_version': sys.version.split()[0]
+            'python_version': sys.version.split()[0]
         }
     )
 
@@ -95,17 +95,17 @@ def compute_idr():
 
 @app.route('/difficulty/', methods=['POST', 'GET'])
 def compute_difficulty():
-    return process_request( calculate_difficulty)
+    return process_request(calculate_difficulty)
 
 
 @app.route('/scores/', methods=['POST', 'GET'])
 def compute_scores():
-    return process_request( calculate_scores)
+    return process_request(calculate_scores)
 
 
 @app.route('/average/', methods=['POST', 'GET'])
 def compute_average():
-    return process_request( calculate_average)
+    return process_request(calculate_average)
 
 
 @app.route('/analyzeTest/', methods=['POST', 'GET'])
@@ -164,5 +164,5 @@ def get_sample_analysis():
 
 if __name__ == '__main__':
     print("Starting service")
-    app.run(host="0.0.0.0", port=5000, threaded=True)
+    app.run(host="0.0.0.0", port=5001, threaded=True)
 
