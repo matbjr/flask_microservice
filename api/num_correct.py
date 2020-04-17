@@ -13,7 +13,7 @@ def calculate_num_correct(param):
     num_correct_list = []
     num_correct_dict = {}
     exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
-    print(exclude_items)
+    # print(exclude_items)
 
     for i in range(0, numItems): # For each question i
         numRight = 0
@@ -32,6 +32,6 @@ def calculate_num_correct(param):
     #     num_correct_dict[i] = -1
     #     k += 1
 
-    print(num_correct_dict)
+    # print(num_correct_dict)
 
     return {service_key: num_correct_dict}

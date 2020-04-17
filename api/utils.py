@@ -35,7 +35,6 @@ def get_id_list(param):
 
 def get_sorted_responses(param):
     inp = update_input(param)
-    print(inp)
     student_list = get_student_list(inp)
     numStudents = len(student_list)
     idList = get_id_list(inp)

@@ -1,8 +1,11 @@
 sample = {
     "student_list": [
         {
-            "first_name": "Student 1",
-            "id": "1",
+            "grad_year": "2022",
+            "id": 10001,
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": "johnsmith@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -87,8 +90,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 2",
-            "id": "2",
+            "grad_year": "2020",
+            "id": 10002,
+            "first_name": "Bernie",
+            "last_name": "Sanders",
+            "email": "b.sanders@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -173,8 +179,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 3",
-            "id": "3",
+            "grad_year": "2022",
+            "id": 10003,
+            "first_name": "Joe",
+            "last_name": "Biden",
+            "email": "biden@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -259,8 +268,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 4",
-            "id": "4",
+            "grad_year": "2022",
+            "id": 10004,
+            "first_name": "Pete",
+            "last_name": "B",
+            "email": "pete.b@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -345,8 +357,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 5",
-            "id": "5",
+            "grad_year": "2020",
+            "id": 10005,
+            "first_name": "Eliz",
+            "last_name": "Warren",
+            "email": "warren.e@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -431,8 +446,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 6",
-            "id": "6",
+            "grad_year": "2021",
+            "id": 10006,
+            "first_name": "Amy",
+            "last_name": "K",
+            "email": "amy_k@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -517,8 +535,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 7",
-            "id": "7",
+            "grad_year": "2022",
+            "id": 10007,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -603,8 +624,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 8",
-            "id": "8",
+            "grad_year": "2020",
+            "id": 10008,
+            "first_name": "Cory",
+            "last_name": "Broker",
+            "email": "c_b@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -689,8 +713,11 @@ sample = {
             ]
         },
         {
-            "first_name": "Student 9",
-            "id": "9",
+            "grad_year": "2020",
+            "id": 10009,
+            "first_name": "Beto",
+            "last_name": "O",
+            "email": "beto_2024@email.com",
             "item_responses": [
                 {
                     "item_id": 1,
@@ -776,7 +803,10 @@ sample = {
         }
     ],
     "exam": {
-        "name": "20 items & 9 students Exam"
+        "name": "20 items Exam with student's info",
+        "Course": "Politics 102",
+        "teacher": "Dr. Oz",
+        "institute": "USA"
     }
 }
 
