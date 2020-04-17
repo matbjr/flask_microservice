@@ -16,7 +16,7 @@ from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
 from api.utils import get_id_list, get_student_list, update_input
 from api.config import get_service_config
-from api.sample import sample, sample_result, sample_result2
+from api.sample import sample, sample_output
 
 
 class TestFunctions:
@@ -83,11 +83,11 @@ class TestFunctions:
     # testing analyze_test with sample data
     def test_sample_analyze(self):
         analysis = analyze_test(sample)
-        assert json.dumps(analysis) == json.dumps(sample_result)
+        assert json.dumps(analysis) == json.dumps(sample_output[0])
 
         sample["exclude_items"] = [2, 6, 9, 12, 15, 16, 17, 18]
         analysis2 = analyze_test(sample)
-        assert json.dumps(analysis2) == json.dumps(sample_result2)
+        assert json.dumps(analysis2) == json.dumps(sample_output[1])
 
     # testing analyze_test
     def test_analyze(self):
