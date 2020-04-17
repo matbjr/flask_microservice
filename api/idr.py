@@ -1,15 +1,24 @@
 from statistics import mean
 from math import sqrt
 
-from utils import get_item_std
+from api.utils import get_item_std, get_sorted_responses, get_id_list, get_student_list, update_input
+from api.config import get_service_config, get_keyword_value
 
-def calculate_pbcc(param, numStudents, numItems):
-    sortedResponses = param
-    pbccList = []
-    scoreSTD = get_item_std(sortedResponses, numStudents)
 
-    if scoreSTD <=0:
-        return {'PBCC': 'Invalid data - No Std. Dev.'}
+def calculate_idr(param):
+    service_key = get_service_config(2)
+    inp = update_input(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
+    sortedResponses = get_sorted_responses(student_list)
+    numStudents = len(sortedResponses)
+    numItems = len (sortedResponses[0])
+    idList = get_id_list(inp)
+    scoreSTD = get_item_std(sortedResponses)
+    idrList = []
+    idrDict = {}
+
+    if scoreSTD < 0:
+        return {service_key: get_keyword_value("bad_std")}
 
     for i in range(0, numItems): # For each question i
         rightList = [] # Scores of students who got question i right
@@ -26,7 +35,10 @@ def calculate_pbcc(param, numStudents, numItems):
                 wrongList.append(score) # Then add their score to the "wrong" list
                 numWrong += 1
 
-        # rightMean = wrongMean = None # <-- Causing errors
+        if numRight == numStudents or numWrong == numStudents:
+            idrList.append(0)
+            continue
+
         if len(rightList) == 1:
             rightMean = rightList[0]
         elif len(rightList) > 1:
@@ -36,10 +48,15 @@ def calculate_pbcc(param, numStudents, numItems):
         elif len(wrongList) > 1:
             wrongMean = mean(wrongList)
         if not rightMean or not wrongMean:
-            return {'pbcc': 'Invalid Data - No mean'}
+            return {service_key: get_keyword_value("bad_mean")}
 
-        pbcc = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
-        pbcc = round(pbcc, 3)
-        pbccList.append(pbcc)
-        
-    return {'pbcc': pbccList}
+        idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
+        idr = round(idr, 3)
+        idrList.append(idr)
+
+    k = 0
+    for i in idList:
+        idrDict[i] = idrList[k]
+        k += 1
+
+    return {service_key: idrDict}
