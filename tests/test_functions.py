@@ -14,7 +14,6 @@ from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
-from api.utils import get_id_list, get_student_list, update_input
 from api.config import get_service_config
 from api.sample import sample, sample_result, sample_result2
 
@@ -30,6 +29,164 @@ class TestFunctions:
             { 
                 "name": "test1"
             },
+            "item_topics":[
+                {
+                    "item_id":1,
+                    "tags":[
+                        {
+                        "topic_tree":"Biology",
+                        "topic_branch_hierarchy":{
+                            "0":"Cell biology",
+                            "1":"Cells",
+                            "2":"Organelles",
+                            "3":"Nucleus"
+                        },
+                        "topic_tagged":"DNA",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"Biology",
+                        "topic_branch_hierarchy":{
+                            "0":"Cell biology",
+                            "1":"Cells",
+                            "2":"Organelles"
+                        },
+                        "topic_tagged":"Ribosomes",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+                {
+                    "item_id":2,
+                    "tags":[
+                        {
+                        "topic_tree":"A",
+                        "topic_branch_hierarchy":{
+                            "0":"B",
+                            "1":"C",
+                            "2":"D",
+                            "3":"E"
+                        },
+                        "topic_tagged":"f",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"A",
+                        "topic_branch_hierarchy":{
+                            "0":"B",
+                            "1":"C",
+                            "2":"D"
+                        },
+                        "topic_tagged":"e",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+                {
+                    "item_id":3,
+                    "tags":[
+                        {
+                        "topic_tree":"G",
+                        "topic_branch_hierarchy":{
+                            "0":"H",
+                            "1":"I",
+                            "2":"J",
+                            "3":"K"
+                        },
+                        "topic_tagged":"l",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"G",
+                        "topic_branch_hierarchy":{
+                            "0":"H",
+                            "1":"I",
+                            "2":"J"
+                        },
+                        "topic_tagged":"k",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+                {
+                    "item_id":4,
+                    "tags":[
+                        {
+                        "topic_tree":"M",
+                        "topic_branch_hierarchy":{
+                            "0":"N",
+                            "1":"O",
+                            "2":"P",
+                            "3":"Q"
+                        },
+                        "topic_tagged":"r",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"M",
+                        "topic_branch_hierarchy":{
+                            "0":"N",
+                            "1":"O",
+                            "2":"P",
+                        },
+                        "topic_tagged":"q",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+                {
+                    "item_id":5,
+                    "tags":[
+                        {
+                        "topic_tree":"A",
+                        "topic_branch_hierarchy":{
+                            "0":"B",
+                            "1":"C",
+                            "2":"D",
+                            "3":"E"
+                        },
+                        "topic_tagged":"f",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"m",
+                        "topic_branch_hierarchy":{
+                            "0":"n",
+                            "1":"o",
+                            "2":"p",
+                        },
+                        "topic_tagged":"q",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+                {
+                    "item_id":6,
+                    "tags":[
+                        {
+                        "topic_tree":"a",
+                        "topic_branch_hierarchy":{
+                            "0":"b",
+                            "1":"c",
+                            "2":"d",
+                            "3":"e"
+                        },
+                        "topic_tagged":"f",
+                        "scored":"Y"
+                        },
+                        {
+                        "topic_tree":"M",
+                        "topic_branch_hierarchy":{
+                            "0":"N",
+                            "1":"O",
+                            "2":"P",
+                        },
+                        "topic_tagged":"q",
+                        "scored":"Y"
+                        }
+                    ]
+                },
+            ],
             "student_list": [
                 { 
                   "grad_year": "2022",
@@ -276,88 +433,6 @@ class TestFunctions:
         analysis = analyze_grad_years(data)["grad_year_analysis"]
 
         assert analysis == expected
-    
-    # testing with item excludes
-    def test_with_excludes(self):
-        data = {
-            "student_list": [
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 0}
-                    ]
-                },
-                { 
-                  "id": 2,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 1}
-                    ]
-                },
-                { 
-                  "id": 3,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1}
-                    ]
-                },
-                { 
-                  "id": 4,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 0}
-                    ]
-                }
-            ],
-            "exclude_items": [4]
-        }
-
-        expected = [1,2,3]
-        id_list = get_id_list(data)
-
-        assert id_list == expected
-
-    # testing without item excludes
-    def test_without_excludes(self):
-        data = {
-            "student_list": [
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
-                    ]
-                },
-                { 
-                  "id": 2,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                    ]
-                },
-                { 
-                  "id": 3,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                    ]
-                }
-            ]
-        }
-
-        expected = [1, 2]
-        id_list = get_id_list(data)
-
-        assert id_list == expected
 
     # testing item exclude calcs
     def test_item_excludes_difference(self):
@@ -449,30 +524,6 @@ class TestFunctions:
 
         assert idr_1 != idr_2
 
-     # test update input
-    def test_update_input(self):
-        data = {
-            "student_list": [
-                {
-                  "item_responses": [
-                        {"response": 1},
-                        {"response": 0},
-                    ]
-                }]}
-
-        expected = {
-            "student_list": [
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
-                    ]
-                }]}
-        updated = update_input(data)
-
-        assert updated == expected
-
     # test analysis with no grad year, student id, or item id
     def test_optional_inputs(self):
         data = {
@@ -500,28 +551,28 @@ class TestFunctions:
             ]
         }
 
-        expected = {'analysis': {
-                        'assumptions': {3: [3]},
-                        'average': 44.4,
-                        'diff_avg': 0.556,
-                        'difficulty': {1: 0.667,
+        expected = {"analysis": {
+                        "assumptions": {3: [3]},
+                        "average": 44.4,
+                        "diff_avg": 0.556,
+                        "difficulty": {1: 0.667,
                                     2: 0.333,
                                     3: 0.667},
-                        'exclude': [1],
-                        'grad_year_analysis': 'No graduation years found',
-                        'idr': {1: -0.037,
+                        "exclude": [1],
+                        "grad_year_analysis": "No graduation years found",
+                        "idr": {1: -0.037,
                                 2: 0.037,
                                 3: 0.074},
-                        'idr_avg': 0.025,
-                        'kr20': -3.0,
-                        'num_correct': {1: 1,
+                        "idr_avg": 0.025,
+                        "kr20": -3.0,
+                        "num_correct": {1: 1,
                                         2: 2,
                                         3: 1},
-                        'scores': {1: 33.3,
+                        "scores": {1: 33.3,
                                 2: 66.7,
                                 3: 33.3},
-                        'weighted_avg': 40.0,
-                        'weighted_scores': {1: 40.0,
+                        "weighted_avg": 40.0,
+                        "weighted_scores": {1: 40.0,
                                             2: 60.0,
                                             3: 20.0}},
                     }
