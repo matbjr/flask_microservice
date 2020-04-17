@@ -128,7 +128,7 @@ config = {
             "id": 12,
             "name": "number_of_correct_responses",
             "short_name": "num_correct",
-            "description": "The absolute number of an item\"s "
+            "description": "The absolute number of an item\'s "
                            "correct responses",
             "type": "list of ints"
         },
@@ -144,7 +144,7 @@ config = {
             "id": 14,
             "name": "analysis_by_graduation_year",
             "short_name": "grad_year_analysis",
-            "description": "Analysis of students\" responses based on "
+            "description": "Analysis of students\' responses based on "
                            "their graduation year",
             "type": "dictionary of exam analyses"
         }
