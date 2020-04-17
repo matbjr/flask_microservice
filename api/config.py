@@ -30,6 +30,13 @@ config = {
             "grad_year": "grad_year",
             "exclude_students": "exclude_students",
 
+            "item_topics": "item_topics",
+            "tags": "tags",
+            "scored": "scored",
+            "topic_branch_hierarchy": "topic_branch_hierarchy",
+            "topic_tagged": "topic_tagged",
+            "topic_tree": "topic_tree",
+
             "exclude_threshold_1": 0.09,
             "exclude_threshold_2": 0,
             "exclude_length_1": 0.5,
@@ -147,6 +154,13 @@ config = {
             "description": "Analysis of students\' responses based on "
                            "their graduation year",
             "type": "dictionary of exam analyses"
+        },
+        {
+            "id": 15,
+            "name": "topic_scores",
+            "short_name": "topic_scores",
+            "description": "The students\' score in each topic",
+            "type": "dictionary of topic scores"
         }
     ] 
 }

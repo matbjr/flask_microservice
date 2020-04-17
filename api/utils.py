@@ -157,3 +157,32 @@ def update_input(param):
 
     inp[get_keyword_value("student_list")] = student_list
     return inp
+
+
+def get_item_topics(param):
+    topics = param[get_keyword_value("item_topics")]
+    topic_dict = dict()
+
+    for i in topics:
+        item = i[get_keyword_value("item_id")]
+        topic_dict[item] = []
+        tags = i[get_keyword_value("tags")]
+        for k in tags:
+            if k[get_keyword_value("scored")] != "Y":
+                continue
+            curr_tree = k[get_keyword_value("topic_tree")]
+            curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
+            curr_topic = k[get_keyword_value("topic_tagged")]
+            hierarchy = dict()
+            topic_score = dict()
+            topic_score[curr_topic] = None
+            hierarchy[curr_tree] = topic_score
+
+            for i in reversed(curr_levels):
+                next_level = dict()
+                next_level[curr_levels[i]] = hierarchy[curr_tree]
+                hierarchy[curr_tree] = next_level
+
+            topic_dict[item].append(hierarchy)
+
+    return topic_dict
