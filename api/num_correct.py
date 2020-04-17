@@ -12,10 +12,8 @@ def calculate_num_correct(param):
     idList = get_id_list(inp)
     num_correct_list = []
     num_correct_dict = {}
-    exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
-    # print(exclude_items)
 
-    for i in range(0, numItems): # For each question i
+    for i in range(0, numItems):  # For each question i
         numRight = 0
         for k in range(0, numStudents): # For each student k
             studentAnswer = sortedResponses[k][i]
