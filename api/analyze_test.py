@@ -58,3 +58,4 @@ if __name__ == '__main__':
     analysis = analyze_test(sample)
 
     print(json.dumps(analysis))
+    

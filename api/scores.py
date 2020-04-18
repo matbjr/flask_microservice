@@ -1,23 +1,22 @@
-from api.utils import get_sorted_responses, get_student_list, update_input
+from api.utils import get_sorted_responses, update_input, get_student_ids
 from api.config import get_service_config, get_keyword_value
 
 
 def calculate_scores(param):
     service_key = get_service_config(4)
     inp = update_input(param)
-    student_list = get_student_list(inp)
-    sortedResponses = get_sorted_responses(inp)
-    numItems = len (sortedResponses[0])
+    sorted_resp = get_sorted_responses(inp)
+    student_ids = get_student_ids(inp) 
+    num_items = len (sorted_resp[0])
     score_dict = {}
 
-    for i in student_list:
-        stud_id = i[get_keyword_value('id')]
-        score_dict[stud_id] = None
+    for curr_id in student_ids:
+        score_dict[curr_id] = None
 
     k = 0
     for i in score_dict:
-        numRight = sum(sortedResponses[k])
-        score = numRight / numItems
+        num_right = sum(sorted_resp[k])
+        score = num_right / num_items
         score = round(score * 100, 1)
         score_dict[i] = score
         k += 1

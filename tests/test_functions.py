@@ -31,7 +31,7 @@ class TestFunctions:
             },
             "item_topics":[
                 {
-                    "item_id":1,
+                    "item_id":"1",
                     "tags":[
                         {
                         "topic_tree":"Biology",
@@ -57,7 +57,7 @@ class TestFunctions:
                     ]
                 },
                 {
-                    "item_id":2,
+                    "item_id":"2",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -83,7 +83,7 @@ class TestFunctions:
                     ]
                 },
                 {
-                    "item_id":3,
+                    "item_id":"3",
                     "tags":[
                         {
                         "topic_tree":"G",
@@ -109,7 +109,7 @@ class TestFunctions:
                     ]
                 },
                 {
-                    "item_id":4,
+                    "item_id":"4",
                     "tags":[
                         {
                         "topic_tree":"M",
@@ -135,7 +135,7 @@ class TestFunctions:
                     ]
                 },
                 {
-                    "item_id":5,
+                    "item_id":"5",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -161,7 +161,7 @@ class TestFunctions:
                     ]
                 },
                 {
-                    "item_id":6,
+                    "item_id":"6",
                     "tags":[
                         {
                         "topic_tree":"a",
@@ -190,46 +190,46 @@ class TestFunctions:
             "student_list": [
                 { 
                   "grad_year": "2022",
-                  "id": 1234,
+                  "id": "1234",
                   "first_name": "John",
                   "last_name": "Smith",
                   "email": "johnsmith@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 0},
-                        {"item_id": 6, "response": 1}
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "2", "response": 0},
+                        {"item_id": "3", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 0},
+                        {"item_id": "6", "response": 1}
                     ]
                 },
                 { "grad_year": "2022",
-                  "id": 1235,
+                  "id": "1235",
                   "first_name": "Jane",
                   "last_name": "Smath",
                   "email": "janesmath@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 1},
-                        {"item_id": 6, "response": 1}
+                        {"item_id": "1", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "3", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 1},
+                        {"item_id": "6", "response": 1}
                     ]
                 },
                 { "grad_year": "2024",
-                  "id": 1236,
+                  "id": "1236",
                   "first_name": "Jake",
                   "last_name": "Jakey",
                   "email": "jakejakey@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 0},
-                        {"item_id": 5, "response": 0},
-                        {"item_id": 6, "response": 1},
-                        {"item_id": 7, "response": 1}
+                        {"item_id": "1", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "3", "response": 0},
+                        {"item_id": "4", "response": 0},
+                        {"item_id": "5", "response": 0},
+                        {"item_id": "6", "response": 1},
+                        {"item_id": "7", "response": 1}
                     ]
                 }
             ],
@@ -249,31 +249,31 @@ class TestFunctions:
     # testing analyze_test
     def test_analyze(self):
         expected = {"analysis": {"kr20": -1.167,
-                                 "idr": {1: 0.0, 2: 0.0, 3: 0.082, 4: 0.082, 5: 0.082, 6: 0.0, 7: -0.082},
-                                 "difficulty": {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0, 7: 0.667}, 
-                                 "scores": {1234: 57.1, 1235: 71.4, 1236: 42.9},
+                                 "idr": {"1": 0.0, "2": 0.0, "3": 0.082, "4": 0.082, "5": 0.082, "6": 0.0, "7": -0.082},
+                                 "difficulty": {"1": 0.667, "2": 0.333, "3": 0.333, "4": 0.333, "5": 0.667, "6": 0.0, "7": 0.667}, 
+                                 "scores": {"1234": 57.1, "1235": 71.4, "1236": 42.9},
                                  "average": 57.1,
-                                 "weighted_scores": {1234: 44.4, 1235: 55.5, 1236: 33.3},
+                                 "weighted_scores": {"1234": 44.4, "1235": 55.5, "1236": 33.3},
                                  "weighted_avg": 44.4, 
-                                 "exclude": [7],
+                                 "exclude": ["7"],
                                  "diff_avg": 0.429, 
                                  "idr_avg": 0.023, 
-                                 "num_correct": {1: 1, 2: 2, 3: 2, 4: 2, 5: 1, 6: 3, 7: 1},
-                                 "assumptions": {1234: [7], 1235: [7]},
+                                 "num_correct": {"1": 1, "2": 2, "3": 2, "4": 2, "5": 1, "6": 3, "7": 1},
+                                 "assumptions": {"1234": ["7"], "1235": ["7"]},
                                  "grad_year_analysis": {
                                     "2022": {
                                         "kr20": -2.333, 
-                                        "idr": {1: -0.036, 2: 0.036, 3: 0.0, 4: 0.0, 5: 0.036, 6: 0.0, 7: 0.0}, 
-                                        "difficulty": {1: 0.5, 2: 0.5,3: 0.0, 4: 0.0, 5: 0.5, 6: 0.0, 7: 1.0}, 
-                                        "scores": {1234: 57.1, 1235: 71.4}, 
+                                        "idr": {"1": -0.036, "2": 0.036, "3": 0.0, "4": 0.0, "5": 0.036, "6": 0.0, "7": 0.0}, 
+                                        "difficulty": {"1": 0.5, "2": 0.5,"3": 0.0, "4": 0.0, "5": 0.5, "6": 0.0, "7": 1.0}, 
+                                        "scores": {"1234": 57.1, "1235": 71.4}, 
                                         "average": 64.2, 
-                                        "weighted_scores": {1234: 20.0, 1235: 40.0},
+                                        "weighted_scores": {"1234": 20.0, "1235": 40.0},
                                         "weighted_avg": 30.0,
-                                        "exclude": [1],
+                                        "exclude": ["1"],
                                         "diff_avg": 0.357,
                                         "idr_avg": 0.005,
-                                        "num_correct": {1: 1, 2: 1, 3: 2, 4: 2, 5: 1, 6: 2, 7: 0},
-                                        "assumptions": {1234: [7], 1235: [7]},
+                                        "num_correct": {"1": 1, "2": 1, "3": 2, "4": 2, "5": 1, "6": 2, "7": 0},
+                                        "assumptions": {"1234": ["7"], "1235": ["7"]},
                                     },
                                     "2024": "Invalid data - Not enough students"
                                  }
@@ -293,7 +293,7 @@ class TestFunctions:
 
     # testing the idr
     def test_idr(self):
-        expected = {1: 0.0, 2: 0.0, 3: 0.082, 4: 0.082, 5: 0.082, 6: 0.0, 7: -0.082}
+        expected = {"1": 0.0, "2": 0.0, "3": 0.082, "4": 0.082, "5": 0.082, "6": 0.0, "7": -0.082}
         idr = calculate_idr(self.data)["idr"]
 
         assert idr == expected
@@ -301,14 +301,14 @@ class TestFunctions:
     # testing the difficulty
     def test_difficulty(self):
 
-        expected = {1: 0.667, 2: 0.333, 3: 0.333, 4: 0.333, 5: 0.667, 6: 0.0, 7: 0.667}
+        expected = {"1": 0.667, "2": 0.333, "3": 0.333, "4": 0.333, "5": 0.667, "6": 0.0, "7": 0.667}
         difficulty = calculate_difficulty(self.data)["difficulty"]
         assert difficulty == expected
 
     # testing the scores
     def test_scores(self):
 
-        expected = {1234: 57.1, 1235: 71.4, 1236: 42.9}
+        expected = {"1234": 57.1, "1235": 71.4, "1236": 42.9}
         scores = calculate_scores(self.data)["scores"]
 
         assert scores == expected
@@ -324,7 +324,7 @@ class TestFunctions:
     # testing the weighted scores
     def test_weighted_scores(self):
 
-        expected = {1234: 44.4, 1235: 55.5, 1236: 33.3}
+        expected = {"1234": 44.4, "1235": 55.5, "1236": 33.3}
         weighted_scores = calculate_weighted_scores(self.data)["weighted_scores"]
 
         assert weighted_scores == expected
@@ -340,7 +340,7 @@ class TestFunctions:
     # testing the get excludes
     def test_get_exclude_recos(self):
 
-        expected = [7]
+        expected = ["7"]
         excludes = get_exclude_recos(self.data)["exclude"]
 
         assert excludes == expected
@@ -364,7 +364,7 @@ class TestFunctions:
     # testing the num correct
     def test_num_correct(self):
 
-        expected = {1: 1, 2: 2, 3: 2, 4: 2, 5: 1, 6: 3, 7: 1}
+        expected = {"1": 1, "2": 2, "3": 2, "4": 2, "5": 1, "6": 3, "7": 1}
         num_correct = calculate_num_correct(self.data)["num_correct"]
 
         assert num_correct == expected
@@ -373,7 +373,7 @@ class TestFunctions:
     # testing the assumptions
     def test_assumptions(self):
 
-        expected = {1234: [7], 1235: [7]}
+        expected = {"1234": ["7"], "1235": ["7"]}
         assumption = get_assumptions(self.data)["assumptions"]
 
         assert assumption == expected
@@ -383,17 +383,17 @@ class TestFunctions:
 
         expected = {"2022": {
                         "kr20": -2.333, 
-                        "idr": {1: -0.036, 2: 0.036, 3: 0.0, 4: 0.0, 5: 0.036, 6: 0.0, 7: 0.0}, 
-                        "difficulty": {1: 0.5, 2: 0.5,3: 0.0, 4: 0.0, 5: 0.5, 6: 0.0, 7: 1.0}, 
-                        "scores": {1234: 57.1, 1235: 71.4}, 
+                        "idr": {"1": -0.036, "2": 0.036, "3": 0.0, "4": 0.0, "5": 0.036, "6": 0.0, "7": 0.0}, 
+                        "difficulty": {"1": 0.5, "2": 0.5,"3": 0.0, "4": 0.0, "5": 0.5, "6": 0.0, "7": 1.0}, 
+                        "scores": {"1234": 57.1, "1235": 71.4}, 
                         "average": 64.2, 
-                        "weighted_scores": {1234: 20.0, 1235: 40.0},
+                        "weighted_scores": {"1234": 20.0, "1235": 40.0},
                         "weighted_avg": 30.0,
-                        "exclude": [1],
+                        "exclude": ["1"],
                         "diff_avg": 0.357,
                         "idr_avg": 0.005,
-                        "num_correct": {1: 1, 2: 1, 3: 2, 4: 2, 5: 1, 6: 2, 7: 0},
-                        "assumptions": {1234: [7], 1235: [7]},
+                        "num_correct": {"1": 1, "2": 1, "3": 2, "4": 2, "5": 1, "6": 2, "7": 0},
+                        "assumptions": {"1234": ["7"], "1235": ["7"]},
                         },
                     "2024": "Invalid data - Not enough students"
                     }
@@ -552,29 +552,29 @@ class TestFunctions:
         }
 
         expected = {"analysis": {
-                        "assumptions": {3: [3]},
+                        "assumptions": {"3": ["3"]},
                         "average": 44.4,
                         "diff_avg": 0.556,
-                        "difficulty": {1: 0.667,
-                                    2: 0.333,
-                                    3: 0.667},
-                        "exclude": [1],
+                        "difficulty": {"1": 0.667,
+                                    "2": 0.333,
+                                    "3": 0.667},
+                        "exclude": ["1"],
                         "grad_year_analysis": "No graduation years found",
-                        "idr": {1: -0.037,
-                                2: 0.037,
-                                3: 0.074},
+                        "idr": {"1": -0.037,
+                                "2": 0.037,
+                                "3": 0.074},
                         "idr_avg": 0.025,
                         "kr20": -3.0,
-                        "num_correct": {1: 1,
-                                        2: 2,
-                                        3: 1},
-                        "scores": {1: 33.3,
-                                2: 66.7,
-                                3: 33.3},
+                        "num_correct": {"1": 1,
+                                        "2": 2,
+                                        "3": 1},
+                        "scores": {"1": 33.3,
+                                "2": 66.7,
+                                "3": 33.3},
                         "weighted_avg": 40.0,
-                        "weighted_scores": {1: 40.0,
-                                            2: 60.0,
-                                            3: 20.0}},
+                        "weighted_scores": {"1": 40.0,
+                                            "2": 60.0,
+                                            "3": 20.0}},
                     }
         analysis = analyze_test(data)
 

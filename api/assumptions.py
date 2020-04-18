@@ -1,18 +1,18 @@
 from api.config import get_keyword_value, get_service_config
-from api.utils import get_id_list, get_student_list, update_input
+from api.utils import get_item_ids, get_student_list, update_input
 
 
 def get_assumptions(param):
     service_key = get_service_config(13)
     inp = update_input(param)
     student_list = get_student_list(inp)
-    idList = get_id_list(inp)
+    id_list = get_item_ids(inp)
     assumptions_dict = {}
     
     for i in student_list: # For each student i
-        checklist = idList.copy()
+        checklist = id_list.copy()
         for k in i[get_keyword_value("item_responses")]: # For each question k
-            for j in idList: # For each item ID j
+            for j in id_list: # For each item ID j
                 if k[get_keyword_value("item_id")] == j: # If item IDs match
                     checklist.remove(j)
 

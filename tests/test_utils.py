@@ -1,6 +1,6 @@
 import json
 
-from api.utils import get_sorted_responses, get_grad_year_list, get_id_list, update_input, get_item_topics
+from api.utils import get_sorted_responses, get_grad_year_list, get_item_ids, update_input, get_item_topics
 
 
 class TestUtils:
@@ -16,7 +16,7 @@ class TestUtils:
             },
             "item_topics":[
                 {
-                    "item_id":1,
+                    "item_id":"1",
                     "tags":[
                         {
                         "topic_tree":"Biology",
@@ -42,7 +42,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":2,
+                    "item_id":"2",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -68,7 +68,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":3,
+                    "item_id":"3",
                     "tags":[
                         {
                         "topic_tree":"G",
@@ -94,7 +94,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":4,
+                    "item_id":"4",
                     "tags":[
                         {
                         "topic_tree":"M",
@@ -120,7 +120,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":5,
+                    "item_id":"5",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -146,7 +146,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":6,
+                    "item_id":"6",
                     "tags":[
                         {
                         "topic_tree":"a",
@@ -175,46 +175,46 @@ class TestUtils:
             "student_list": [
                 {
                   "grad_year": "2022",
-                  "id": 1234,
+                  "id": "1234",
                   "first_name": "John",
                   "last_name": "Smith",
                   "email": "johnsmith@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 0},
-                        {"item_id": 8, "response": 1}
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "3", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 0},
+                        {"item_id": "8", "response": 1}
                     ]
                 },
                 { "grad_year": "2022",
-                  "id": 1235,
+                  "id": "1235",
                   "first_name": "Jane",
                   "last_name": "Smath",
                   "email": "janesmath@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 1},
-                        {"item_id": 6, "response": 1}
+                        {"item_id": "1", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "3", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 1},
+                        {"item_id": "6", "response": 1}
                     ]
                 },
                 { "grad_year": "2024",
-                  "id": 1236,
+                  "id": "1236",
                   "first_name": "Jake",
                   "last_name": "Jakey",
                   "email": "jakejakey@email.com",
                   "item_responses": [
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 0},
-                        {"item_id": 6, "response": 0},
-                        {"item_id": 5, "response": 1},
-                        {"item_id": 7, "response": 1}
+                        {"item_id": "2", "response": 0},
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "3", "response": 0},
+                        {"item_id": "4", "response": 0},
+                        {"item_id": "6", "response": 0},
+                        {"item_id": "5", "response": 1},
+                        {"item_id": "7", "response": 1}
                     ]
                 }
             ],
@@ -278,7 +278,7 @@ class TestUtils:
         }
 
         expected = [1,2,3]
-        id_list = get_id_list(data)
+        id_list = get_item_ids(data)
 
         assert id_list == expected
 
@@ -311,7 +311,7 @@ class TestUtils:
         }
 
         expected = [1, 2]
-        id_list = get_id_list(data)
+        id_list = get_item_ids(data)
 
         assert id_list == expected
 
@@ -329,10 +329,10 @@ class TestUtils:
         expected = {
             "student_list": [
                 {
-                  "id": 1,
+                  "id": "1",
                   "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "2", "response": 0},
                     ]
                 }]}
         updated = update_input(data)
@@ -341,17 +341,17 @@ class TestUtils:
 
     # test getting item topics
     def test_get_topics(self):
-        expected = {1: [{'Biology': {'Cell biology': {'Cells': {'Organelles': {'Nucleus': {'DNA': None}}}}}},
+        expected = {"1": [{'Biology': {'Cell biology': {'Cells': {'Organelles': {'Nucleus': {'DNA': None}}}}}},
                         {'Biology': {'Cell biology': {'Cells': {'Organelles': {'Ribosomes': None}}}}}],
-                    2: [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
+                    "2": [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
                         {'A': {'B': {'C': {'D': {'e': None}}}}}],
-                    3: [{'G': {'H': {'I': {'J': {'K': {'l': None}}}}}},
+                    "3": [{'G': {'H': {'I': {'J': {'K': {'l': None}}}}}},
                         {'G': {'H': {'I': {'J': {'k': None}}}}}],
-                    4: [{'M': {'N': {'O': {'P': {'Q': {'r': None}}}}}},
+                    "4": [{'M': {'N': {'O': {'P': {'Q': {'r': None}}}}}},
                         {'M': {'N': {'O': {'P': {'q': None}}}}}],
-                    5: [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
+                    "5": [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
                         {'m': {'n': {'o': {'p': {'q': None}}}}}],
-                    6: [{'a': {'b': {'c': {'d': {'e': {'f': None}}}}}},
+                    "6": [{'a': {'b': {'c': {'d': {'e': {'f': None}}}}}},
                         {'M': {'N': {'O': {'P': {'q': None}}}}}]}
         topics = get_item_topics(self.data)
         

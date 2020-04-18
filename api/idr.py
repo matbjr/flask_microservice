@@ -1,7 +1,7 @@
 from statistics import mean
 from math import sqrt
 
-from api.utils import get_item_std, get_sorted_responses, get_id_list, get_student_list, update_input
+from api.utils import get_score_std, get_sorted_responses, get_item_ids, get_student_list, update_input
 from api.config import get_service_config, get_keyword_value
 
 
@@ -9,54 +9,53 @@ def calculate_idr(param):
     service_key = get_service_config(2)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    sortedResponses = get_sorted_responses(student_list)
-    numStudents = len(sortedResponses)
-    numItems = len (sortedResponses[0])
-    idList = get_id_list(inp)
-    scoreSTD = get_item_std(sortedResponses)
-    idrList = []
-    idrDict = {}
+    sorted_resp = get_sorted_responses(student_list)
+    num_students = len(sorted_resp)
+    num_items = len (sorted_resp[0])
+    id_list = get_item_ids(inp)
+    score_std = get_score_std(inp)
+    idr_list = []
+    idr_dict = {}
 
-    if scoreSTD < 0:
+    if score_std < 0:
         return {service_key: get_keyword_value("bad_std")}
 
-    for i in range(0, numItems): # For each question i
-        rightList = [] # Scores of students who got question i right
-        wrongList = [] # Scores of students who got question i wrong
-        numRight = 0 # Total number of students who got question i right
-        numWrong = 0 # Total number of students who got question i wrong
-        for k in range(0, numStudents): # For each student k
-            if sortedResponses[k][i] == 1: # If student k gets question i correct
-                score = sum(sortedResponses[k]) / numItems
-                rightList.append(score) # Then add their score to the "right" list
-                numRight += 1
-            elif sortedResponses[k][i] == 0: # If student k gets question i wrong 
-                score = sum(sortedResponses[k]) / numItems
-                wrongList.append(score) # Then add their score to the "wrong" list
-                numWrong += 1
+    for i in range(0, num_items): # For each question i
+        right_list = []
+        wrong_list = []
+        num_right = 0
+        num_wrong = 0
+        for k in range(0, num_students): # For each student k
+            if sorted_resp[k][i] == 1: # If student k gets question i correct
+                score = sum(sorted_resp[k]) / num_items
+                right_list.append(score) # Then add their score to the "right" list
+                num_right += 1
+            elif sorted_resp[k][i] == 0: # If student k gets question i wrong 
+                score = sum(sorted_resp[k]) / num_items
+                wrong_list.append(score) # Then add their score to the "wrong" list
+                num_wrong += 1
 
-        if numRight == numStudents or numWrong == numStudents:
-            idrList.append(0)
+        if num_right == num_students or num_wrong == num_students:
+            idr_list.append(0)
             continue
-
-        if len(rightList) == 1:
-            rightMean = rightList[0]
-        elif len(rightList) > 1:
-            rightMean = mean(rightList)
-        if len(wrongList) == 1:
-            wrongMean = wrongList[0]
-        elif len(wrongList) > 1:
-            wrongMean = mean(wrongList)
-        if not rightMean or not wrongMean:
+        if len(right_list) == 1:
+            right_mean = right_list[0]
+        elif len(right_list) > 1:
+            right_mean = mean(right_list)
+        if len(wrong_list) == 1:
+            wrong_mean = wrong_list[0]
+        elif len(wrong_list) > 1:
+            wrong_mean = mean(wrong_list)
+        if not right_mean or not wrong_mean:
             return {service_key: get_keyword_value("bad_mean")}
 
-        idr = ((rightMean - wrongMean) * sqrt(numRight * numWrong)) / numStudents * scoreSTD
+        idr = ((right_mean - wrong_mean) * sqrt(num_right * num_wrong)) / num_students * score_std
         idr = round(idr, 3)
-        idrList.append(idr)
+        idr_list.append(idr)
 
     k = 0
-    for i in idList:
-        idrDict[i] = idrList[k]
+    for i in id_list:
+        idr_dict[i] = idr_list[k]
         k += 1
 
-    return {service_key: idrDict}
+    return {service_key: idr_dict}
