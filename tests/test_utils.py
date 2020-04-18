@@ -2,6 +2,7 @@ import json
 
 import api.utils as utils
 
+
 class TestUtils:
     data = None
 
