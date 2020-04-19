@@ -3,6 +3,19 @@ from api.config import get_service_config, get_keyword_value
 
 
 def calculate_kr20(param):
+    """
+    A function to get the kr20 value of an exam:
+    First it get the number of items divided by the
+    number of items - 1. Then it multiplies that by 
+    1 - the summation of the product of the 
+    proportion of those who got an item right by the
+    proportion of those who got it wrong divided by the
+    variance of the students' scores.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a float: the kr20
+    """
     service_key = get_service_config(1)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}

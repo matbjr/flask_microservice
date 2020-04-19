@@ -16,6 +16,17 @@ from api.analyze_grad_years import analyze_grad_years
 
 
 def analyze_test(param):
+    """
+    A function to get an exam's analysis:
+    It calls every service used to analyze
+    an exam and then returns the analysis.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of dictionaries:
+             a dictionary with the results
+             of the services as values
+    """
     service_key = get_service_config(6)
     inp = update_input(param)
     # use microservice calls here when all are hosted

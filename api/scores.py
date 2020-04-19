@@ -3,6 +3,16 @@ from api.config import get_service_config, get_keyword_value
 
 
 def calculate_scores(param):
+    """
+    A function to get the score of each student:
+    For each student, it gets the number of correct
+    responses and divides it by the number of questions.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of floats: a dictionary with
+             student ids as keys and their score as values
+    """
     service_key = get_service_config(4)
     inp = update_input(param)
     sorted_resp = get_sorted_responses(inp)

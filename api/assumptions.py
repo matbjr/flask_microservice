@@ -3,6 +3,23 @@ from api.utils import get_item_ids, get_student_list, update_input
 
 
 def get_assumptions(param):
+    """
+    A function to get the items for which a
+    student was assumed to have a response
+    of 0:
+    It gets a list of all item ids listed from
+    every student's responses, then iterates
+    through every student. If a student doesn't
+    have a response for an item in the id list,
+    then that item is assumed to have a response
+    of 0 for that student.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of dictionaries:
+             a dictionary with student ids as keys
+             and a list of item ids as values
+    """
     service_key = get_service_config(13)
     inp = update_input(param)
     student_list = get_student_list(inp)

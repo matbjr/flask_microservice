@@ -4,6 +4,18 @@ from api.difficulty import calculate_difficulty
 
 
 def calculate_weighted_scores(param):
+    """
+    A function to get the weighted score of each student:
+    For each student, it gets the weight of every item
+    they got correct by getting its difficulty and dividing
+    it by the sum of all items' difficulties.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of floats: a dictionary with
+             student ids as keys and their weighted score 
+             as values
+    """
     service_key = get_service_config(7)
     inp = update_input(param)
     student_ids = get_student_ids(inp)

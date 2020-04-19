@@ -3,6 +3,18 @@ from api.config import get_service_config, get_keyword_value
 
 
 def calculate_num_correct(param):
+    """
+    A function to get the number of students who
+    got an item correct:
+    It iterates over each item, counting how many
+    students got it correct.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of ints: a dictionary with
+             item ids as keys and number of correct
+             responses as values
+    """
     service_key = get_service_config(12)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}

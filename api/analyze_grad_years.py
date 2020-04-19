@@ -15,6 +15,19 @@ from api.assumptions import get_assumptions
 
 
 def analyze_grad_years(param):
+    """
+    A function to get an exam's analysis by 
+    students' graduation year:
+    It groups all students by graduation year and 
+    then iterates over the graduation years, calling
+    every service used to analyze an exam. 
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of nested dictionaries:
+             a dictionary with graduation years as
+             keys and the exam analysis as values
+    """
     service_key = get_service_config(14)
     inp = update_input(param)
     assumptions_key = get_service_config(13)

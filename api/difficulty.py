@@ -3,6 +3,19 @@ from api.config import get_service_config, get_keyword_value
 
 
 def calculate_difficulty(param):
+    """
+    A function to get the difficulty of 
+    each item on the exam:
+    It calculates how many students got an
+    item correct, and then divides it by
+    the total number of students.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of floats: a dictionary
+             with item ids as keys and the
+             difficulty as values
+    """
     service_key = get_service_config(3)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}

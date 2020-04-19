@@ -6,6 +6,22 @@ from api.config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):
+    """
+    A function to get the idr of each item:
+    For every item, it calculates the mean score
+    of students who got the answer right and subtracts
+    it by the mean score of those who got it wrong.
+    Then it multiplies that by the square root of 
+    the number of students who got the item right
+    multiplied by the total of those who got it wrong.
+    Then it divides that by the number of students
+    multiplied by the std of the students' scores.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of floats: a dictionary with
+             item ids as keys and idr as values
+    """
     service_key = get_service_config(2)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}

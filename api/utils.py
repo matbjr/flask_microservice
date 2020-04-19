@@ -12,7 +12,7 @@ def get_score_std(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: float, the standard deviation
+    :return: float: the standard deviation
     """
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}
@@ -37,7 +37,7 @@ def get_item_ids(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: list of strings, a list containing all item ids
+    :return: list of strings: a list containing all item ids
     """
     inp = update_input(param)
     student_list = get_student_list(inp)
@@ -73,7 +73,7 @@ def get_sorted_responses(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: list of lists of ints, a list containing 
+    :return: list of lists of ints: a list containing 
              all students' responses in order of item id
     """
     inp = update_input(param)
@@ -123,7 +123,7 @@ def get_grad_year_list(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: list of strings, a list containing 
+    :return: list of strings: a list containing 
              all listed graduation years
     """
     inp = update_input(param)
@@ -153,7 +153,7 @@ def sort_students_by_grad_year(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: dictionary of responses, a dictionary
+    :return: dictionary of responses: a dictionary
              with graduation years as keys and
              student responses as values in the
              Reliabilty Measures standard json format
@@ -190,7 +190,7 @@ def get_student_ids(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: list of strings, a list containing all student ids
+    :return: list of strings: a list containing all student ids
     """
     inp = update_input(param)
     student_list = get_student_list(inp)
@@ -210,7 +210,7 @@ def get_student_list(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: list of student information, a list
+    :return: list of student information: a list
              containing every student's item responses,
              id, and grad year if given
     """
@@ -285,7 +285,7 @@ def get_item_topics(param):
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: a dictionary of nested dictionaries,
+    :return: a dictionary of nested dictionaries:
              a dictionary with item ids as keys and
              nested dictionaries of a topic's hierarchy
              as values.
