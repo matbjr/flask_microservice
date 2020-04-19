@@ -2,53 +2,95 @@ from statistics import pstdev
 from api.config import get_keyword_value
 
 
-def get_item_std(item):
-    scoreList = []
-    for i in item:
+def get_score_std(param):
+    """
+    A function to calculate the standard deviation of
+    the students' scores for the exam:
+    It iterates through a list of each student's
+    responses, putting the sums in a list, and then
+    taking the standard deviation of that list.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: float: the standard deviation
+    """
+    inp = update_input(param)
+    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
+    sorted_resp = get_sorted_responses(student_list)
+    score_list = []
+    for i in sorted_resp:
         score = sum(i)
-        scoreList.append(score)
-    # scoreSTD = get_std(scoreList)  # micro service call
-    scoreSTD = pstdev(scoreList)
+        score_list.append(score)
+    # score_std = get_std(score_list)  # micro service call
+    score_std = pstdev(score_list)
 
-    return scoreSTD
+    return score_std
 
 
-def get_id_list(param):
+def get_item_ids(param):
+    """
+    A function to get a list of all the item ids 
+    used in the exam:
+    It iterates through a list of all the items a
+    student responded to, and then adds that item's
+    id to the id list if it isn't already in it.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: list of strings: a list containing all item ids
+    """
     inp = update_input(param)
     student_list = get_student_list(inp)
-    idList = []
-    responseList = []
+    id_list = []
+    response_list = []
     
     for i in student_list:
-        responseList.append(i[get_keyword_value("item_responses")])
+        response_list.append(i[get_keyword_value("item_responses")])
         
-    for i in responseList:
+    for i in response_list:
         for k in i:
-            curr_id = int(k[get_keyword_value("item_id")])
-            if curr_id not in idList:
-                idList.append(curr_id)
+            curr_id = k[get_keyword_value("item_id")]
+            if curr_id not in id_list:
+                id_list.append(curr_id)
     
-    idList.sort()
+    id_list.sort()
 
-    return idList
+    return id_list
 
 
 def get_sorted_responses(param):
+    """
+    A function to sort every student's response
+    to an item based on its item id:
+    It calls the get_item_ids function and then
+    creates a dictionary with the item ids as keys.
+    Then it iterates through every students' responses
+    adding each item response to its corresponding key
+    in the dictionary. It then creates a now sorted 
+    list of each student's responses based on its 
+    index in the dictionary.
+
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: list of lists of ints: a list containing 
+             all students' responses in order of item id
+    """
     inp = update_input(param)
     student_list = get_student_list(inp)
-    numStudents = len(student_list)
-    idList = get_id_list(inp)
-    responseList = []
+    num_students = len(student_list)
+    id_list = get_item_ids(inp)
+    response_list = []
     responses = {}
     
     for i in student_list:
-        responseList.append(i[get_keyword_value("item_responses")])
+        response_list.append(i[get_keyword_value("item_responses")])
 
-    for i in idList:  # Create a dictionary with the item IDs as keys
+    for i in id_list:  # Create a dictionary with the item IDs as keys
         responses[i] = []
     
-    for i in responseList:  # For each student response list i
-        checklist = idList.copy()
+    for i in response_list:  # For each student response list i
+        checklist = id_list.copy()
         for k in i: # For each question k
             for j in responses: # For each item ID j
                 # If item IDs match, add response to dictionary
@@ -60,18 +102,30 @@ def get_sorted_responses(param):
             for i in checklist:
                 responses[i].append(0)
 
-    sortedResponses = []
-    for i in range(0, numStudents):  # For each student
-        studentResponses = []
+    sorted_resp = []
+    for i in range(0, num_students):  # For each student
+        student_responses = []
         for k in responses: # For every item ID
             # Create a list of the students responses sorted by item ID
-            studentResponses.append(responses[k][i])
-        sortedResponses.append(studentResponses)
+            student_responses.append(responses[k][i])
+        sorted_resp.append(student_responses)
 
-    return sortedResponses
+    return sorted_resp
 
 
 def get_grad_year_list(param):
+    """
+    A function to get all the graduation years
+    of students taking the exam:
+    It iterates through every student's information
+    adding their graduation year to a list if it 
+    exists and isnt already in the list.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: list of strings: a list containing 
+             all listed graduation years
+    """
     inp = update_input(param)
     student_list = get_student_list(inp)
     grad_year_list = []
@@ -88,10 +142,26 @@ def get_grad_year_list(param):
 
 
 def sort_students_by_grad_year(param):
+    """
+    A function to sort students into a dictionary 
+    with the graduation years as keys:
+    It calls the get_grad_year_list function and
+    then creates a dictionary with the years as keys.
+    Then it iterates through every student and adds 
+    their responses to the dictionary of their
+    corresponding year.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: dictionary of responses: a dictionary
+             with graduation years as keys and
+             student responses as values in the
+             Reliabilty Measures standard json format
+    """
     inp = update_input(param)
     student_list = get_student_list(inp)
     grad_year_list = get_grad_year_list(inp)
-    id_list = get_id_list(inp)
+    id_list = get_item_ids(inp)
     responses_by_grad_year = {}
 
     for i in grad_year_list:
@@ -112,7 +182,38 @@ def sort_students_by_grad_year(param):
     return responses_by_grad_year
 
 
+def get_student_ids(param):
+    """
+    A function to get a list of all the student ids:
+    It iterates through every student and adds their
+    id to a list.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: list of strings: a list containing all student ids
+    """
+    inp = update_input(param)
+    student_list = get_student_list(inp)
+    student_ids = []
+
+    for i in student_list:
+        curr_id = i[get_keyword_value('id')]
+        student_ids.append(curr_id)
+    
+    return student_ids
+
+
 def get_student_list(param):
+    """
+    A function to get the list of students from
+    the Reliabilty Measures standard json format.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: list of student information: a list
+             containing every student's item responses,
+             id, and grad year if given
+    """
     inp = update_input(param)
     student_list = list(inp[get_keyword_value("student_list")])
 
@@ -120,26 +221,41 @@ def get_student_list(param):
 
 
 def update_input(param):
+    """
+    A function to update the information of
+    a json in the Reliabilty Measures standard 
+    json format:
+    If the json does not contain student ids, a
+    default of 1-n is used. If no item ids are given.
+    a default of 1-n is used. If a student or item is
+    included in an exclude list, they are removed from
+    the json.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a json in the Reliabilty Measures
+            standard json format
+    """
     inp = param
     student_list = list(param[get_keyword_value("student_list")])
     exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
     exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
-    remove_students = []
 
     for i in range(0, len(student_list)):
         curr_stud = student_list[i].get(get_keyword_value("id"))
         if curr_stud is None:
-            student_list[i][(get_keyword_value("id"))] = i+1
+            student_list[i][(get_keyword_value("id"))] = str(i+1)
 
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
             curr_item = curr_responses[k].get(get_keyword_value("item_id"))
             if curr_item is None:
-                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = k+1
+                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(k+1)
 
+    remove_students = []
     for i in student_list:
-        if int(i[get_keyword_value("id")]) in exclude_students:
+        if i[get_keyword_value("id")] in exclude_students:
             remove_students.append(i)
     for i in remove_students:
         student_list.remove(i)
@@ -160,8 +276,26 @@ def update_input(param):
 
 
 def get_item_topics(param):
-    topics = param[get_keyword_value("item_topics")]
-    topic_dict = dict()
+    """
+    A function to get the hierarchy of all topics
+    per item:
+    It iterates through every items topic info and
+    creates a hierarchy of nested dictionaries for
+    each item's topics.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of nested dictionaries:
+             a dictionary with item ids as keys and
+             nested dictionaries of a topic's hierarchy
+             as values.
+    """
+    inp = update_input(param)
+    topics = inp.get(get_keyword_value("item_topics"), [])
+    topic_dict = {}
+
+    if not topics:
+        return topic_dict
 
     for i in topics:
         item = i[get_keyword_value("item_id")]
@@ -173,13 +307,18 @@ def get_item_topics(param):
             curr_tree = k[get_keyword_value("topic_tree")]
             curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
             curr_topic = k[get_keyword_value("topic_tagged")]
-            hierarchy = dict()
-            topic_score = dict()
+            hierarchy = {}
+            topic_score = {}
             topic_score[curr_topic] = None
             hierarchy[curr_tree] = topic_score
 
-            for i in reversed(curr_levels):
-                next_level = dict()
+            level_list = []
+            for i in curr_levels:
+                level_list.append(i)
+            level_list.sort(reverse=True)
+
+            for i in level_list:
+                next_level = {}
                 next_level[curr_levels[i]] = hierarchy[curr_tree]
                 hierarchy[curr_tree] = next_level
 

@@ -1,21 +1,28 @@
 from api.config import get_service_config
 from api.utils import update_input
 from api.kr20 import calculate_kr20
-from api.idr import calculate_idr
-from api.difficulty import calculate_difficulty
-from api.scores import calculate_scores
-from api.average import calculate_average
-from api.weighted_scores import calculate_weighted_scores
-from api.weighted_average import calculate_weighted_average
+from api.idr import calculate_idr, calculate_idr_average
+from api.difficulty import calculate_difficulty, calculate_difficulty_average
+from api.scores import calculate_scores, calculate_average
+from api.weighted_scores import calculate_weighted_scores, calculate_weighted_average
 from api.excludes import get_exclude_recos
-from api.difficulty_average import calculate_difficulty_average
-from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
 
 
 def analyze_test(param):
+    """
+    A function to get an exam's analysis:
+    It calls every service used to analyze
+    an exam and then returns the analysis.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a dictionary of dictionaries:
+             a dictionary with the results
+             of the services as values
+    """
     service_key = get_service_config(6)
     inp = update_input(param)
     # use microservice calls here when all are hosted
@@ -34,7 +41,7 @@ def analyze_test(param):
     val_grad_year_analysis = analyze_grad_years(inp)
 
     # join all results
-    result = dict()
+    result = {}
     items = [val_kr20, val_idr, val_difficulty,
              val_scores, val_average, val_weighted_s,
              val_weighted_avg, val_excludes, val_diff_avg,
@@ -58,3 +65,4 @@ if __name__ == '__main__':
     analysis = analyze_test(sample)
 
     print(json.dumps(analysis))
+    

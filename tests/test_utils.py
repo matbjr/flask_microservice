@@ -1,6 +1,6 @@
 import json
 
-from api.utils import get_sorted_responses, get_grad_year_list, get_id_list, update_input, get_item_topics
+import api.utils as utils
 
 
 class TestUtils:
@@ -16,7 +16,7 @@ class TestUtils:
             },
             "item_topics":[
                 {
-                    "item_id":1,
+                    "item_id":"1",
                     "tags":[
                         {
                         "topic_tree":"Biology",
@@ -42,7 +42,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":2,
+                    "item_id":"2",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -68,7 +68,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":3,
+                    "item_id":"3",
                     "tags":[
                         {
                         "topic_tree":"G",
@@ -94,7 +94,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":4,
+                    "item_id":"4",
                     "tags":[
                         {
                         "topic_tree":"M",
@@ -120,7 +120,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":5,
+                    "item_id":"5",
                     "tags":[
                         {
                         "topic_tree":"A",
@@ -146,7 +146,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "item_id":6,
+                    "item_id":"6",
                     "tags":[
                         {
                         "topic_tree":"a",
@@ -175,46 +175,46 @@ class TestUtils:
             "student_list": [
                 {
                   "grad_year": "2022",
-                  "id": 1234,
+                  "id": "1234",
                   "first_name": "John",
                   "last_name": "Smith",
                   "email": "johnsmith@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 0},
-                        {"item_id": 8, "response": 1}
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "3", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 0},
+                        {"item_id": "8", "response": 1}
                     ]
                 },
                 { "grad_year": "2022",
-                  "id": 1235,
+                  "id": "1235",
                   "first_name": "Jane",
                   "last_name": "Smath",
                   "email": "janesmath@email.com",
                   "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1},
-                        {"item_id": 5, "response": 1},
-                        {"item_id": 6, "response": 1}
+                        {"item_id": "1", "response": 0},
+                        {"item_id": "2", "response": 1},
+                        {"item_id": "3", "response": 1},
+                        {"item_id": "4", "response": 1},
+                        {"item_id": "5", "response": 1},
+                        {"item_id": "6", "response": 1}
                     ]
                 },
                 { "grad_year": "2024",
-                  "id": 1236,
+                  "id": "1236",
                   "first_name": "Jake",
                   "last_name": "Jakey",
                   "email": "jakejakey@email.com",
                   "item_responses": [
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 0},
-                        {"item_id": 6, "response": 0},
-                        {"item_id": 5, "response": 1},
-                        {"item_id": 7, "response": 1}
+                        {"item_id": "2", "response": 0},
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "3", "response": 0},
+                        {"item_id": "4", "response": 0},
+                        {"item_id": "6", "response": 0},
+                        {"item_id": "5", "response": 1},
+                        {"item_id": "7", "response": 1}
                     ]
                 }
             ],
@@ -222,100 +222,146 @@ class TestUtils:
             "exclude_students":[]
         }
 
+    # test getting std
+    def test_get_std(self):
+        
+        expected = 0.816496580927726
+        std = utils.get_score_std(self.data)
+
+        assert std == expected
+
+    # test getting item ids
+    def test_get_item_ids(self):
+        
+        expected = ['1', '2', '3', '4', '5', '6', '7', '8']
+        item_ids = utils.get_item_ids(self.data)
+
+        assert item_ids == expected
+
+    # test sorting responses
     def test_get_sorted_responses(self):
 
         expected = [[1, 1, 0, 1, 0, 0, 0, 1],
                     [0, 1, 1, 1, 1, 1, 0, 0],
                     [1, 0, 0, 0, 1, 0, 1, 0]]
 
-        responses = get_sorted_responses(self.data)
+        responses = utils.get_sorted_responses(self.data)
         print(responses)
 
         assert expected == responses
 
-    # testing with item excludes
-    def test_with_excludes(self):
-        data = {
-            "student_list": [
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 0}
-                    ]
-                },
-                { 
-                  "id": 2,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 1}
-                    ]
-                },
-                { 
-                  "id": 3,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 0},
-                        {"item_id": 3, "response": 1},
-                        {"item_id": 4, "response": 1}
-                    ]
-                },
-                { 
-                  "id": 4,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 1},
-                        {"item_id": 3, "response": 0},
-                        {"item_id": 4, "response": 0}
-                    ]
-                }
-            ],
-            "exclude_items": [4]
-        }
+    # test getting grad years
+    def test_get_grad_year_list(self):
 
-        expected = [1,2,3]
-        id_list = get_id_list(data)
+        expected = ['2022', '2024']
+        grad_year_list = utils.get_grad_year_list(self.data)
 
-        assert id_list == expected
+        assert grad_year_list == expected
 
-    # testing without item excludes
-    def test_without_excludes(self):
-        data = {
-            "student_list": [
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1},
-                        {"item_id": 2, "response": 0},
+    #test sorting by grad years
+    def test_sort_students_by_grad_year(self):
+
+        expected = {
+                    '2022': {
+                        'student_list': [{
+                            'email': 'johnsmith@email.com',
+                            'first_name': 'John',
+                            'grad_year': '2022',
+                            'id': '1234',
+                            'item_responses': [ {'item_id': '1', 'response': 1},
+                                                {'item_id': '3', 'response': 0},
+                                                {'item_id': '2', 'response': 1},
+                                                {'item_id': '4', 'response': 1},
+                                                {'item_id': '5', 'response': 0},
+                                                {'item_id': '8', 'response': 1},
+                                                {'item_id': '6', 'response': 0},
+                                                {'item_id': '7', 'response': 0}],
+                            'last_name': 'Smith'},
+                            {'email': 'janesmath@email.com',
+                            'first_name': 'Jane',
+                            'grad_year': '2022',
+                            'id': '1235',
+                            'item_responses': [ {'item_id': '1',  'response': 0},
+                                                {'item_id': '2', 'response': 1},
+                                                {'item_id': '3', 'response': 1},
+                                                {'item_id': '4', 'response': 1},
+                                                {'item_id': '5', 'response': 1},
+                                                {'item_id': '6', 'response': 1},
+                                                {'item_id': '7', 'response': 0},
+                                                {'item_id': '8', 'response': 0}],
+                            'last_name': 'Smath'}]},
+                    '2024': {
+                        'student_list': [{
+                            'email': 'jakejakey@email.com',
+                            'first_name': 'Jake',
+                            'grad_year': '2024',
+                            'id': '1236',
+                            'item_responses': [ {'item_id': '2', 'response': 0},
+                                                {'item_id': '1', 'response': 1},
+                                                {'item_id': '3', 'response': 0},
+                                                {'item_id': '4', 'response': 0},
+                                                {'item_id': '6', 'response': 0},
+                                                {'item_id': '5', 'response': 1},
+                                                {'item_id': '7', 'response': 1},
+                                                {'item_id': '8', 'response': 0}],
+                            'last_name': 'Jakey'}]},
+                    }
+        by_grad_year = utils.sort_students_by_grad_year(self.data)
+
+        assert by_grad_year == expected
+
+    # test getting student ids
+    def test_get_student_ids(self):
+
+        expected = ['1234', '1235', '1236']
+        stud_ids = utils.get_student_ids(self.data)
+
+        assert stud_ids == expected
+
+    # test getting student list
+    def test_get_student_list(self):
+
+        expected = [
+                    {'email': 'johnsmith@email.com',
+                    'first_name': 'John',
+                    'grad_year': '2022',
+                    'id': '1234',
+                    'item_responses': [{'item_id': '1', 'response': 1},
+                                        {'item_id': '3', 'response': 0},
+                                        {'item_id': '2', 'response': 1},
+                                        {'item_id': '4', 'response': 1},
+                                        {'item_id': '5', 'response': 0},
+                                        {'item_id': '8', 'response': 1}],
+                    'last_name': 'Smith'},
+                    {'email': 'janesmath@email.com',
+                    'first_name': 'Jane',
+                    'grad_year': '2022',
+                    'id': '1235',
+                    'item_responses': [{'item_id': '1', 'response': 0},
+                                        {'item_id': '2', 'response': 1},
+                                        {'item_id': '3', 'response': 1},
+                                        {'item_id': '4', 'response': 1},
+                                        {'item_id': '5', 'response': 1},
+                                        {'item_id': '6', 'response': 1}],
+                    'last_name': 'Smath'},
+                    {'email': 'jakejakey@email.com',
+                    'first_name': 'Jake',
+                    'grad_year': '2024',
+                    'id': '1236',
+                    'item_responses': [{'item_id': '2', 'response': 0},
+                                        {'item_id': '1', 'response': 1},
+                                        {'item_id': '3', 'response': 0},
+                                        {'item_id': '4', 'response': 0},
+                                        {'item_id': '6', 'response': 0},
+                                        {'item_id': '5', 'response': 1},
+                                        {'item_id': '7', 'response': 1}],
+                    'last_name': 'Jakey'},
                     ]
-                },
-                { 
-                  "id": 2,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                    ]
-                },
-                { 
-                  "id": 3,
-                  "item_responses": [
-                        {"item_id": 1, "response": 0},
-                        {"item_id": 2, "response": 1},
-                    ]
-                }
-            ]
-        }
+        stud_list = utils.get_student_list(self.data)
 
-        expected = [1, 2]
-        id_list = get_id_list(data)
+        assert stud_list == expected
 
-        assert id_list == expected
-
-    # test update input
+    # test updating input
     def test_update_input(self):
         data = {
             "student_list": [
@@ -329,30 +375,124 @@ class TestUtils:
         expected = {
             "student_list": [
                 {
+                  "id": "1",
+                  "item_responses": [
+                        {"item_id": "1", "response": 1},
+                        {"item_id": "2", "response": 0},
+                    ]
+                }]}
+        updated = utils.update_input(data)
+
+        assert updated == expected
+
+    # test getting topics
+    def test_get_topics(self):
+        expected = {"1": [{'Biology': {'Cell biology': {'Cells': {'Organelles': {'Nucleus': {'DNA': None}}}}}},
+                          {'Biology': {'Cell biology': {'Cells': {'Organelles': {'Ribosomes': None}}}}}],
+                    "2": [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
+                          {'A': {'B': {'C': {'D': {'e': None}}}}}],
+                    "3": [{'G': {'H': {'I': {'J': {'K': {'l': None}}}}}},
+                          {'G': {'H': {'I': {'J': {'k': None}}}}}],
+                    "4": [{'M': {'N': {'O': {'P': {'Q': {'r': None}}}}}},
+                          {'M': {'N': {'O': {'P': {'q': None}}}}}],
+                    "5": [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
+                          {'m': {'n': {'o': {'p': {'q': None}}}}}],
+                    "6": [{'a': {'b': {'c': {'d': {'e': {'f': None}}}}}},
+                          {'M': {'N': {'O': {'P': {'q': None}}}}}]}
+        topics = utils.get_item_topics(self.data)
+        
+        assert topics == expected
+
+    # testing with item excludes
+    def test_with_item_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 0}
+                    ]
+                }
+            ],
+            "exclude_items": [4]
+        }
+
+        expected = [1,2,3]
+        id_list = utils.get_item_ids(data)
+
+        assert id_list == expected
+
+    # testing without item excludes
+    def test_without_item_excludes(self):
+        data = {
+            "student_list": [
+                {
                   "id": 1,
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
                     ]
-                }]}
-        updated = update_input(data)
+                }
+            ]
+        }
 
-        assert updated == expected
+        expected = [1, 2]
+        id_list = utils.get_item_ids(data)
 
-    # test getting item topics
-    def test_get_topics(self):
-        expected = {1: [{'Biology': {'Cell biology': {'Cells': {'Organelles': {'Nucleus': {'DNA': None}}}}}},
-                        {'Biology': {'Cell biology': {'Cells': {'Organelles': {'Ribosomes': None}}}}}],
-                    2: [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
-                        {'A': {'B': {'C': {'D': {'e': None}}}}}],
-                    3: [{'G': {'H': {'I': {'J': {'K': {'l': None}}}}}},
-                        {'G': {'H': {'I': {'J': {'k': None}}}}}],
-                    4: [{'M': {'N': {'O': {'P': {'Q': {'r': None}}}}}},
-                        {'M': {'N': {'O': {'P': {'q': None}}}}}],
-                    5: [{'A': {'B': {'C': {'D': {'E': {'f': None}}}}}},
-                        {'m': {'n': {'o': {'p': {'q': None}}}}}],
-                    6: [{'a': {'b': {'c': {'d': {'e': {'f': None}}}}}},
-                        {'M': {'N': {'O': {'P': {'q': None}}}}}]}
-        topics = get_item_topics(self.data)
-        
-        assert topics == expected
+        assert id_list == expected
+
+    # testing with student excludes
+    def test_with_student_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
+                    ]
+                },
+                {
+                  "id": 2,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
+                    ]
+                }
+            ],
+            "exclude_students": [1]
+        }
+
+        expected = [2]
+        stud_ids = utils.get_student_ids(data)
+
+        assert stud_ids == expected
+
+    # testing without student excludes
+    def test_without_student_excludes(self):
+        data = {
+            "student_list": [
+                {
+                  "id": 1,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
+                    ]
+                },
+                {
+                  "id": 2,
+                  "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
+                    ]
+                }
+            ]
+        }
+
+        expected = [1, 2]
+        stud_ids = utils.get_student_ids(data)
+
+        assert stud_ids == expected

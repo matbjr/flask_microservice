@@ -1,30 +1,42 @@
-from api.utils import get_item_std, get_sorted_responses, get_student_list, update_input
+from api.utils import get_score_std, get_sorted_responses, get_student_list, update_input
 from api.config import get_service_config, get_keyword_value
 
 
 def calculate_kr20(param):
+    """
+    A function to get the kr20 value of an exam:
+    First it get the number of items divided by the
+    number of items - 1. Then it multiplies that by 
+    1 - the summation of the product of the 
+    proportion of those who got an item right by the
+    proportion of those who got it wrong divided by the
+    variance of the students' scores.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a float: the kr20
+    """
     service_key = get_service_config(1)
     inp = update_input(param)
     student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    sortedResponses = get_sorted_responses(student_list)
-    numStudents = len(sortedResponses)
-    numItems = len (sortedResponses[0])
-    pqList = []
-    scoreSTD = get_item_std(sortedResponses)
+    sorted_resp = get_sorted_responses(student_list)
+    num_students = len(sorted_resp)
+    num_items = len (sorted_resp[0])
+    pq_list = []
+    score_std = get_score_std(inp)
 
-    if scoreSTD <= 0:
+    if score_std <= 0:
         return {service_key: get_keyword_value("bad_std")}
 
-    for i in range(0, numItems):
+    for i in range(0, num_items):
         p = 0
-        for k in range(0, numStudents):
-            p += sortedResponses[k][i]
-        p /= numStudents
+        for k in range(0, num_students):
+            p += sorted_resp[k][i]
+        p /= num_students
         q = 1 - p
-        pqList.append(p * q)
-    pqSum = sum(pqList)
+        pq_list.append(p * q)
+    pq_sum = sum(pq_list)
 
-    # need validation here
-    kr20_value = (numItems /(numItems - 1)) * (1 - (pqSum / (scoreSTD ** 2)))
+    kr20_value = (num_items /(num_items - 1)) * (1 - (pq_sum / (score_std ** 2)))
 
     return {service_key: round(kr20_value, 3)}
