@@ -1,15 +1,11 @@
 from api.config import get_service_config, get_keyword_value
 from api.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
 from api.kr20 import calculate_kr20
-from api.idr import calculate_idr
-from api.difficulty import calculate_difficulty
-from api.scores import calculate_scores
-from api.average import calculate_average
-from api.weighted_scores import calculate_weighted_scores
-from api.weighted_average import calculate_weighted_average
+from api.idr import calculate_idr, calculate_idr_average
+from api.difficulty import calculate_difficulty, calculate_difficulty_average
+from api.scores import calculate_scores, calculate_average
+from api.weighted_scores import calculate_weighted_scores, calculate_weighted_average
 from api.excludes import get_exclude_recos
-from api.difficulty_average import calculate_difficulty_average
-from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 
@@ -59,14 +55,14 @@ def analyze_grad_years(param):
         val_idr_avg = calculate_idr_average(curr_students)
         val_num_correct = calculate_num_correct(curr_students)
 
-        curr_assumptions = dict()
+        curr_assumptions = {}
         for k in assumptions:
             for j in student_list:
                 if k == j[get_keyword_value("id")]:
                     curr_assumptions[k] = assumptions[k]
         val_assumptions = {assumptions_key: curr_assumptions}
 
-        result = dict()
+        result = {}
         items = [val_kr20, val_idr, val_difficulty,
                  val_scores, val_average, val_weighted_s,
                  val_weighted_avg, val_excludes, val_diff_avg,

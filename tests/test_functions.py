@@ -1,16 +1,12 @@
 import json
 
 from api.kr20 import calculate_kr20
-from api.idr import calculate_idr
-from api.difficulty import calculate_difficulty
-from api.scores import calculate_scores
-from api.average import calculate_average
+from api.idr import calculate_idr, calculate_idr_average
+from api.difficulty import calculate_difficulty, calculate_difficulty_average
+from api.scores import calculate_scores, calculate_average
 from api.analyze_test import analyze_test
-from api.weighted_scores import calculate_weighted_scores
-from api.weighted_average import calculate_weighted_average
+from api.weighted_scores import calculate_weighted_scores, calculate_weighted_average
 from api.excludes import get_exclude_recos
-from api.difficulty_average import calculate_difficulty_average
-from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years

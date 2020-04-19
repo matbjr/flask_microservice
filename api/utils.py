@@ -194,7 +194,7 @@ def get_student_ids(param):
     """
     inp = update_input(param)
     student_list = get_student_list(inp)
-    student_ids = list()
+    student_ids = []
 
     for i in student_list:
         curr_id = i[get_keyword_value('id')]
@@ -292,7 +292,7 @@ def get_item_topics(param):
     """
     inp = update_input(param)
     topics = inp.get(get_keyword_value("item_topics"), [])
-    topic_dict = dict()
+    topic_dict = {}
 
     if not topics:
         return topic_dict
@@ -307,13 +307,18 @@ def get_item_topics(param):
             curr_tree = k[get_keyword_value("topic_tree")]
             curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
             curr_topic = k[get_keyword_value("topic_tagged")]
-            hierarchy = dict()
-            topic_score = dict()
+            hierarchy = {}
+            topic_score = {}
             topic_score[curr_topic] = None
             hierarchy[curr_tree] = topic_score
 
-            for i in reversed(curr_levels):
-                next_level = dict()
+            level_list = []
+            for i in curr_levels:
+                level_list.append(i)
+            level_list.sort(reverse=True)
+
+            for i in level_list:
+                next_level = {}
                 next_level[curr_levels[i]] = hierarchy[curr_tree]
                 hierarchy[curr_tree] = next_level
 
