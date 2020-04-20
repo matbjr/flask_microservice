@@ -24,8 +24,7 @@ def calculate_idr(param):
     """
     service_key = get_service_config(2)
     inp = update_input(param)
-    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    sorted_resp = get_sorted_responses(student_list)
+    sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])
     id_list = get_item_ids(inp)

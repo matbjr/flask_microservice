@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     "application_id": "rm_01",
-    "application_version": "0.2.1",
+    "application_version": "0.2.2",
     "application_name": "Reliability Measures microservices",
     "application_short_name": "rm_microservices",
     "service_url": "http://api.reliabilitymeasures.com/",
@@ -36,18 +36,21 @@ config = {
             "topic_branch_hierarchy": "topic_branch_hierarchy",
             "topic_tagged": "topic_tagged",
             "topic_tree": "topic_tree",
+            "topic_ids": "topic_ids",
+            "topic_hierarchy": "topic_hierarchy",
+            "topic_rights": "topic_rights",
 
             "exclude_threshold_1": 0.09,
             "exclude_threshold_2": 0,
             "exclude_length_1": 0.5,
             "exclude_length_2": 0.8,
-            "bad_exam": "bad_exam",
 
             "bad_data": "Invalid data - Not enough students",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
             "no_grad_year": "No graduation years found",
-            "no_assumptions": "No student response assumptions were made"
+            "no_assumptions": "No student response assumptions were made",
+            "no_topics": "No topics were found"
     },  
     "services": [
         # use the shot_name key for service path and in response key.
@@ -157,10 +160,10 @@ config = {
         },
         {
             "id": 15,
-            "name": "topic_scores",
-            "short_name": "topic_scores",
-            "description": "The students\' score in each topic",
-            "type": "dictionary of topic scores"
+            "name": "topic_right_responses",
+            "short_name": "topic_rights",
+            "description": "Each students\' number of right responses in each topic",
+            "type": "dictionary of topic rights"
         }
     ] 
 }

@@ -8,6 +8,7 @@ from api.weighted_scores import calculate_weighted_scores, calculate_weighted_av
 from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
+from api.topic_rights import calculate_topic_rights
 
 
 def analyze_grad_years(param):
@@ -28,9 +29,8 @@ def analyze_grad_years(param):
     inp = update_input(param)
     assumptions_key = get_service_config(13)
     assumptions = get_assumptions(inp)[assumptions_key]
-    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    students_dict = sort_students_by_grad_year(student_list)
-    grad_year_list = get_grad_year_list(student_list)
+    students_dict = sort_students_by_grad_year(inp)
+    grad_year_list = get_grad_year_list(inp)
     grad_analysis = {}
 
     if not grad_year_list:
@@ -54,6 +54,7 @@ def analyze_grad_years(param):
         val_diff_avg = calculate_difficulty_average(curr_students)
         val_idr_avg = calculate_idr_average(curr_students)
         val_num_correct = calculate_num_correct(curr_students)
+        val_topic_rights = calculate_topic_rights(inp)
 
         curr_assumptions = {}
         for k in assumptions:
@@ -66,7 +67,8 @@ def analyze_grad_years(param):
         items = [val_kr20, val_idr, val_difficulty,
                  val_scores, val_average, val_weighted_s,
                  val_weighted_avg, val_excludes, val_diff_avg,
-                 val_idr_avg, val_num_correct, val_assumptions]
+                 val_idr_avg, val_num_correct, val_assumptions,
+                 val_topic_rights]
         for item in items:
             result.update(item)
 

@@ -15,8 +15,7 @@ def get_score_std(param):
     :return: float: the standard deviation
     """
     inp = update_input(param)
-    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    sorted_resp = get_sorted_responses(student_list)
+    sorted_resp = get_sorted_responses(inp)
     score_list = []
     for i in sorted_resp:
         score = sum(i)
@@ -280,15 +279,14 @@ def get_item_topics(param):
     A function to get the hierarchy of all topics
     per item:
     It iterates through every items topic info and
-    creates a hierarchy of nested dictionaries for
-    each item's topics.
+    creates a hierarchy for each item's topics.
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: a dictionary of nested dictionaries:
-             a dictionary with item ids as keys and
-             nested dictionaries of a topic's hierarchy
-             as values.
+    :return: a list of dictionaries:
+             a list of dictionaries containing a
+             topic hierarchy, its corresponding item id,
+             and a placeholder number of rights.
     """
     inp = update_input(param)
     topics = inp.get(get_keyword_value("item_topics"), [])
@@ -326,14 +324,26 @@ def get_item_topics(param):
             if k not in tree_list:
                 tree_list.append(k)
 
-    tree_items = {}
+    tree_tuple = {}
     for i in tree_list:
         tree = tuple(sorted(i.items()))
-        tree_items[tree] = []
+        tree_tuple[tree] = []
         for k in tree_dict:
             for j in tree_dict[k]:
                 if j == i:
-                    tree_items[tree].append(k)
-    tree_items = tuple(tree_items.items())
+                    tree_tuple[tree].append(k)
+    tree_tuple = tuple(tree_tuple.items())
 
-    return tree_items
+    final_trees = []
+    for i in tree_tuple:
+        tree_object = {}
+        ids = i[1]
+        tree = i[0]
+        tree_object[get_keyword_value("topic_ids")] = ids
+        tree_object[get_keyword_value("topic_hierarchy")] = tree
+        tree_object[get_keyword_value("topic_rights")] = 0
+        final_trees.append(tree_object)
+
+
+
+    return final_trees

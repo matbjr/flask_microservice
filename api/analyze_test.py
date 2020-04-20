@@ -9,6 +9,7 @@ from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
+from api.topic_rights import calculate_topic_rights
 
 
 def analyze_test(param):
@@ -38,6 +39,7 @@ def analyze_test(param):
     val_idr_avg = calculate_idr_average(inp)
     val_num_correct = calculate_num_correct(inp)
     val_assumptions = get_assumptions(inp)
+    val_topic_rights = calculate_topic_rights(inp)
     val_grad_year_analysis = analyze_grad_years(inp)
 
     # join all results
@@ -46,7 +48,7 @@ def analyze_test(param):
              val_scores, val_average, val_weighted_s,
              val_weighted_avg, val_excludes, val_diff_avg,
              val_idr_avg, val_num_correct, val_assumptions,
-             val_grad_year_analysis]
+             val_topic_rights, val_grad_year_analysis]
     for item in items:
         result.update(item)
 
