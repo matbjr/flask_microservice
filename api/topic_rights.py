@@ -48,3 +48,4 @@ def calculate_topic_rights(param):
 
 
     return {service_key: topic_rights}
+    
