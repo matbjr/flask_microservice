@@ -302,20 +302,25 @@ def get_item_topics(param):
         for k in tags:
             if k[get_keyword_value("scored")] != "Y":
                 continue
-            curr_tree = k[get_keyword_value("topic_tree")]
-            curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
-            curr_topic = k[get_keyword_value("topic_tagged")]
+            curr_tree = k.get(get_keyword_value("topic_tree"), "Unknown")
+            curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
+            curr_topic = k.get(get_keyword_value("topic_tagged"), "Unknown")
 
             level_list = []
-            for i in curr_levels:
-                level_list.append(int(i))
-            level_list.sort(reverse=True)
+            if curr_levels:
+                for i in curr_levels:
+                    level_list.append(int(i))
+                level_list.sort(reverse=True)
 
             hier_level = {}
             hier_level[0] = curr_tree
-            for i in range(1, level_list[0]+2):
-                hier_level[i] = curr_levels.get(str(i-1), "Unkown")
-            hier_level[level_list[0]+2] = curr_topic
+            if curr_levels:
+                for i in range(1, level_list[0]+2):
+                    hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+                hier_level[level_list[0]+2] = curr_topic
+            else:
+                hier_level[1] = curr_topic
+
             tree_dict[item].append(hier_level)
     
     tree_list = []
