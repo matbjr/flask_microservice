@@ -292,14 +292,14 @@ def get_item_topics(param):
     """
     inp = update_input(param)
     topics = inp.get(get_keyword_value("item_topics"), [])
-    topic_dict = {}
-
+    
     if not topics:
-        return topic_dict
+        return {}
 
+    tree_dict = {}
     for i in topics:
         item = i[get_keyword_value("item_id")]
-        topic_dict[item] = []
+        tree_dict[item] = []
         tags = i[get_keyword_value("tags")]
         for k in tags:
             if k[get_keyword_value("scored")] != "Y":
@@ -307,21 +307,33 @@ def get_item_topics(param):
             curr_tree = k[get_keyword_value("topic_tree")]
             curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
             curr_topic = k[get_keyword_value("topic_tagged")]
-            hierarchy = {}
-            topic_score = {}
-            topic_score[curr_topic] = None
-            hierarchy[curr_tree] = topic_score
 
             level_list = []
             for i in curr_levels:
-                level_list.append(i)
+                level_list.append(int(i))
             level_list.sort(reverse=True)
 
-            for i in level_list:
-                next_level = {}
-                next_level[curr_levels[i]] = hierarchy[curr_tree]
-                hierarchy[curr_tree] = next_level
+            hier_level = {}
+            hier_level[0] = curr_tree
+            for i in range(1, level_list[0]+2):
+                hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+            hier_level[level_list[0]+2] = curr_topic
+            tree_dict[item].append(hier_level)
+    
+    tree_list = []
+    for i in tree_dict:
+        for k in tree_dict[i]:
+            if k not in tree_list:
+                tree_list.append(k)
 
-            topic_dict[item].append(hierarchy)
+    tree_items = {}
+    for i in tree_list:
+        tree = tuple(sorted(i.items()))
+        tree_items[tree] = []
+        for k in tree_dict:
+            for j in tree_dict[k]:
+                if j == i:
+                    tree_items[tree].append(k)
+    tree_items = tuple(tree_items.items())
 
-    return topic_dict
+    return tree_items
