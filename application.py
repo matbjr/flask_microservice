@@ -23,6 +23,7 @@ from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
+from api.topic_rights import calculate_topic_rights
 
 
 app = Flask(__name__)
@@ -153,6 +154,11 @@ def compute_assumptions():
 @app.route('/analyze_grad_years/', methods=['POST', 'GET'])
 def get_grad_year_analysis():
     return process_request( analyze_grad_years)
+
+
+@app.route('/topic_rights/', methods=['POST', 'GET'])
+def get_topic_rights():
+    return process_request( calculate_topic_rights)
 
 
 @app.route('/sample', methods=['POST', 'GET'])

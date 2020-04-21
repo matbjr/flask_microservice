@@ -15,8 +15,7 @@ def get_score_std(param):
     :return: float: the standard deviation
     """
     inp = update_input(param)
-    student_list = {get_keyword_value("student_list"): get_student_list(inp)}
-    sorted_resp = get_sorted_responses(student_list)
+    sorted_resp = get_sorted_responses(inp)
     score_list = []
     for i in sorted_resp:
         score = sum(i)
@@ -280,48 +279,76 @@ def get_item_topics(param):
     A function to get the hierarchy of all topics
     per item:
     It iterates through every items topic info and
-    creates a hierarchy of nested dictionaries for
-    each item's topics.
+    creates a hierarchy for each item's topics.
 
     :param: a json in the Reliabilty Measures
             standard json format
-    :return: a dictionary of nested dictionaries:
-             a dictionary with item ids as keys and
-             nested dictionaries of a topic's hierarchy
-             as values.
+    :return: a list of dictionaries:
+             a list of dictionaries containing a
+             topic hierarchy, its corresponding item id,
+             and a placeholder number of rights.
     """
     inp = update_input(param)
     topics = inp.get(get_keyword_value("item_topics"), [])
-    topic_dict = {}
-
+    
     if not topics:
-        return topic_dict
+        return {}
 
+    tree_dict = {}
     for i in topics:
         item = i[get_keyword_value("item_id")]
-        topic_dict[item] = []
+        tree_dict[item] = []
         tags = i[get_keyword_value("tags")]
         for k in tags:
             if k[get_keyword_value("scored")] != "Y":
                 continue
-            curr_tree = k[get_keyword_value("topic_tree")]
-            curr_levels = k[get_keyword_value("topic_branch_hierarchy")]
-            curr_topic = k[get_keyword_value("topic_tagged")]
-            hierarchy = {}
-            topic_score = {}
-            topic_score[curr_topic] = None
-            hierarchy[curr_tree] = topic_score
+            curr_tree = k.get(get_keyword_value("topic_tree"), "Unknown")
+            curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
+            curr_topic = k.get(get_keyword_value("topic_tagged"), "Unknown")
 
             level_list = []
-            for i in curr_levels:
-                level_list.append(i)
-            level_list.sort(reverse=True)
+            if curr_levels:
+                for i in curr_levels:
+                    level_list.append(int(i))
+                level_list.sort(reverse=True)
 
-            for i in level_list:
-                next_level = {}
-                next_level[curr_levels[i]] = hierarchy[curr_tree]
-                hierarchy[curr_tree] = next_level
+            hier_level = {}
+            hier_level[0] = curr_tree
+            if curr_levels:
+                for i in range(1, level_list[0]+2):
+                    hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+                hier_level[level_list[0]+2] = curr_topic
+            else:
+                hier_level[1] = curr_topic
 
-            topic_dict[item].append(hierarchy)
+            tree_dict[item].append(hier_level)
+    
+    tree_list = []
+    for i in tree_dict:
+        for k in tree_dict[i]:
+            if k not in tree_list:
+                tree_list.append(k)
 
-    return topic_dict
+    tree_tuple = {}
+    for i in tree_list:
+        tree = tuple(sorted(i.items()))
+        tree_tuple[tree] = []
+        for k in tree_dict:
+            for j in tree_dict[k]:
+                if j == i:
+                    tree_tuple[tree].append(k)
+    tree_tuple = tuple(tree_tuple.items())
+
+    final_trees = []
+    for i in tree_tuple:
+        tree_object = {}
+        ids = i[1]
+        tree = i[0]
+        tree_object[get_keyword_value("topic_ids")] = ids
+        tree_object[get_keyword_value("topic_hierarchy")] = tree
+        tree_object[get_keyword_value("topic_rights")] = 0
+        final_trees.append(tree_object)
+
+
+
+    return final_trees

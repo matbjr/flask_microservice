@@ -10,8 +10,11 @@ from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
+from api.topic_rights import calculate_topic_rights
 from api.config import get_service_config
 from api.sample import sample, sample_output
+
+import tests.expecteds as exp
 
 
 class TestFunctions:
@@ -244,37 +247,7 @@ class TestFunctions:
 
     # testing analyze_test
     def test_analyze(self):
-        expected = {"analysis": {"kr20": -1.167,
-                                 "idr": {"1": 0.0, "2": 0.0, "3": 0.082, "4": 0.082, "5": 0.082, "6": 0.0, "7": -0.082},
-                                 "difficulty": {"1": 0.667, "2": 0.333, "3": 0.333, "4": 0.333, "5": 0.667, "6": 0.0, "7": 0.667}, 
-                                 "scores": {"1234": 57.1, "1235": 71.4, "1236": 42.9},
-                                 "average": 57.1,
-                                 "weighted_scores": {"1234": 44.4, "1235": 55.5, "1236": 33.3},
-                                 "weighted_avg": 44.4, 
-                                 "exclude": ["7"],
-                                 "diff_avg": 0.429, 
-                                 "idr_avg": 0.023, 
-                                 "num_correct": {"1": 1, "2": 2, "3": 2, "4": 2, "5": 1, "6": 3, "7": 1},
-                                 "assumptions": {"1234": ["7"], "1235": ["7"]},
-                                 "grad_year_analysis": {
-                                    "2022": {
-                                        "kr20": -2.333, 
-                                        "idr": {"1": -0.036, "2": 0.036, "3": 0.0, "4": 0.0, "5": 0.036, "6": 0.0, "7": 0.0}, 
-                                        "difficulty": {"1": 0.5, "2": 0.5,"3": 0.0, "4": 0.0, "5": 0.5, "6": 0.0, "7": 1.0}, 
-                                        "scores": {"1234": 57.1, "1235": 71.4}, 
-                                        "average": 64.2, 
-                                        "weighted_scores": {"1234": 20.0, "1235": 40.0},
-                                        "weighted_avg": 30.0,
-                                        "exclude": ["1"],
-                                        "diff_avg": 0.357,
-                                        "idr_avg": 0.005,
-                                        "num_correct": {"1": 1, "2": 1, "3": 2, "4": 2, "5": 1, "6": 2, "7": 0},
-                                        "assumptions": {"1234": ["7"], "1235": ["7"]},
-                                    },
-                                    "2024": "Invalid data - Not enough students"
-                                 }
-                                }
-                    }
+        expected = exp.test_analysis
 
         analysis = analyze_test(self.data)
         assert analysis == expected
@@ -377,25 +350,18 @@ class TestFunctions:
     # testing analysis by grad year
     def test_grad_analysis(self):
 
-        expected = {"2022": {
-                        "kr20": -2.333, 
-                        "idr": {"1": -0.036, "2": 0.036, "3": 0.0, "4": 0.0, "5": 0.036, "6": 0.0, "7": 0.0}, 
-                        "difficulty": {"1": 0.5, "2": 0.5,"3": 0.0, "4": 0.0, "5": 0.5, "6": 0.0, "7": 1.0}, 
-                        "scores": {"1234": 57.1, "1235": 71.4}, 
-                        "average": 64.2, 
-                        "weighted_scores": {"1234": 20.0, "1235": 40.0},
-                        "weighted_avg": 30.0,
-                        "exclude": ["1"],
-                        "diff_avg": 0.357,
-                        "idr_avg": 0.005,
-                        "num_correct": {"1": 1, "2": 1, "3": 2, "4": 2, "5": 1, "6": 2, "7": 0},
-                        "assumptions": {"1234": ["7"], "1235": ["7"]},
-                        },
-                    "2024": "Invalid data - Not enough students"
-                    }
+        expected = exp.grad_analysis
         analysis = analyze_grad_years(self.data)["grad_year_analysis"]
 
         assert analysis == expected
+
+    # testing topic scores
+    def test_topic_score(self):
+
+        expected = exp.topic_score
+        topic_rights = calculate_topic_rights(self.data)["topic_rights"]
+
+        assert topic_rights == expected
 
     # testing with no grad year
     def test_no_grad_year(self):
@@ -567,6 +533,7 @@ class TestFunctions:
                         "scores": {"1": 33.3,
                                 "2": 66.7,
                                 "3": 33.3},
+                        "topic_rights": "No topics were found",
                         "weighted_avg": 40.0,
                         "weighted_scores": {"1": 40.0,
                                             "2": 60.0,
