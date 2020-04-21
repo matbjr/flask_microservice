@@ -15,7 +15,7 @@ cloud_provider = {
 # default
 config = {
     "application_id": "rm_01",
-    "application_version": "0.2.1",
+    "application_version": "0.2.2",
     "application_name": "Reliability Measures microservices",
     "application_short_name": "rm_microservices",
     "service_url": "http://api.reliabilitymeasures.com/",
@@ -164,6 +164,13 @@ config = {
             "short_name": "topic_rights",
             "description": "Each students\' number of right responses in each topic",
             "type": "dictionary of topic rights"
+        },
+        {
+            "id": 16,
+            "name": "topic_right_averages",
+            "short_name": "topic_avgs",
+            "description": "The average number of right responses in each topic",
+            "type": "dictionary of topic right averages"
         }
     ] 
 }

@@ -10,20 +10,16 @@ from api.std import calculate_std
 from api.summation import calculate_summation
 from api.proportion import calculate_proportion
 from api.kr20 import calculate_kr20
-from api.idr import calculate_idr
-from api.difficulty import calculate_difficulty
-from api.scores import calculate_scores
-from api.average import calculate_average
+from api.idr import calculate_idr ,calculate_idr_average
+from api.difficulty import calculate_difficulty, calculate_difficulty_average
+from api.scores import calculate_scores, calculate_average
 from api.analyze_test import analyze_test
-from api.weighted_scores import calculate_weighted_scores
-from api.weighted_average import calculate_weighted_average
+from api.weighted_scores import calculate_weighted_scores, calculate_weighted_average
 from api.excludes import get_exclude_recos
-from api.difficulty_average import calculate_difficulty_average
-from api.idr_average import calculate_idr_average
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
-from api.topic_rights import calculate_topic_rights
+from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 
 app = Flask(__name__)
@@ -159,6 +155,11 @@ def get_grad_year_analysis():
 @app.route('/topic_rights/', methods=['POST', 'GET'])
 def get_topic_rights():
     return process_request( calculate_topic_rights)
+
+
+@app.route('/topic_averages/', methods=['POST', 'GET'])
+def get_topic_averages():
+    return process_request( calculate_topic_averages)
 
 
 @app.route('/sample', methods=['POST', 'GET'])

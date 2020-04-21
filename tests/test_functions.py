@@ -10,7 +10,7 @@ from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
-from api.topic_rights import calculate_topic_rights
+from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 from api.config import get_service_config
 from api.sample import sample, sample_output
 
@@ -363,6 +363,14 @@ class TestFunctions:
 
         assert topic_rights == expected
 
+    # testing topic averages
+    def test_topic_avgs(self):
+
+        expected = exp.topic_avgs
+        topic_rights = calculate_topic_averages(self.data)["topic_avgs"]
+
+        assert topic_rights == expected
+
     # testing with no grad year
     def test_no_grad_year(self):
         data = {
@@ -533,7 +541,8 @@ class TestFunctions:
                         "scores": {"1": 33.3,
                                 "2": 66.7,
                                 "3": 33.3},
-                        "topic_rights": "No topics were found",
+                        "topic_avgs": "No topics were found",
+                        'topic_rights': 'No topics were found',
                         "weighted_avg": 40.0,
                         "weighted_scores": {"1": 40.0,
                                             "2": 60.0,
