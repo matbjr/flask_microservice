@@ -134,6 +134,9 @@ def get_grad_year_list(param):
         if curr_grad_year != None:
             if curr_grad_year not in grad_year_list:
                 grad_year_list.append(curr_grad_year)
+
+    if not grad_year_list:
+        return get_keyword_value("no_grad_year")
     
     grad_year_list.sort()
 
@@ -162,6 +165,9 @@ def sort_students_by_grad_year(param):
     grad_year_list = get_grad_year_list(inp)
     id_list = get_item_ids(inp)
     responses_by_grad_year = {}
+
+    if grad_year_list == get_keyword_value("no_grad_year"):
+        return get_keyword_value("no_grad_year")
 
     for i in grad_year_list:
         responses_by_grad_year[i] = {(get_keyword_value("student_list")): []}
@@ -292,7 +298,7 @@ def get_item_topics(param):
     topics = inp.get(get_keyword_value("item_topics"), [])
     
     if not topics:
-        return {}
+        return get_keyword_value("no_topics")
 
     tree_dict = {}
     for i in topics:
@@ -348,7 +354,5 @@ def get_item_topics(param):
         tree_object[get_keyword_value("topic_hierarchy")] = tree
         tree_object[get_keyword_value("topic_rights")] = 0
         final_trees.append(tree_object)
-
-
 
     return final_trees
