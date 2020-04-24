@@ -22,6 +22,8 @@ def get_assumptions(param):
     """
     service_key = get_service_config(13)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     student_list = get_student_list(inp)
     id_list = get_item_ids(inp)
     assumptions_dict = {}

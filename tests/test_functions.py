@@ -399,7 +399,7 @@ class TestFunctions:
             ]
         }
 
-        expected = "No graduation years found"
+        expected = "No graduation years were found, or all students are in the same graduation year"
         analysis = analyze_grad_years(data)["grad_year_analysis"]
 
         assert analysis == expected
@@ -529,7 +529,7 @@ class TestFunctions:
                                     "2": 0.333,
                                     "3": 0.667},
                         "exclude": ["1"],
-                        "grad_year_analysis": "No graduation years found",
+                        "grad_year_analysis": "No graduation years were found, or all students are in the same graduation year",
                         "idr": {"1": -0.037,
                                 "2": 0.037,
                                 "3": 0.074},

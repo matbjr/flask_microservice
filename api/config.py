@@ -21,6 +21,8 @@ config = {
     "service_url": "http://api.reliabilitymeasures.com/",
     "test_url": "http://localhost:5000/",
     "keywords": {
+            "exam": "exam",
+            "name": "name",
             "item_responses": "item_responses",
             "student_list": "student_list",
             "item_id": "item_id",
@@ -44,13 +46,16 @@ config = {
             "exclude_threshold_2": 0,
             "exclude_length_1": 0.5,
             "exclude_length_2": 0.8,
+            "unknown": "unknown",
 
             "bad_data": "Invalid data - Not enough students",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
-            "no_grad_year": "No graduation years found",
+            "no_grad_year": "No graduation years were found, or all students are in the same graduation year",
             "no_assumptions": "No student response assumptions were made",
-            "no_topics": "No topics were found"
+            "no_topics": "No topics were found",
+            "no_students": "No student information was found",
+            "no_responses": "No student responses were found"
     },  
     "services": [
         # use the shot_name key for service path and in response key.

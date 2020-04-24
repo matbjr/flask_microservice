@@ -18,6 +18,8 @@ def calculate_weighted_scores(param):
     """
     service_key = get_service_config(7)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     student_ids = get_student_ids(inp)
     sorted_resp = get_sorted_responses(inp)
     num_items = len(sorted_resp[0])
@@ -54,6 +56,8 @@ def calculate_weighted_average(param):
     """
     service_key = get_service_config(8)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     weighted_scores = list(list(calculate_weighted_scores(inp).values())[0].values())
     num_students = len(weighted_scores)
     weighted_average = sum(weighted_scores) / num_students

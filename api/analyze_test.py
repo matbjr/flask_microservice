@@ -1,4 +1,4 @@
-from api.config import get_service_config
+from api.config import get_service_config, get_keyword_value
 from api.utils import update_input
 from api.kr20 import calculate_kr20
 from api.idr import calculate_idr, calculate_idr_average
@@ -26,6 +26,8 @@ def analyze_test(param):
     """
     service_key = get_service_config(6)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     # use microservice calls here when all are hosted
     val_kr20 = calculate_kr20(inp)
     val_idr = calculate_idr(inp)

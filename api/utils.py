@@ -15,6 +15,8 @@ def get_score_std(param):
     :return: float: the standard deviation
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     sorted_resp = get_sorted_responses(inp)
     score_list = []
     for i in sorted_resp:
@@ -39,6 +41,8 @@ def get_item_ids(param):
     :return: list of strings: a list containing all item ids
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     id_list = []
     response_list = []
@@ -76,6 +80,8 @@ def get_sorted_responses(param):
              all students' responses in order of item id
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     num_students = len(student_list)
     id_list = get_item_ids(inp)
@@ -126,16 +132,17 @@ def get_grad_year_list(param):
              all listed graduation years
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     grad_year_list = []
         
     for i in student_list:
-        curr_grad_year = i.get(get_keyword_value("grad_year"))
-        if curr_grad_year != None:
-            if curr_grad_year not in grad_year_list:
-                grad_year_list.append(curr_grad_year)
+        curr_grad_year = i[get_keyword_value("grad_year")]
+        if curr_grad_year not in grad_year_list:
+            grad_year_list.append(curr_grad_year)
 
-    if not grad_year_list:
+    if len(grad_year_list) == 1:
         return get_keyword_value("no_grad_year")
     
     grad_year_list.sort()
@@ -161,6 +168,8 @@ def sort_students_by_grad_year(param):
              Reliabilty Measures standard json format
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     grad_year_list = get_grad_year_list(inp)
     id_list = get_item_ids(inp)
@@ -198,6 +207,8 @@ def get_student_ids(param):
     :return: list of strings: a list containing all student ids
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     student_ids = []
 
@@ -220,6 +231,8 @@ def get_student_list(param):
              id, and grad year if given
     """
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = list(inp[get_keyword_value("student_list")])
 
     return student_list
@@ -242,22 +255,51 @@ def update_input(param):
             standard json format
     """
     inp = param
-    student_list = list(param[get_keyword_value("student_list")])
     exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
     exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
+    student_list = list(param.get(get_keyword_value("student_list"), []))
 
+    # If no exam object is given or no exam name is given, name it "unknown"
+    exam_info = param.get(get_keyword_value("exam"))
+    if not exam_info:
+        inp[get_keyword_value("exam")] = {get_keyword_value("name"): get_keyword_value("unknown")}
+    else:
+        exam_name = exam_info[get_keyword_value("name")]
+        if not exam_name:
+            inp[get_keyword_value("exam")][get_keyword_value("name")] = get_keyword_value("unknown")
+
+    # If no student data was given, return with message
+    if not student_list:
+        return get_keyword_value("no_students")
+
+    # If a student does not have responses, give him an empty response list
+    for i in range(0, len(student_list)):
+        curr_responses = student_list[i].get(get_keyword_value("item_responses"))
+        if not curr_responses:
+            student_list[i][get_keyword_value("item_responses")] = []
+        
+    # If a student does not have an id, assign their index+1 as their id
     for i in range(0, len(student_list)):
         curr_stud = student_list[i].get(get_keyword_value("id"))
-        if curr_stud is None:
+        curr_grad_yr = student_list[i].get(get_keyword_value("grad_year"))
+        if not curr_stud:
             student_list[i][(get_keyword_value("id"))] = str(i+1)
+        if not curr_grad_yr:
+            student_list[i][(get_keyword_value("grad_year"))] = get_keyword_value("unknown")
 
+    # If an item in a student's response list does not have an id, assign its index+1 as its id
+    # If an item in a student's response list does not have a response, assign it a value of 0
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
-            curr_item = curr_responses[k].get(get_keyword_value("item_id"))
-            if curr_item is None:
+            curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
+            curr_item = curr_responses[k].get(get_keyword_value("response"))
+            if not curr_item_id:
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(k+1)
+            if not curr_item:
+                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("response")] = 0
 
+    # If a student's id is in the exclude list, exclude them from the data
     remove_students = []
     for i in student_list:
         if i[get_keyword_value("id")] in exclude_students:
@@ -265,6 +307,7 @@ def update_input(param):
     for i in remove_students:
         student_list.remove(i)
 
+    # If an item's id is in the exclude list, exclude it from the data
     for i in range(0, len(student_list)):
         remove_items = []
         curr_responses = student_list[i][get_keyword_value("item_responses")]
@@ -277,6 +320,7 @@ def update_input(param):
         student_list[i][get_keyword_value("item_responses")] = curr_responses
 
     inp[get_keyword_value("student_list")] = student_list
+
     return inp
 
 
@@ -294,40 +338,46 @@ def get_item_topics(param):
              topic hierarchy, its corresponding item id,
              and a placeholder number of rights.
     """
-    inp = update_input(param)
-    topics = inp.get(get_keyword_value("item_topics"), [])
+    inp = inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
+    topics = inp.get(get_keyword_value("item_topics"))
     
     if not topics:
         return get_keyword_value("no_topics")
 
     tree_dict = {}
+    index = 0
     for i in topics:
-        item = i[get_keyword_value("item_id")]
+        index += 1
+        item = i.get(get_keyword_value("item_id"), index)
         tree_dict[item] = []
-        tags = i[get_keyword_value("tags")]
-        for k in tags:
-            if k[get_keyword_value("scored")] != "Y":
-                continue
-            curr_tree = k.get(get_keyword_value("topic_tree"), "Unknown")
-            curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
-            curr_topic = k.get(get_keyword_value("topic_tagged"), "Unknown")
+        tags = i.get(get_keyword_value("tags"))
+        if tags:
+            for k in tags:
+                if k.get(get_keyword_value("scored"), "Y") != "Y":
+                    continue
+                curr_tree = k.get(get_keyword_value("topic_tree"), 
+                            inp[get_keyword_value("exam")][get_keyword_value("name")])
+                curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
+                curr_topic = k.get(get_keyword_value("topic_tagged"), get_keyword_value("unknown"))
 
-            level_list = []
-            if curr_levels:
-                for i in curr_levels:
-                    level_list.append(int(i))
-                level_list.sort(reverse=True)
+                level_list = []
+                if curr_levels:
+                    for i in curr_levels:
+                        level_list.append(int(i))
+                    level_list.sort(reverse=True)
 
-            hier_level = {}
-            hier_level[0] = curr_tree
-            if curr_levels:
-                for i in range(1, level_list[0]+2):
-                    hier_level[i] = curr_levels.get(str(i-1), "Unkown")
-                hier_level[level_list[0]+2] = curr_topic
-            else:
-                hier_level[1] = curr_topic
+                hier_level = {}
+                hier_level[0] = curr_tree
+                if curr_levels:
+                    for i in range(1, level_list[0]+2):
+                        hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+                    hier_level[level_list[0]+2] = curr_topic
+                else:
+                    hier_level[1] = curr_topic
 
-            tree_dict[item].append(hier_level)
+                tree_dict[item].append(hier_level)
     
     tree_list = []
     for i in tree_dict:
