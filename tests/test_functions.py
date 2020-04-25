@@ -342,7 +342,7 @@ class TestFunctions:
     # testing the assumptions
     def test_assumptions(self):
 
-        expected = {"1234": ["7"], "1235": ["7"]}
+        expected = {'1234': {'assumed': ['7']}, '1235': {'assumed': ['7']}}
         assumption = get_assumptions(self.data)["assumptions"]
 
         assert assumption == expected
@@ -522,7 +522,7 @@ class TestFunctions:
         }
 
         expected = {"analysis": {
-                        "assumptions": {"3": ["3"]},
+                        "assumptions": {'3': {'assumed': ['3']}},
                         "average": 44.4,
                         "diff_avg": 0.556,
                         "difficulty": {"1": 0.667,

@@ -55,7 +55,9 @@ config = {
             "no_assumptions": "No student response assumptions were made",
             "no_topics": "No topics were found",
             "no_students": "No student information was found",
-            "no_responses": "No student responses were found"
+            "no_responses": "No student responses were found",
+            "assumed": "assumed",
+            "dupes": "duplicates"
     },  
     "services": [
         # use the shot_name key for service path and in response key.

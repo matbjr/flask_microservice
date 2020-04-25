@@ -30,13 +30,21 @@ def get_assumptions(param):
     
     for i in student_list: # For each student i
         checklist = id_list.copy()
+        dupes = []
         for k in i[get_keyword_value("item_responses")]: # For each question k
             for j in id_list: # For each item ID j
                 if k[get_keyword_value("item_id")] == j: # If item IDs match
-                    checklist.remove(j)
-
+                    if j in checklist:
+                        checklist.remove(j)
+                    else:
+                        dupes.append(j)
+        if dupes:
+            assumptions_dict[i[get_keyword_value("id")]] = {}
+            assumptions_dict[i[get_keyword_value("id")]][get_keyword_value("dupes")] = dupes
+            
         if len(checklist) != 0:
-            assumptions_dict[i[get_keyword_value("id")]] = checklist.copy()
+            assumptions_dict[i[get_keyword_value("id")]] = {}
+            assumptions_dict[i[get_keyword_value("id")]][get_keyword_value("assumed")] = checklist.copy()
 
     if not assumptions_dict:
         return {service_key: get_keyword_value("no_assumptions")}

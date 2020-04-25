@@ -101,7 +101,8 @@ def get_sorted_responses(param):
                 # If item IDs match, add response to dictionary
                 if k[get_keyword_value("item_id")] == j:
                     responses[j].append(k[get_keyword_value("response")])
-                    checklist.remove(j)
+                    if j in checklist:
+                        checklist.remove(j)
 
         if len(checklist) != 0:
             for i in checklist:
@@ -287,15 +288,27 @@ def update_input(param):
         if not curr_grad_yr:
             student_list[i][(get_keyword_value("grad_year"))] = get_keyword_value("unknown")
 
-    # If an item in a student's response list does not have an id, assign its index+1 as its id
+    # If an item in a student's response list does not have an id, assign its index+1 as its id, unless it's already used as an id
     # If an item in a student's response list does not have a response, assign it a value of 0
+    id_list = []
+    for i in range(0, len(student_list)):
+        curr_responses = student_list[i][get_keyword_value("item_responses")]
+        for k in range(0, len(curr_responses)):
+            curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
+            if curr_item_id:
+                if curr_item_id not in id_list:
+                    id_list.append(curr_item_id)
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
             curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
             curr_item = curr_responses[k].get(get_keyword_value("response"))
             if not curr_item_id:
-                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(k+1)
+                for j in range(0, len(curr_responses)):
+                    new_id = j+1
+                    while str(new_id) in id_list:
+                        new_id = new_id+1
+                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(new_id)
             if not curr_item:
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("response")] = 0
 
