@@ -18,15 +18,20 @@ def get_config_file(cloud_config):
 
         md, res = dbx.files_download("/" + filename)
         data = res.content
-        # print(len(data), 'bytes; md:', md)
-        return json.loads(data)
+        # print(len(data), 'bytes; md:', md, type(data))
+        try:
+            return json.loads(data)
+        except Exception:
+            return data
 
 
 if __name__ == '__main__':
     cloud_provider = {
         'cloud_host': 'dropbox',
-        'cloud_config_file': 'config.json',
+        'cloud_config_file': 'token.pickle',
         'cloud_access_key': 'vDuiM-56ZzsAAAAAAAAHJGw5MRrhkkeJZ0AJhft11_SCePhuuP2XCVGY3pMGvLBn',
     }
 
-    print(json.dumps(get_config_file(cloud_provider), indent=4))
+    print(get_config_file(cloud_provider))
+
+    #print(json.dumps(get_config_file(cloud_provider), indent=4))

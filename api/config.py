@@ -18,6 +18,8 @@ config = {
     "application_version": "0.2.2",
     "application_name": "Reliability Measures microservices",
     "application_short_name": "rm_microservices",
+    "application_client_id": '807686504198-k9ob5s4g4kunufkrtb6mb9s6sr3dkatu.'
+                             'apps.googleusercontent.com',
     "service_url": "http://api.reliabilitymeasures.com/",
     "test_url": "http://localhost:5000/",
     "keywords": {
@@ -96,6 +98,7 @@ config = {
             "id": 6,
             "name": "Test Analysis",
             "short_name": "analysis",
+            "api_method": "analyzeTest/",
             "description": "The whole test analysis with all results",
             "type": "list of items"
         },
