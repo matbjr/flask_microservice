@@ -3,7 +3,8 @@ from flask_cors import cross_origin, CORS
 import json
 import sys
 
-from providers.google.get_credentials import get_credential_from_token
+from providers.google.get_credentials import GoogleCredentails
+from providers.google.google_classroom import list_courses
 
 from api.config import get_config
 from api.sample import sample, sample2
@@ -69,8 +70,11 @@ def welcome():
 def get_tokens():
     id_token = request.args.get('id_token')
     access_token = request.args.get('access_token')
-    _, info = get_credential_from_token(id_token, access_token)
-    return jsonify(info)
+    app.gc = GoogleCredentails()
+    creds, info = app.gc.get_credential_from_token(id_token, access_token)
+    courses = list_courses(creds)
+    print(courses)
+    return jsonify({'user': info, 'courses': courses})
     # return process_request(calculate_std)
 
 

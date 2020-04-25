@@ -1,12 +1,11 @@
 from googleapiclient.discovery import build
 
-from providers.google.get_credentials import get_credential, \
-    get_cred, get_credential_from_token
+from providers.google.get_credentials import GoogleCredentails
 
 
 def get_sheet(creds=None, sheet=None, range=None):
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     SPREADSHEET_ID = sheet or "1W8m1I_eMccRQ9eGdOaucckmem0Jyf-5cmJzyA3wQB-k"
     RANGE_NAME = range or 'Student Submissions'
@@ -25,8 +24,9 @@ def list_courses(creds=None):
     """Shows basic usage of the Classroom API.
     Prints the names of the first 10 courses the user has access to.
     """
+
     if not creds:
-        creds = get_cred()
+       creds = GoogleCredentails().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -50,7 +50,7 @@ def list_course_work(creds=None, course_id="78180851867"):
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -76,7 +76,7 @@ def list_student_responses(creds=None, students={},
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -114,7 +114,7 @@ def list_students_teachers(creds=None, teachers=False, course_id="78180851867"):
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -150,7 +150,7 @@ def list_students_teachers(creds=None, teachers=False, course_id="78180851867"):
 
 def add_course(creds=None):
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
     course = {
@@ -174,12 +174,7 @@ if __name__ == '__main__':
     # creds = get_cred()
     # add_course()
 
-    #creds = get_credential('token2.pickle')
-
-    token_id = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY5ZDk3YjRjYWU5MGJjZDc2YWViMjAwMjZmNmI3NzBjYWMyMjE3ODMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODA3Njg2NTA0MTk4LWs5b2I1czRnNGt1bnVma3J0YjZtYjlzNnNyM2RrYXR1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODA3Njg2NTA0MTk4LWs5b2I1czRnNGt1bnVma3J0YjZtYjlzNnNyM2RrYXR1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyOTE5Njg2OTIwNjYxNzU2NTU1IiwiZW1haWwiOiJmYXJydWtoNTAzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoidDJKZHpOS3pGaXdzeDk2WVpVbkVWUSIsIm5hbWUiOiJGYXJydWtoIFNoYWh6YWQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2dqeUlLMU13WGNRd1RvRm9lM3dkV0oxMDRRN1NLalF3X0tIcmR3N0E9czk2LWMiLCJnaXZlbl9uYW1lIjoiRmFycnVraCIsImZhbWlseV9uYW1lIjoiU2hhaHphZCIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNTg3ODI5NzgyLCJleHAiOjE1ODc4MzMzODIsImp0aSI6IjVmZDMyMmE3YjUzYmFiMWI5ZjU4M2FhNmMzMzllZjY2YzQ2MDJiMmYifQ.OJLWVoN51i88F_Uc9sa5YN-r2r3Dzhw4JD4yWfjnZn2-2UCv0rRniH2IdgUHNf1YwuFgVz1ny7jXBdcgt5v-xNWniDYsTAs22-8NO_qfeJu66svtRyT-r0l91KUOtVbhcQg0ZfhkZdf61n7MH3ACMu_DWCkUeKfCuJvlzH7YYv0KXXqq6eOIAeV27B6-HTmJ38qSTCesAvte0ct9ktcUxnZTImgAInwyq1p4L4q2Kit9jUrbihXShLcq_lDS6DW_sD6NwVKQjY96sxibbuFqjxB8I7Y3Sxf1FZeNOiLSH-0WbhEJsasM77PK0CIv3gZyFyHdIp3WNDHt66XmaXxR0Q"
-    access_token = "ya29.a0Ae4lvC1_O-Bsx_aCrA8PSWoLcxz5c1a0yep47KVyqRwatG-ha0ykCFbmO7h47rQRXal1uYnV-ufSac3ilUOpo3hMxnDayvAKANL3zcxAht7ICz3NbyLXwfHiMVYOETS2fsvKIR-JXetL7brFrTAfXpXRzNrNjWaUUxQ"
-    creds = get_credential_from_token(token_id, access_token)
-    print(creds.refresh_token, creds.client_id, creds.client_secret, creds.id_token)
+    creds = GoogleCredentails().get_credential('token2.pickle')
 
     courses = list_courses(creds)
     print("**********************************")
