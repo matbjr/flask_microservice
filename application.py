@@ -73,10 +73,28 @@ def get_tokens():
     app.gc = GoogleCredentails()
     creds, info = app.gc.get_credential_from_token(id_token, access_token)
     courses = list_courses(creds)
-    print(courses)
+    #print(courses)
     return jsonify({'user': info, 'courses': courses})
     # return process_request(calculate_std)
 
+
+@app.route('/classroom/', methods=['POST', 'GET'])
+def get_classes():
+    id_token = request.args.get('id_token')
+    access_token = request.args.get('access_token')
+
+    app.gc = GoogleCredentails()
+    if access_token and id_token:
+        creds, info = app.gc.get_credential_from_token(id_token, access_token)
+    else:
+        creds = app.gc.get_credential()  # RM organization courses
+        info = {'name': get_config("application_org"),
+                'email': get_config("application_email")}
+
+    courses = list_courses(creds)
+    #print(courses)
+    return jsonify({'user': info, 'courses': courses})
+    # return process_request(calculate_std)
 
 @app.route('/std/', methods=['POST', 'GET'])
 def compute_std():

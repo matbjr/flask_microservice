@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
 
 
-from providers.google.get_credentials import get_credential, get_cred
+from providers.google.get_credentials import GoogleCredentails
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/classroom.courses',
@@ -17,13 +17,14 @@ SCOPES = ['https://www.googleapis.com/auth/classroom.courses',
 # https://www.googleapis.com/auth/classroom.announcements
 
 QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
-          '1YqKgwDOcaXV18ndcmFxUi74mtzbVDMC9EXOIRxenQ6M'
+          '1YqKgwDOcaXV18ndcmFxUi74mtzbVDMC9EXOIRxenQ6M',
+          '1bGPWCeTQDO2fvMrmm8qsVqc9HrtDUvgjz3uEHYosI5U'
          ]
 
 
 def get_sheet(creds=None, sheet_id=None, col_range=None):
     if not creds:
-        creds = get_cred()
+        creds = GoogleCredentails().get_cred()
 
     service = build('sheets', 'v4', credentials=creds)
 
@@ -39,7 +40,7 @@ def get_sheet(creds=None, sheet_id=None, col_range=None):
 
 if __name__ == '__main__':
 
-    creds = get_credential('token2.pickle')
+    creds = GoogleCredentails().get_cred()
 
     # responses = get_sheet(creds)
     # print("Responses: ", len(responses))

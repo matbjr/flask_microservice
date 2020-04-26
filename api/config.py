@@ -17,6 +17,8 @@ config = {
     "application_id": "rm_01",
     "application_version": "0.2.2",
     "application_name": "Reliability Measures microservices",
+    "application_org": "Reliability Measures",
+    "application_email": "info@reliabilitymeasures.com",
     "application_short_name": "rm_microservices",
     "application_client_id": '807686504198-k9ob5s4g4kunufkrtb6mb9s6sr3dkatu.'
                              'apps.googleusercontent.com',
