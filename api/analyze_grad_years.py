@@ -27,6 +27,8 @@ def analyze_grad_years(param):
     """
     service_key = get_service_config(14)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     assumptions_key = get_service_config(13)
     assumptions = get_assumptions(inp)[assumptions_key]
     students_dict = sort_students_by_grad_year(inp)

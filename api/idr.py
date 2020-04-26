@@ -24,6 +24,8 @@ def calculate_idr(param):
     """
     service_key = get_service_config(2)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])
@@ -88,6 +90,8 @@ def calculate_idr_average(param):
     """
     service_key = get_service_config(11)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     idr_dict = list(calculate_idr(inp).values())[0]
     if idr_dict == get_keyword_value("bad_mean"):
         return {service_key: get_keyword_value("bad_mean")}

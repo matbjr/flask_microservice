@@ -21,6 +21,8 @@ def calculate_topic_rights(param):
     """
     service_key = get_service_config(15)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     student_list = get_student_list(inp)
     check_topics = get_item_topics(inp)
     topic_rights = {}
@@ -65,6 +67,8 @@ def calculate_topic_averages(param):
     """
     service_key = get_service_config(16)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     topic_avgs = get_item_topics(inp)
     topic_responses = calculate_topic_rights(inp)[get_service_config(15)]
     num_topics = len(topic_avgs)
