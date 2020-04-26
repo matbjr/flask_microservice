@@ -304,10 +304,9 @@ def update_input(param):
             curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
             curr_item = curr_responses[k].get(get_keyword_value("response"))
             if not curr_item_id:
-                for j in range(0, len(curr_responses)):
-                    new_id = j+1
-                    while str(new_id) in id_list:
-                        new_id = new_id+1
+                new_id = k+1
+                while str(new_id) in id_list:
+                    new_id = new_id+1
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(new_id)
             if not curr_item:
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("response")] = 0
