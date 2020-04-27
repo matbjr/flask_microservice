@@ -16,7 +16,7 @@ cloud_provider = {
 # default
 default_config = {
     "application_id": "rm_01",
-    "application_version": "0.2.2",
+    "application_version": "0.2.3",
     "application_name": "Reliability Measures microservices",
     "application_org": "Reliability Measures",
     "application_email": "info@reliabilitymeasures.com",
@@ -35,6 +35,8 @@ default_config = {
         "db_name": "ReliabilityMeasures_DB"
     },
     "keywords": {
+            "exam": "exam",
+            "name": "name",
             "item_responses": "item_responses",
             "student_list": "student_list",
             "item_id": "item_id",
@@ -58,13 +60,18 @@ default_config = {
             "exclude_threshold_2": 0,
             "exclude_length_1": 0.5,
             "exclude_length_2": 0.8,
+            "unknown": "unknown",
 
             "bad_data": "Invalid data - Not enough students",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
-            "no_grad_year": "No graduation years found",
+            "no_grad_year": "No graduation years were found, or all students are in the same graduation year",
             "no_assumptions": "No student response assumptions were made",
-            "no_topics": "No topics were found"
+            "no_topics": "No topics were found",
+            "no_students": "No student information was found",
+            "no_responses": "No student responses were found",
+            "assumed": "assumed",
+            "dupes": "duplicates"
     },  
     "services": [
         # use the shot_name key for service path and in response key.

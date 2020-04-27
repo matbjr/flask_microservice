@@ -18,6 +18,8 @@ def calculate_difficulty(param):
     """
     service_key = get_service_config(3)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])
@@ -54,6 +56,8 @@ def calculate_difficulty_average(param):
     """
     service_key = get_service_config(10)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     diff_list = list(list(calculate_difficulty(inp).values())[0].values())
     num_items = len(diff_list)
     diff_avg = sum(diff_list) / num_items

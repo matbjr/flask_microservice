@@ -17,6 +17,8 @@ def calculate_num_correct(param):
     """
     service_key = get_service_config(12)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len(sorted_resp[0])
