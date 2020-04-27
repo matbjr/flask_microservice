@@ -1,4 +1,4 @@
-from api.utils import get_sorted_responses, get_item_ids, get_student_list, update_input, get_error
+from api.utils import get_sorted_responses, get_item_ids, get_student_list, update_input
 from api.config import get_service_config, get_keyword_value
 
 
@@ -17,10 +17,9 @@ def calculate_difficulty(param):
              difficulty as values
     """
     service_key = get_service_config(3)
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return {service_key: catch_error[1]}
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])
@@ -56,10 +55,9 @@ def calculate_difficulty_average(param):
     :return: a float: the difficulty average
     """
     service_key = get_service_config(10)
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return {service_key: catch_error[1]}
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     diff_list = list(list(calculate_difficulty(inp).values())[0].values())
     num_items = len(diff_list)
     diff_avg = sum(diff_list) / num_items

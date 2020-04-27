@@ -14,10 +14,9 @@ def get_score_std(param):
             standard json format
     :return: float: the standard deviation
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     sorted_resp = get_sorted_responses(inp)
     score_list = []
     for i in sorted_resp:
@@ -41,10 +40,9 @@ def get_item_ids(param):
             standard json format
     :return: list of strings: a list containing all item ids
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     id_list = []
     response_list = []
@@ -81,10 +79,9 @@ def get_sorted_responses(param):
     :return: list of lists of ints: a list containing 
              all students' responses in order of item id
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     num_students = len(student_list)
     id_list = get_item_ids(inp)
@@ -104,7 +101,8 @@ def get_sorted_responses(param):
                 # If item IDs match, add response to dictionary
                 if k[get_keyword_value("item_id")] == j:
                     responses[j].append(k[get_keyword_value("response")])
-                    checklist.remove(j)
+                    if j in checklist:
+                        checklist.remove(j)
 
         if len(checklist) != 0:
             for i in checklist:
@@ -134,10 +132,9 @@ def get_grad_year_list(param):
     :return: list of strings: a list containing 
              all listed graduation years
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     grad_year_list = []
         
@@ -171,10 +168,9 @@ def sort_students_by_grad_year(param):
              student responses as values in the
              Reliabilty Measures standard json format
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     grad_year_list = get_grad_year_list(inp)
     id_list = get_item_ids(inp)
@@ -211,10 +207,9 @@ def get_student_ids(param):
             standard json format
     :return: list of strings: a list containing all student ids
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = get_student_list(inp)
     student_ids = []
 
@@ -236,10 +231,9 @@ def get_student_list(param):
              containing every student's item responses,
              id, and grad year if given
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     student_list = list(inp[get_keyword_value("student_list")])
 
     return student_list
@@ -266,25 +260,6 @@ def update_input(param):
     exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
     student_list = list(param.get(get_keyword_value("student_list"), []))
 
-    # If no student data was given, return with message
-    if not student_list or len(student_list) <= 1:
-        return get_keyword_value("bad_data")
-
-    # If a student does not have responses, give him an empty response list
-    for i in range(0, len(student_list)):
-        curr_responses = student_list[i].get(get_keyword_value("item_responses"))
-        if not curr_responses:
-            student_list[i][get_keyword_value("item_responses")] = []
-
-    # If all response lists are empty or only has one item, return with message
-    valid_items = False
-    for i in student_list:
-        curr_responses = i[get_keyword_value("item_responses")]
-        if len(curr_responses) > 1:
-            valid_items = True
-    if not valid_items:
-        return get_keyword_value("bad_num_items")
-
     # If no exam object is given or no exam name is given, name it "unknown"
     exam_info = param.get(get_keyword_value("exam"))
     if not exam_info:
@@ -293,36 +268,36 @@ def update_input(param):
         exam_name = exam_info[get_keyword_value("name")]
         if not exam_name:
             inp[get_keyword_value("exam")][get_keyword_value("name")] = get_keyword_value("unknown")
+
+    # If no student data was given, return with message
+    if not student_list:
+        return get_keyword_value("no_students")
+
+    # If a student does not have responses, give him an empty response list
+    for i in range(0, len(student_list)):
+        curr_responses = student_list[i].get(get_keyword_value("item_responses"))
+        if not curr_responses:
+            student_list[i][get_keyword_value("item_responses")] = []
         
     # If a student does not have an id, assign their index+1 as their id
-    student_ids = []
-    for i in student_list:
-        curr_stud = i.get(get_keyword_value("grad_year"))
-        if curr_stud:
-            if curr_stud not in student_ids:
-                student_ids.append(curr_stud)
     for i in range(0, len(student_list)):
         curr_stud = student_list[i].get(get_keyword_value("id"))
         curr_grad_yr = student_list[i].get(get_keyword_value("grad_year"))
         if not curr_stud:
-            new_id = i+1
-            while str(new_id) in student_ids:
-                new_id += 1
-            student_list[i][(get_keyword_value("id"))] = str(new_id)
-            student_ids.append(str(new_id))
+            student_list[i][(get_keyword_value("id"))] = str(i+1)
         if not curr_grad_yr:
             student_list[i][(get_keyword_value("grad_year"))] = get_keyword_value("unknown")
 
     # If an item in a student's response list does not have an id, assign its index+1 as its id, unless it's already used as an id
     # If an item in a student's response list does not have a response, assign it a value of 0
-    item_ids = []
+    id_list = []
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
             curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
             if curr_item_id:
-                if curr_item_id not in item_ids:
-                    item_ids.append(curr_item_id)
+                if curr_item_id not in id_list:
+                    id_list.append(curr_item_id)
     for i in range(0, len(student_list)):
         curr_responses = student_list[i][get_keyword_value("item_responses")]
         for k in range(0, len(curr_responses)):
@@ -330,8 +305,8 @@ def update_input(param):
             curr_item = curr_responses[k].get(get_keyword_value("response"))
             if not curr_item_id:
                 new_id = k+1
-                while str(new_id) in item_ids:
-                    new_id += 1
+                while str(new_id) in id_list:
+                    new_id = new_id+1
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(new_id)
             if not curr_item:
                 student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("response")] = 0
@@ -344,6 +319,7 @@ def update_input(param):
     for i in remove_students:
         student_list.remove(i)
 
+    # If an item's id is in the exclude list, exclude it from the data
     for i in range(0, len(student_list)):
         remove_items = []
         curr_responses = student_list[i][get_keyword_value("item_responses")]
@@ -356,19 +332,6 @@ def update_input(param):
         student_list[i][get_keyword_value("item_responses")] = curr_responses
 
     inp[get_keyword_value("student_list")] = student_list
-
-    # Re-check data
-    student_list = list(inp.get(get_keyword_value("student_list"), []))
-    if not student_list or len(student_list) <= 1:
-        return get_keyword_value("bad_data")
-
-    valid_items = False
-    for i in student_list:
-        curr_responses = i[get_keyword_value("item_responses")]
-        if len(curr_responses) > 1:
-            valid_items = True
-    if not valid_items:
-        return get_keyword_value("bad_num_items")
 
     return inp
 
@@ -387,56 +350,46 @@ def get_item_topics(param):
              topic hierarchy, its corresponding item id,
              and a placeholder number of rights.
     """
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return catch_error[1]
     inp = inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return get_keyword_value("no_students")
     topics = inp.get(get_keyword_value("item_topics"))
     
     if not topics:
         return get_keyword_value("no_topics")
 
-    item_ids = []
-    for i in topics:
-        item = i.get(get_keyword_value("item_id"))
-        if item:
-            if item not in item_ids:
-                item_ids.append(item)
-
     tree_dict = {}
-    index = 1
+    index = 0
     for i in topics:
-        item = i.get(get_keyword_value("item_id"))
-        if not item:
-            while index in item_ids:
-                index += 1
-            item = index
-            item_ids.append(index)
+        index += 1
+        item = i.get(get_keyword_value("item_id"), index)
         tree_dict[item] = []
-        tags = i[get_keyword_value("tags")]
-        for k in tags:
-            if k.get(get_keyword_value("scored"), "Y") != "Y":
-                continue
-            curr_tree = k.get(get_keyword_value("topic_tree"), "unknown")
-            curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
-            curr_topic = k.get(get_keyword_value("topic_tagged"), "unknown")
+        tags = i.get(get_keyword_value("tags"))
+        if tags:
+            for k in tags:
+                if k.get(get_keyword_value("scored"), "Y") != "Y":
+                    continue
+                curr_tree = k.get(get_keyword_value("topic_tree"), 
+                            inp[get_keyword_value("exam")][get_keyword_value("name")])
+                curr_levels = k.get(get_keyword_value("topic_branch_hierarchy"))
+                curr_topic = k.get(get_keyword_value("topic_tagged"), get_keyword_value("unknown"))
 
-            level_list = []
-            if curr_levels:
-                for i in curr_levels:
-                    level_list.append(int(i))
-                level_list.sort(reverse=True)
+                level_list = []
+                if curr_levels:
+                    for i in curr_levels:
+                        level_list.append(int(i))
+                    level_list.sort(reverse=True)
 
-            hier_level = {}
-            hier_level[0] = curr_tree
-            if curr_levels:
-                for i in range(1, level_list[0]+2):
-                    hier_level[i] = curr_levels.get(str(i-1), "Unkown")
-                hier_level[level_list[0]+2] = curr_topic
-            else:
-                hier_level[1] = curr_topic
+                hier_level = {}
+                hier_level[0] = curr_tree
+                if curr_levels:
+                    for i in range(1, level_list[0]+2):
+                        hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+                    hier_level[level_list[0]+2] = curr_topic
+                else:
+                    hier_level[1] = curr_topic
 
-            tree_dict[item].append(hier_level)
+                tree_dict[item].append(hier_level)
     
     tree_list = []
     for i in tree_dict:
@@ -465,13 +418,3 @@ def get_item_topics(param):
         final_trees.append(tree_object)
 
     return final_trees
-
-
-def get_error(param):
-    if param == get_keyword_value("bad_data") or param == get_keyword_value("bad_num_items"):
-        return (True, param)
-    inp = update_input(param)
-    if inp == get_keyword_value("bad_data") or inp == get_keyword_value("bad_num_items"):
-        return (True, inp)
-    
-    return (False, inp)

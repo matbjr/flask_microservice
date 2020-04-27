@@ -1,5 +1,5 @@
 from api.config import get_service_config, get_keyword_value
-from api.utils import get_sorted_responses, get_student_list, update_input, get_student_ids, get_error
+from api.utils import get_sorted_responses, get_student_list, update_input, get_student_ids
 from api.difficulty import calculate_difficulty
 
 
@@ -17,10 +17,9 @@ def calculate_weighted_scores(param):
              as values
     """
     service_key = get_service_config(7)
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return {service_key: catch_error[1]}
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     student_ids = get_student_ids(inp)
     sorted_resp = get_sorted_responses(inp)
     num_items = len(sorted_resp[0])
@@ -56,10 +55,9 @@ def calculate_weighted_average(param):
     :return: a float: the weighted score average
     """
     service_key = get_service_config(8)
-    catch_error = get_error(param)
-    if catch_error[0]:
-        return {service_key: catch_error[1]}
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     weighted_scores = list(list(calculate_weighted_scores(inp).values())[0].values())
     num_students = len(weighted_scores)
     weighted_average = sum(weighted_scores) / num_students

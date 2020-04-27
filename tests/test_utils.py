@@ -369,29 +369,16 @@ class TestUtils:
                         {"response": 1},
                         {"response": 0},
                     ]
-                },
-                {
-                  "item_responses": [
-                        {"response": 1},
-                        {"response": 0},
-                    ]
                 }]}
 
         expected = {
-            "exam": {"name": "unknown"},
+            "exam": {
+                "name": "unknown"
+            },
             "student_list": [
                 {
-                  "grad_year": "unknown",
                   "id": "1",
-                  "item_responses": [
-                        {"item_id": "1", "response": 1},
-                        {"item_id": "2", "response": 0},
-                    ]
-                },
-                {
-                  "grad_year": "unknown",
-                  "id": "2",
-                  "grad_year": "unknown",
+                  'grad_year': 'unknown',
                   "item_responses": [
                         {"item_id": "1", "response": 1},
                         {"item_id": "2", "response": 0},
@@ -548,23 +535,17 @@ class TestUtils:
                 {
                   "id": 1,
                   "item_responses": [
-                        {"item_id": "1", "response": 1},
-                        {"item_id": "2", "response": 0},
-                        {"item_id": "3", "response": 1},
-                        {"item_id": "4", "response": 0}
-                    ]
-                },
-                {
-                  "id": 2,
-                  "item_responses": [
-                        {"item_id": "1", "response": 1}
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 0}
                     ]
                 }
             ],
-            "exclude_items": ["4"]
+            "exclude_items": [4]
         }
 
-        expected = ["1","2","3"]
+        expected = [1,2,3]
         id_list = utils.get_item_ids(data)
 
         assert id_list == expected
@@ -578,12 +559,6 @@ class TestUtils:
                   "item_responses": [
                         {"item_id": 1, "response": 1},
                         {"item_id": 2, "response": 0},
-                    ]
-                },
-                {
-                  "id": 1,
-                  "item_responses": [
-                        {"item_id": 1, "response": 1}
                     ]
                 }
             ]
@@ -599,31 +574,24 @@ class TestUtils:
         data = {
             "student_list": [
                 {
-                  "id": "1",
+                  "id": 1,
                   "item_responses": [
-                        {"item_id": "1", "response": 1},
-                        {"item_id": "2", "response": 0}
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
                     ]
                 },
                 {
-                  "id": "2",
+                  "id": 2,
                   "item_responses": [
-                        {"item_id": "1", "response": 1},
-                        {"item_id": "2", "response": 0}
-                    ]
-                },
-                {
-                  "id": "3",
-                  "item_responses": [
-                        {"item_id": "1", "response": 1},
-                        {"item_id": "2", "response": 0}
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
                     ]
                 }
             ],
-            "exclude_students": ["1"]
+            "exclude_students": [1]
         }
 
-        expected = ["2","3"]
+        expected = [2]
         stud_ids = utils.get_student_ids(data)
 
         assert stud_ids == expected
