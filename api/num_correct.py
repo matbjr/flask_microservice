@@ -1,5 +1,5 @@
 from common.utils import get_sorted_responses, get_item_ids, update_input
-from common.config import get_service_config
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_num_correct(param):

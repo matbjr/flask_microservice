@@ -78,6 +78,7 @@ def calculate_idr(param):
 
     return {service_key: idr_dict}
 
+
 def calculate_idr_average(param):
     """
     A function to get the average idr of
