@@ -1,4 +1,4 @@
-from api.utils import get_student_list , update_input, get_item_topics
+from api.utils import get_student_list , update_input, get_item_topics, get_error
 from api.config import get_service_config, get_keyword_value
 
 
@@ -20,9 +20,10 @@ def calculate_topic_rights(param):
              of right responses
     """
     service_key = get_service_config(15)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     student_list = get_student_list(inp)
     check_topics = get_item_topics(inp)
     topic_rights = {}
@@ -66,9 +67,10 @@ def calculate_topic_averages(param):
              of right responses
     """
     service_key = get_service_config(16)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     topic_avgs = get_item_topics(inp)
     topic_responses = calculate_topic_rights(inp)[get_service_config(15)]
     num_topics = len(topic_avgs)

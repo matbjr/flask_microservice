@@ -53,6 +53,7 @@ config = {
             "unknown": "unknown",
 
             "bad_data": "Invalid data - Not enough students",
+            "bad_num_items": "Invalid data - Not enough items",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
             "no_grad_year": "No graduation years were found, or all students are in the same graduation year",
@@ -207,3 +208,4 @@ def get_config_from_cloud(cloud_provider):
         config = get_config_file(cloud_provider)
     except Exception as exc:
         print("Config Exception!")
+        
