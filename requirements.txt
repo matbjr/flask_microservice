@@ -1,5 +1,10 @@
 flask
 flask_cors
+bottle
+fastapi
 requests
 Werkzeug==0.16.1
 pytest
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

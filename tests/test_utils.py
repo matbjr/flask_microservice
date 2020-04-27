@@ -372,9 +372,13 @@ class TestUtils:
                 }]}
 
         expected = {
+            "exam": {
+                "name": "unknown"
+            },
             "student_list": [
                 {
                   "id": "1",
+                  'grad_year': 'unknown',
                   "item_responses": [
                         {"item_id": "1", "response": 1},
                         {"item_id": "2", "response": 0},

@@ -20,6 +20,8 @@ def get_exclude_recos(param):
     """
     service_key = get_service_config(9)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     idr_dict = list(calculate_idr(inp).values())[0]
     if idr_dict == get_keyword_value("bad_mean"):
         return {service_key: get_keyword_value("bad_mean")}

@@ -15,6 +15,8 @@ def calculate_scores(param):
     """
     service_key = get_service_config(4)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     student_ids = get_student_ids(inp) 
     num_items = len (sorted_resp[0])
@@ -46,6 +48,8 @@ def calculate_average(param):
     """
     service_key = get_service_config(5)
     inp = update_input(param)
+    if inp == get_keyword_value("no_students"):
+        return {service_key: get_keyword_value("no_students")}
     score_list = list(list(calculate_scores(inp).values())[0].values())
     num_students = len(score_list)
     average = sum(score_list) / num_students

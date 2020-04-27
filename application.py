@@ -3,9 +3,11 @@ from flask_cors import cross_origin, CORS
 import json
 import sys
 
+from providers.google.get_credentials import GoogleCredentails
+from providers.google.google_classroom import list_courses
+
 from api.config import get_config
 from api.sample import sample, sample2
-
 from api.std import calculate_std
 from api.summation import calculate_summation
 from api.proportion import calculate_proportion
@@ -54,7 +56,6 @@ def process_request(fn, json_data=None):
 
 
 @app.route('/', methods=['POST', 'GET'])
-@cross_origin()
 def welcome():
     return jsonify(
         {
@@ -64,6 +65,36 @@ def welcome():
         }
     )
 
+
+@app.route('/login/', methods=['POST', 'GET'])
+def get_tokens():
+    id_token = request.args.get('id_token')
+    access_token = request.args.get('access_token')
+    app.gc = GoogleCredentails()
+    creds, info = app.gc.get_credential_from_token(id_token, access_token)
+    courses = list_courses(creds)
+    #print(courses)
+    return jsonify({'user': info, 'courses': courses})
+    # return process_request(calculate_std)
+
+
+@app.route('/classroom/', methods=['POST', 'GET'])
+def get_classes():
+    id_token = request.args.get('id_token')
+    access_token = request.args.get('access_token')
+
+    app.gc = GoogleCredentails()
+    if access_token and id_token:
+        creds, info = app.gc.get_credential_from_token(id_token, access_token)
+    else:
+        creds = app.gc.get_credential()  # RM organization courses
+        info = {'name': get_config("application_org"),
+                'email': get_config("application_email")}
+
+    courses = list_courses(creds)
+    #print(courses)
+    return jsonify({'user': info, 'courses': courses})
+    # return process_request(calculate_std)
 
 @app.route('/std/', methods=['POST', 'GET'])
 def compute_std():
@@ -106,7 +137,6 @@ def compute_average():
 
 
 @app.route('/analyzeTest/', methods=['POST', 'GET'])
-@cross_origin()
 def get_analysis():
 
     return process_request(analyze_test)
@@ -171,5 +201,5 @@ def get_sample_analysis():
 
 if __name__ == '__main__':
     print("Starting service")
-    app.run(host="0.0.0.0", port=5001, threaded=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True)
 
