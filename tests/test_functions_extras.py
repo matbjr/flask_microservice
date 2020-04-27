@@ -239,6 +239,7 @@ class TestFunctions:
 
         expected = {"analysis": "Invalid data - Not enough items"}
         analysis = analyze_test(data)
+        print(analysis)
 
         assert analysis == expected
 

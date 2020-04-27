@@ -2,7 +2,7 @@ from statistics import mean
 from math import sqrt
 
 from common.utils import get_score_std, get_sorted_responses, get_item_ids, \
-    update_input
+    update_input, get_error
 from common.config import get_service_config, get_keyword_value
 
 
@@ -24,9 +24,10 @@ def calculate_idr(param):
              item ids as keys and idr as values
     """
     service_key = get_service_config(2)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])
@@ -91,9 +92,10 @@ def calculate_idr_average(param):
     :return: a float: the average idr
     """
     service_key = get_service_config(11)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     idr_dict = list(calculate_idr(inp).values())[0]
     if idr_dict == get_keyword_value("bad_mean"):
         return {service_key: get_keyword_value("bad_mean")}

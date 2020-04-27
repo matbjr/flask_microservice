@@ -1,6 +1,6 @@
 from api.idr import calculate_idr
 from common.config import get_service_config, get_keyword_value
-from common.utils import update_input
+from common.utils import update_input, get_error
 
 
 def get_exclude_recos(param):
@@ -19,9 +19,10 @@ def get_exclude_recos(param):
     :return: a list of strings: a list of item ids
     """
     service_key = get_service_config(9)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     idr_dict = list(calculate_idr(inp).values())[0]
     if idr_dict == get_keyword_value("bad_mean"):
         return {service_key: get_keyword_value("bad_mean")}

@@ -255,14 +255,14 @@ def update_input(param):
     a default of 1-n is used. If a student or item is
     included in an exclude list, they are removed from
     the json.
-
     :param: a json in the Reliabilty Measures
             standard json format
     :return: a json in the Reliabilty Measures
             standard json format
     """
     inp = param
-    exclude_students = list(param.get(get_keyword_value("exclude_students"), []))
+    exclude_students = list(
+        param.get(get_keyword_value("exclude_students"), []))
     exclude_items = list(param.get(get_keyword_value("exclude_items"), []))
     student_list = list(param.get(get_keyword_value("student_list"), []))
 
@@ -272,7 +272,8 @@ def update_input(param):
 
     # If a student does not have responses, give him an empty response list
     for i in range(0, len(student_list)):
-        curr_responses = student_list[i].get(get_keyword_value("item_responses"))
+        curr_responses = student_list[i].get(
+            get_keyword_value("item_responses"))
         if not curr_responses:
             student_list[i][get_keyword_value("item_responses")] = []
 
@@ -288,12 +289,14 @@ def update_input(param):
     # If no exam object is given or no exam name is given, name it "unknown"
     exam_info = param.get(get_keyword_value("exam"))
     if not exam_info:
-        inp[get_keyword_value("exam")] = {get_keyword_value("name"): get_keyword_value("unknown")}
+        inp[get_keyword_value("exam")] = {
+            get_keyword_value("name"): get_keyword_value("unknown")}
     else:
         exam_name = exam_info[get_keyword_value("name")]
         if not exam_name:
-            inp[get_keyword_value("exam")][get_keyword_value("name")] = get_keyword_value("unknown")
-        
+            inp[get_keyword_value("exam")][
+                get_keyword_value("name")] = get_keyword_value("unknown")
+
     # If a student does not have an id, assign their index+1 as their id
     student_ids = []
     for i in student_list:
@@ -305,13 +308,15 @@ def update_input(param):
         curr_stud = student_list[i].get(get_keyword_value("id"))
         curr_grad_yr = student_list[i].get(get_keyword_value("grad_year"))
         if not curr_stud:
-            new_id = i+1
+            new_id = i + 1
             while str(new_id) in student_ids:
                 new_id += 1
             student_list[i][(get_keyword_value("id"))] = str(new_id)
             student_ids.append(str(new_id))
         if not curr_grad_yr:
-            student_list[i][(get_keyword_value("grad_year"))] = get_keyword_value("unknown")
+            student_list[i][
+                (get_keyword_value("grad_year"))] = get_keyword_value(
+                "unknown")
 
     # If an item in a student's response list does not have an id, assign its index+1 as its id, unless it's already used as an id
     # If an item in a student's response list does not have a response, assign it a value of 0
@@ -329,12 +334,14 @@ def update_input(param):
             curr_item_id = curr_responses[k].get(get_keyword_value("item_id"))
             curr_item = curr_responses[k].get(get_keyword_value("response"))
             if not curr_item_id:
-                new_id = k+1
+                new_id = k + 1
                 while str(new_id) in item_ids:
                     new_id += 1
-                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("item_id")] = str(new_id)
+                student_list[i][get_keyword_value("item_responses")][k][
+                    get_keyword_value("item_id")] = str(new_id)
             if not curr_item:
-                student_list[i][get_keyword_value("item_responses")][k][get_keyword_value("response")] = 0
+                student_list[i][get_keyword_value("item_responses")][k][
+                    get_keyword_value("response")] = 0
 
     # If a student's id is in the exclude list, exclude them from the data
     remove_students = []
