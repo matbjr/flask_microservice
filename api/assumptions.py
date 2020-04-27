@@ -1,5 +1,5 @@
-from api.config import get_keyword_value, get_service_config
-from api.utils import get_item_ids, get_student_list, update_input
+from common.config import get_keyword_value, get_service_config
+from common.utils import get_item_ids, get_student_list, update_input
 
 
 def get_assumptions(param):

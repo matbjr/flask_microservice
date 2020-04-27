@@ -1,8 +1,9 @@
 from statistics import mean
 from math import sqrt
 
-from api.utils import get_score_std, get_sorted_responses, get_item_ids, get_student_list, update_input
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_score_std, get_sorted_responses, get_item_ids, \
+    update_input
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_idr(param):

@@ -1,5 +1,5 @@
-from api.utils import get_sorted_responses, update_input, get_student_ids
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_sorted_responses, update_input, get_student_ids
+from common.config import get_service_config
 
 
 def calculate_scores(param):

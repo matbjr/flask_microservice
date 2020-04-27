@@ -1,6 +1,5 @@
-import json
-
-import api.utils as utils
+import common.utils as utils
+from common.config import initialize_config
 
 
 class TestUtils:
@@ -9,6 +8,7 @@ class TestUtils:
     # This is called before the actual tests are called.
     # self.data is a class variable that can be used through out the class
     def setup(self):
+        initialize_config(True)  # with default config
         self.data = {
             "exam":
             {

@@ -1,5 +1,5 @@
-from api.config import get_service_config
-from api.utils import update_input
+from common.config import get_service_config
+from common.utils import update_input
 from api.kr20 import calculate_kr20
 from api.idr import calculate_idr, calculate_idr_average
 from api.difficulty import calculate_difficulty, calculate_difficulty_average
@@ -58,7 +58,7 @@ def analyze_test(param):
 
 
 if __name__ == '__main__':
-    from api.sample import sample, sample_result, sample_result2
+    from common.sample import sample
     import json
 
     analysis = analyze_test(sample)

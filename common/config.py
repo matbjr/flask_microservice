@@ -1,6 +1,7 @@
 from providers.cloud_handler import get_config_file
+import json
 
-
+global config
 # JSON object for literals and constants
 # will be hosted in some cloud storage
 # all keys are lower case, Use underscore for longer keys
@@ -13,17 +14,26 @@ cloud_provider = {
 }
 
 # default
-config = {
+default_config = {
     "application_id": "rm_01",
     "application_version": "0.2.2",
     "application_name": "Reliability Measures microservices",
     "application_org": "Reliability Measures",
     "application_email": "info@reliabilitymeasures.com",
     "application_short_name": "rm_microservices",
-    "application_client_id": '807686504198-k9ob5s4g4kunufkrtb6mb9s6sr3dkatu.'
-                             'apps.googleusercontent.com',
+    "application_client_id": "xxxxx."
+                             "apps.googleusercontent.com",
     "service_url": "http://api.reliabilitymeasures.com/",
     "test_url": "http://localhost:5000/",
+    "login_method": "login/",
+    "classroom_method": "classroom/",
+    "quiz_method": "quiz/",
+    "db_provider": {
+        "db_host": "",
+        "db_user": "",
+        "db_password": "",
+        "db_name": "ReliabilityMeasures_DB"
+    },
     "keywords": {
             "item_responses": "item_responses",
             "student_list": "student_list",
@@ -143,7 +153,7 @@ config = {
             "id": 12,
             "name": "number_of_correct_responses",
             "short_name": "num_correct",
-            "description": "The absolute number of an item\'s "
+            "description": "The absolute number of an item\"s "
                            "correct responses",
             "type": "list of ints"
         },
@@ -159,7 +169,7 @@ config = {
             "id": 14,
             "name": "analysis_by_graduation_year",
             "short_name": "grad_year_analysis",
-            "description": "Analysis of students\' responses based on "
+            "description": "Analysis of students\" responses based on "
                            "their graduation year",
             "type": "dictionary of exam analyses"
         },
@@ -167,7 +177,7 @@ config = {
             "id": 15,
             "name": "topic_right_responses",
             "short_name": "topic_rights",
-            "description": "Each students\' number of right responses in each topic",
+            "description": "Each students\" number of right responses in each topic",
             "type": "dictionary of topic rights"
         },
         {
@@ -180,23 +190,48 @@ config = {
     ] 
 }
 
-# more to follow
+
+class Config:
+    config = None
+
+    def __init__(self):
+        self.config = default_config
+
+    def get_keyword_value(self, key):
+        return self.config["keywords"][key]
+
+    def get_service_config(self, service_id, field="short_name"):
+        service = self.config["services"][service_id]
+        return service.get(field)
+
+    def get_config(self, config_key, sub_key=None):
+        if sub_key:
+            self.config.get(config_key, {}).get(sub_key)
+        else:
+            return self.config.get(config_key)
+
+    def get_config_from_cloud(self):
+        try:
+            self.config = get_config_file(cloud_provider)
+        except Exception as exc:
+            print("Config Exception!")
 
 
-def get_keyword_value(key):
-    return config["keywords"][key]
+def initialize_config(default=False):
+    global config
+    config = Config()
+    if not default:
+        config.get_config_from_cloud()
+
+
+def get_config(config_key, sub_key=None):
+    return config.get_config(config_key, sub_key)
 
 
 def get_service_config(service_id, field="short_name"):
-    return config["services"][service_id][field]
+    return config.get_service_config(service_id, field)
 
 
-def get_config(config_key):
-    return config.get(config_key)
+def get_keyword_value(key):
+    return config.get_keyword_value(key)
 
-
-def get_config_from_cloud(cloud_provider):
-    try:
-        config = get_config_file(cloud_provider)
-    except Exception as exc:
-        print("Config Exception!")

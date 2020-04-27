@@ -1,5 +1,5 @@
-from api.utils import get_student_list , update_input, get_item_topics
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_student_list , update_input, get_item_topics
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_topic_rights(param):

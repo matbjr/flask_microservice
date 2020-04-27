@@ -1,7 +1,7 @@
 from typing import Any
 import json
-from api.config import get_config
-from sample import sample, sample2
+from common.config import get_config
+from common.sample import sample2
 
 api_url = get_config('service_url')
 

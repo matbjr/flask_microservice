@@ -1,5 +1,5 @@
-from api.config import get_service_config, get_keyword_value
-from api.utils import get_sorted_responses, get_student_list, update_input, get_student_ids
+from common.config import get_service_config
+from common.utils import get_sorted_responses, update_input, get_student_ids
 from api.difficulty import calculate_difficulty
 
 

@@ -20,8 +20,9 @@ def get_config_file(cloud_config):
         data = res.content
         # print(len(data), 'bytes; md:', md, type(data))
         try:
-            return json.loads(data)
-        except Exception:
+            return json.loads(data.decode())
+        except Exception as exc:
+            print(exc)
             return data
 
 

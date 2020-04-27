@@ -1,5 +1,5 @@
 from statistics import pstdev
-from api.config import get_keyword_value
+from common.config import get_keyword_value
 
 
 def get_score_std(param):

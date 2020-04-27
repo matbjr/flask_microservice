@@ -1,5 +1,5 @@
-from api.config import get_service_config, get_keyword_value
-from api.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
+from common.config import get_service_config, get_keyword_value
+from common.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
 from api.kr20 import calculate_kr20
 from api.idr import calculate_idr, calculate_idr_average
 from api.difficulty import calculate_difficulty, calculate_difficulty_average
