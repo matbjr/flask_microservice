@@ -33,4 +33,10 @@ class MySqlDB:
                 my_cursor.execute(sql, val)
 
         self.my_db.commit()
-        return
+        return my_cursor.rowcount
+
+    def insert_str(self, sql):
+        my_cursor = self.my_db.cursor()
+        my_cursor.execute(sql)
+        self.my_db.commit()
+        return my_cursor.rowcount

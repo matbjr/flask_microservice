@@ -438,7 +438,8 @@ def get_item_topics(param):
             hier_level[0] = curr_tree
             if curr_levels:
                 for i in range(1, level_list[0]+2):
-                    hier_level[i] = curr_levels.get(str(i-1), "Unkown")
+                    hier_level[i] = curr_levels.get(
+                        str(i-1), get_keyword_value("unknown"))
                 hier_level[level_list[0]+2] = curr_topic
             else:
                 hier_level[1] = curr_topic
