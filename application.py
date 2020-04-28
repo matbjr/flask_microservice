@@ -29,7 +29,6 @@ class RMApp(Flask):
     def __init__(self, *args, **kwargs):
         super(RMApp, self).__init__(*args, **kwargs)
         initialize_config()
-        print(get_config("db_provider"))
 
 
 app = RMApp(__name__)

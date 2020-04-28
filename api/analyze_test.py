@@ -62,7 +62,10 @@ def analyze_test(param):
 
 if __name__ == '__main__':
     from common.sample import sample
+    from common.config import initialize_config
     import json
+
+    initialize_config()
 
     analysis = analyze_test(sample)
     print(json.dumps(analysis))

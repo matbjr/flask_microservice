@@ -27,6 +27,7 @@ default_config = {
     "test_url": "http://localhost:5000/",
     "login_method": "login/",
     "classroom_method": "classroom/",
+    "sample_method": "sample/",
     "quiz_method": "quiz/",
     "db_provider": {
         "db_host": "",
