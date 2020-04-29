@@ -1,5 +1,5 @@
-from api.config import get_service_config, get_keyword_value
-from api.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input
+from common.config import get_service_config, get_keyword_value
+from common.utils import sort_students_by_grad_year, get_student_list, get_grad_year_list, update_input, get_error
 from api.kr20 import calculate_kr20
 from api.idr import calculate_idr, calculate_idr_average
 from api.difficulty import calculate_difficulty, calculate_difficulty_average
@@ -26,9 +26,10 @@ def analyze_grad_years(param):
              keys and the exam analysis as values
     """
     service_key = get_service_config(14)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     assumptions_key = get_service_config(13)
     assumptions = get_assumptions(inp)[assumptions_key]
     students_dict = sort_students_by_grad_year(inp)
@@ -40,10 +41,11 @@ def analyze_grad_years(param):
 
     for i in students_dict:
         curr_students = students_dict[i]
-        student_list = get_student_list(curr_students)
-        if len(student_list) <= 1:
-            grad_analysis[i] = get_keyword_value("bad_data")
+        catch_error = get_error(curr_students)
+        if catch_error[0]:
+            grad_analysis[i] = catch_error[1]
             continue
+        student_list = get_student_list(curr_students)
 
         val_kr20 = calculate_kr20(curr_students)
         val_idr = calculate_idr(curr_students)

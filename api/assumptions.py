@@ -1,5 +1,5 @@
-from api.config import get_keyword_value, get_service_config
-from api.utils import get_item_ids, get_student_list, update_input
+from common.config import get_keyword_value, get_service_config
+from common.utils import get_item_ids, get_student_list, update_input, get_error
 
 
 def get_assumptions(param):
@@ -21,9 +21,10 @@ def get_assumptions(param):
              and a list of item ids as values
     """
     service_key = get_service_config(13)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     student_list = get_student_list(inp)
     id_list = get_item_ids(inp)
     assumptions_dict = {}

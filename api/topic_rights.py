@@ -1,5 +1,5 @@
-from api.utils import get_student_list , update_input, get_item_topics
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_student_list , update_input, get_item_topics, get_error
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_topic_rights(param):
@@ -12,7 +12,7 @@ def calculate_topic_rights(param):
     that item correct, then the number of right
     responses for that topic increases.
 
-    :param: a json in the Reliabilty Measures
+    :param: a json in the Reliability Measures
             standard json format
     :return: a dictionary of dictionaries:
              a dictionary with student ids as keys
@@ -20,9 +20,10 @@ def calculate_topic_rights(param):
              of right responses
     """
     service_key = get_service_config(15)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     student_list = get_student_list(inp)
     check_topics = get_item_topics(inp)
     topic_rights = {}
@@ -47,7 +48,6 @@ def calculate_topic_rights(param):
 
         topic_rights[stud_id] = topic_trees
 
-
     return {service_key: topic_rights}
 
 
@@ -59,16 +59,17 @@ def calculate_topic_averages(param):
     per topic and then divides them by the total
     number of students.
 
-    :param: a json in the Reliabilty Measures
+    :param: a json in the Reliability Measures
             standard json format
     :return: a list of dictionaries, a list of
              each topic and its average number
              of right responses
     """
     service_key = get_service_config(16)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     topic_avgs = get_item_topics(inp)
     topic_responses = calculate_topic_rights(inp)[get_service_config(15)]
     num_topics = len(topic_avgs)

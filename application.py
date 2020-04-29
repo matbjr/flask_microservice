@@ -6,8 +6,8 @@ import sys
 from providers.google.get_credentials import GoogleCredentails
 from providers.google.google_classroom import list_courses
 
-from api.config import get_config
-from api.sample import sample, sample2
+from common.config import get_config, initialize_config
+from common.sample import sample
 from api.std import calculate_std
 from api.summation import calculate_summation
 from api.proportion import calculate_proportion
@@ -24,7 +24,15 @@ from api.analyze_grad_years import analyze_grad_years
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 
-app = Flask(__name__)
+class RMApp(Flask):
+
+    def __init__(self, *args, **kwargs):
+        super(RMApp, self).__init__(*args, **kwargs)
+        initialize_config()
+
+
+app = RMApp(__name__)
+
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
 

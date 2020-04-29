@@ -1,5 +1,5 @@
-from api.utils import get_sorted_responses, update_input, get_student_ids
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_sorted_responses, update_input, get_student_ids, get_error
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_scores(param):
@@ -8,15 +8,16 @@ def calculate_scores(param):
     For each student, it gets the number of correct
     responses and divides it by the number of questions.
 
-    :param: a json in the Reliabilty Measures
+    :param: a json in the Reliability Measures
             standard json format
     :return: a dictionary of floats: a dictionary with
              student ids as keys and their score as values
     """
     service_key = get_service_config(4)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     student_ids = get_student_ids(inp) 
     num_items = len (sorted_resp[0])
@@ -42,14 +43,15 @@ def calculate_average(param):
     It gets every students score and then
     calculates the average of those scores.
 
-    :param: a json in the Reliabilty Measures
+    :param: a json in the Reliability Measures
             standard json format
     :return: a float: the score average
     """
     service_key = get_service_config(5)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     score_list = list(list(calculate_scores(inp).values())[0].values())
     num_students = len(score_list)
     average = sum(score_list) / num_students

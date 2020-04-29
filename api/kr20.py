@@ -1,5 +1,5 @@
-from api.utils import get_score_std, get_sorted_responses, get_student_list, update_input
-from api.config import get_service_config, get_keyword_value
+from common.utils import get_score_std, get_sorted_responses, update_input, get_error
+from common.config import get_service_config, get_keyword_value
 
 
 def calculate_kr20(param):
@@ -17,9 +17,10 @@ def calculate_kr20(param):
     :return: a float: the kr20
     """
     service_key = get_service_config(1)
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return {service_key: catch_error[1]}
     inp = update_input(param)
-    if inp == get_keyword_value("no_students"):
-        return {service_key: get_keyword_value("no_students")}
     sorted_resp = get_sorted_responses(inp)
     num_students = len(sorted_resp)
     num_items = len (sorted_resp[0])

@@ -10,7 +10,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
 from providers.cloud_handler import get_config_file
-from api.config import cloud_provider, get_config
+from common.config import cloud_provider, get_config
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/classroom.courses',
@@ -33,7 +33,6 @@ class GoogleCredentails:
     def __init__(self):
         self.credential = None
         self.expiry = None
-        pass
 
     def get_credential(self, token_file=None):
         """allow access using token file from cloud
