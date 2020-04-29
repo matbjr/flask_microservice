@@ -1,11 +1,11 @@
 from googleapiclient.discovery import build
 
-from providers.google.get_credentials import GoogleCredentails
+from providers.google.get_credentials import GoogleCredentials
 
 
 def get_sheet(creds=None, sheet=None, range=None):
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     SPREADSHEET_ID = sheet or "1W8m1I_eMccRQ9eGdOaucckmem0Jyf-5cmJzyA3wQB-k"
     RANGE_NAME = range or 'Student Submissions'
@@ -26,7 +26,7 @@ def list_courses(creds=None):
     """
 
     if not creds:
-       creds = GoogleCredentails().get_cred()
+       creds = GoogleCredentials().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -50,7 +50,7 @@ def list_course_work(creds=None, course_id="78180851867"):
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -76,7 +76,7 @@ def list_student_responses(creds=None, students={},
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -114,7 +114,7 @@ def list_students_teachers(creds=None, teachers=False, course_id="78180851867"):
     Prints the names of the first 10 courses the user has access to.
     """
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
 
@@ -150,7 +150,7 @@ def list_students_teachers(creds=None, teachers=False, course_id="78180851867"):
 
 def add_course(creds=None):
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     service = build('classroom', 'v1', credentials=creds)
     course = {
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     # creds = get_cred()
     # add_course()
 
-    creds = GoogleCredentails().get_credential('token2.pickle')
+    creds = GoogleCredentials().get_credential('token2.pickle')
 
     courses = list_courses(creds)
     print("**********************************")

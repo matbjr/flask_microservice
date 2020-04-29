@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from googleapiclient.discovery import build
-from providers.google.get_credentials import GoogleCredentails
+from providers.google.get_credentials import GoogleCredentials
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
 
@@ -23,7 +23,7 @@ def datetime_format(datestr, fr="%m/%d/%Y %H:%M:%S", to="%Y-%m-%d %H:%M:%S"):
 
 def get_sheet(creds=None, sheet_id=None, col_range=None):
     if not creds:
-        creds = GoogleCredentails().get_cred()
+        creds = GoogleCredentials().get_cred()
 
     service = build('sheets', 'v4', credentials=creds)
 
@@ -33,7 +33,9 @@ def get_sheet(creds=None, sheet_id=None, col_range=None):
     result = sheet.values().get(spreadsheetId=sheet_id,
                                 range=col_range).execute()
     values = result.get('values', [])
-    #print(values)
+
+    #gs = sheet.get(spreadsheetId=sheet_id)
+    #print(gs)
 
     return values
 
@@ -41,7 +43,7 @@ def get_sheet(creds=None, sheet_id=None, col_range=None):
 if __name__ == '__main__':
 
     initialize_config()
-    creds = GoogleCredentails().get_cred()
+    creds = GoogleCredentials().get_cred()
     db = MySqlDB()
     # print(db)
     db.connect()
@@ -52,25 +54,24 @@ if __name__ == '__main__':
     index = 1
     sql_quiz = "INSERT INTO quizzes(`id`, `provider_id`, `tilte`, " \
                "`desciption`, `metadata`, `type`, `no_of_questions`, " \
-               "`total_marks`, `questions`, `timestamp`) " \
-               "VALUES "
+               "`total_marks`, `questions`, `timestamp`, `responses`) " \
+               "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     sql_ques = "INSERT INTO `questions`(`id`, `text`, `subject`, " \
                "`subject_id`, `topic`, `topic_id`, `sub_topics`, " \
                "`sub_topics_id`, `type`, `metadata`, `choices`, " \
                "`answer`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    student_sql = "INSERT INTO `students`(`id`, `provider_id`, `name`, " \
-                  "`description`, `creation_date`, `update_date`, " \
-                  "`address`, `city`, `state`, `zip`, `contact_person`, " \
-                  "`contact_person2`, `phone`, `phone2`, `email`, `age`, " \
-                  "`status`, `school`) VALUES " \
-                  "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql_responses = "INSERT INTO `students`(`id`, `creation_date`,`marks`, `name`, " \
+                  "`description`,`age`, `city`, `state`, " \
+                  "`school`, `responses`) VALUES " \
+                  "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     for quiz in QUIZES:
-        responses = get_sheet(creds, sheet_id=quiz,
+        rows = get_sheet(creds, sheet_id=quiz,
                               col_range="Form Responses 1")
-        print("Quiz ", index, quiz, len(responses))
-        head = responses[0]
-        answers = responses[1]
+        print("Quiz ", index, quiz, len(rows))
+        head = rows[0]
+        answers = rows[1]
+        choices = []
 
         questions = []
         correct_answers = []
@@ -84,17 +85,55 @@ if __name__ == '__main__':
 
         for a in answers[start:]:
             correct_answers.append(a)
+            choices.append(set())
+
+        # get all responses
+        all_responses = []
+        for row in rows[2:]:
+            i = 0
+            loc = row[4].strip()
+            location = loc.replace(',','/').split('/')
+            values = ('', datetime_format(row[0]), row[1], row[2].strip(),
+                      'Quiz ' + str(index), row[3],
+                      location[0].strip(), )
+            if len(location) > 1:
+                values += (location[1].strip(),)
+            else:
+                values += (location[0].strip(),)
+            if len(location) > 2:
+                values += (location[2].strip(),)
+            else:
+                values += (location[0].strip(),)
+
+            responses = []
+            for a in row[start:]:
+                choices[i].add(a)
+                responses.append(a)
+                i += 1
+            values += (json.dumps(responses), )
+            print(values)
+            all_responses.append(values)
+
+        print(db.insert(sql_responses, all_responses))
+
+        # change and sort all set() to list for json
+        options = []
+        for ch in choices:
+            op = list(sorted(ch))
+            print(len(op), op)
+            options.append(op)
 
         ques_dict = {'questions': questions,
-                     'correct_answers': correct_answers
+                     'correct_answers': correct_answers,
+                     'choices': options
                      }
         values = (index, quiz, 'Quiz ' + str(index), '', json.dumps(metadata),
                   1, len(head[:start]), 5, json.dumps(ques_dict),
-                  datetime_format(answers[0]))
+                  datetime_format(answers[0]), len(rows)-1)
 
-        print(sql_quiz + str(values))
+        #print(sql_quiz + str(values))
 
-        #print(db.insert_str(sql_quiz + str(values)))
+        #print(db.insert(sql_quiz, values))
 
         index += 1
 
