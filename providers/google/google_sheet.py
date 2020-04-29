@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     close = 0
     index = 1
-    sql_quiz = "INSERT INTO quizzes(`id`, `provider_id`, `tilte`, " \
+    sql_quiz = "INSERT INTO quizzes(`id`, `provider_id`, `name`, " \
                "`desciption`, `metadata`, `type`, `no_of_questions`, " \
                "`total_marks`, `questions`, `timestamp`, `responses`) " \
                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -89,10 +89,10 @@ if __name__ == '__main__':
 
         # get all responses
         all_responses = []
-        for row in rows[2:]:
+        for row in rows[1:]:
             i = 0
             loc = row[4].strip()
-            location = loc.replace(',','/').split('/')
+            location = loc.replace(',', '/').replace(' ', '/').split('/')
             values = ('', datetime_format(row[0]), row[1], row[2].strip(),
                       'Quiz ' + str(index), row[3],
                       location[0].strip(), )

@@ -107,7 +107,8 @@ def get_classes():
 def get_quiz():
     name = request.args.get('name')
     ignore_case = bool(request.args.get('ignore_case', 'true'))
-    results = get_quizzes_by_names(name, ignore_case=ignore_case)
+    all_responses = bool(request.args.get('all_responses', 'true'))
+    results = get_quizzes_by_names(name, ignore_case, all_responses)
     return jsonify(results)
 
 
