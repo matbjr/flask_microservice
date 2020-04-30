@@ -17,8 +17,8 @@ class MySqlDB:
           database=db_config.get("db_name")
         )
 
-    def query(self, sql):
-        my_cursor = self.my_db.cursor(dictionary=True)
+    def query(self, sql, is_dict=True):
+        my_cursor = self.my_db.cursor(dictionary=is_dict)
         my_cursor.execute(sql)
         my_result = my_cursor.fetchall()
 
