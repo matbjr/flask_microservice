@@ -34,7 +34,7 @@ class MySqlDB:
         self.my_db.commit()
         return my_cursor.rowcount
 
-    def insert_str(self, sql):
+    def query_commit(self, sql):
         my_cursor = self.my_db.cursor()
         my_cursor.execute(sql)
         self.my_db.commit()

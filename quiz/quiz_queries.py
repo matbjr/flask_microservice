@@ -44,9 +44,11 @@ def get_quizzes_by_names(name, ignore_case=False, get_questions=False):
     sql = query.format(name if not ignore_case else name.lower())
     results = connect_and_execute(sql)
     total = 0
-    topics = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
     no_quizzes = len(results)
-    topic_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0, 'Seerah': 0, 'History': 0}
+    topic_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
+                    'Seerah': 0, 'History': 0}
+    topic_max_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
+                    'Seerah': 0, 'History': 0}
     for quiz in results:
         your_answers = json.loads(quiz['responses'])
         score = int(quiz['marks'].split('/')[0].strip())
@@ -58,17 +60,23 @@ def get_quizzes_by_names(name, ignore_case=False, get_questions=False):
             quiz['responses'] = []
             for q, c, a, t in zip(questions['questions'],
                                questions['correct_answers'],
-                               your_answers, topics):
+                               your_answers, questions['topics']):
                 point = 1 if a == c else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,
                     'your_answer': a,
+                    'topic': t,
                     'point': point})
                 topic_scores[t] += point
+                topic_max_scores[t] += 1
 
-    total_scores = {'No. of Quizzes': no_quizzes, 'Combined score': total,
-                    'Topic Scores': topic_scores}
+    total_scores = {'No. of Quizzes': no_quizzes,
+                    'Combined score': total,
+                    'Combined score Percentage': round(total * 100.0/(5*no_quizzes), 2),
+                    'Topic Scores': topic_scores,
+                    'Topic Max Scores': topic_max_scores
+                    }
     return {"quizzes": results, "total_scores": total_scores}
 
 
@@ -79,6 +87,6 @@ def get_query_result(query):
 if __name__ == '__main__':
     initialize_config()
     print(get_quizzes_by_names('Nazli'))
-    print(json.dumps(get_quizzes_by_names('Matin', True, True), indent=4))
+    print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
 
     #print(get_query_result(queries[1].format('Matin'.lower())))

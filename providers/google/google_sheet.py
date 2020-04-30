@@ -15,6 +15,10 @@ QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
           '1Z75Hg9k3TTMF4ZPSMOMn_2Ccs5wHsbkxBU_MHMWOEo8',
           '1l6dRb24i38a1Lcy3qrGpnKErnjhyNqMh2kiq_V01vsk'
           ]
+topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
+topics1 = ['History', 'Aqeedah', 'Seerah', 'Fiqh', 'Qur`an']
+topics2 = ['Seerah', 'Fiqh', 'Qur`an', 'Qur`an', 'Seerah']
+topics3 = ['Aqeedah', 'Qur`an', 'Fiqh', 'Fiqh', 'Qur`an']
 
 
 def datetime_format(datestr, fr="%m/%d/%Y %H:%M:%S", to="%Y-%m-%d %H:%M:%S"):
@@ -50,6 +54,9 @@ if __name__ == '__main__':
     db.connect()
 
     print(db.query("show tables"))
+    #print(db.query_commit("delete from quizzes"))
+    #print(db.query_commit("delete from students"))
+    #print(db.query_commit("ALTER TABLE students AUTO_INCREMENT=1"))
 
     close = 0
     index = 1
@@ -112,10 +119,10 @@ if __name__ == '__main__':
                 responses.append(a)
                 i += 1
             values += (json.dumps(responses), )
-            print(values)
+            #print(values)
             all_responses.append(values)
 
-        print(db.insert(sql_responses, all_responses))
+        #print(db.insert(sql_responses, all_responses))
 
         # change and sort all set() to list for json
         options = []
@@ -124,25 +131,22 @@ if __name__ == '__main__':
             print(len(op), op)
             options.append(op)
 
+        topic_list = [topics1, topics2, topics3]
+        topics = topics_new
+        if index <= 3:
+            topics = topic_list[index - 1]
+
         ques_dict = {'questions': questions,
                      'correct_answers': correct_answers,
-                     'choices': options
+                     'choices': options,
+                     'topics': topics
                      }
         values = (index, quiz, 'Quiz ' + str(index), '', json.dumps(metadata),
                   1, len(head[:start]), 5, json.dumps(ques_dict),
                   datetime_format(answers[0]), len(rows)-1)
 
-        #print(sql_quiz + str(values))
+        print(sql_quiz + str(values))
 
         #print(db.insert(sql_quiz, values))
 
         index += 1
-
-
-        # for g in responses:
-        #     if not g:
-        #         close += 1
-        #     else:
-        #         print(g)
-        #     if close > 2:
-        #         break
