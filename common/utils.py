@@ -291,16 +291,25 @@ def update_input(param):
     if not valid_items:
         return get_keyword_value("bad_num_items")
 
-    # If no exam object is given or no exam name is given, name it "unknown"
+    # If no exam object is given or it does not contain any info, update it with "unknown"
     exam_info = param.get(get_keyword_value("exam"))
     if not exam_info:
         inp[get_keyword_value("exam")] = {
-            get_keyword_value("name"): get_keyword_value("unknown")}
+            get_keyword_value("name"): get_keyword_value("unknown"), 
+            get_keyword_value("scoring_method"): get_keyword_value("unknown")}
     else:
-        exam_name = exam_info[get_keyword_value("name")]
+        exam_name = exam_info.get(get_keyword_value("name"))
+        scoring_method = exam_info.get(get_keyword_value("scoring_method"))
+        factor = exam_info.get(get_keyword_value("scaled_factor"))
         if not exam_name:
             inp[get_keyword_value("exam")][
                 get_keyword_value("name")] = get_keyword_value("unknown")
+        if not scoring_method:
+            inp[get_keyword_value("exam")][
+                get_keyword_value("scoring_method")] = get_keyword_value("unknown")
+        if not factor:
+            inp[get_keyword_value("exam")][
+                get_keyword_value("scaled_factor")] = 1
 
     # If a student does not have an id, assign it a new id
     # If the student is given a group, assign it the group "unknown"
@@ -507,3 +516,23 @@ def get_error(param):
         return (True, inp)
     
     return (False, inp)
+
+
+def get_scoring_method(param):
+    """
+    A function to get the scoring method
+    of an exam:
+    Returns the "scoring_method" object from the json
+    and its factor for scaled scoring.
+
+    :param: a json in the Reliabilty Measures
+            standard json format
+    :return: a string: containing the scoring method. 
+    """
+    inp = update_input(param)
+    scoring_method = inp[get_keyword_value("exam")][
+        get_keyword_value("scoring_method")]
+    factor = inp[get_keyword_value("exam")][
+        get_keyword_value("scaled_factor")]
+
+    return (scoring_method, factor)

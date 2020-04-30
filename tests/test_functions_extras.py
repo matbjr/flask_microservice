@@ -1,6 +1,8 @@
 from api.idr import calculate_idr
 from api.analyze_test import analyze_test
 from api.analyze_groups import analyze_groups
+from api.scores import calculate_average, calculate_scores
+from api.weighted_scores import calculate_weighted_average, calculate_weighted_scores
 
 import tests.expecteds as exp
 
@@ -159,7 +161,7 @@ class TestFunctions:
 
         expected = {"analysis": {
                         "assumptions": {"3": {"assumed": ["3"]}},
-                        "average": 44.4,
+                        "average": 0.444,
                         "diff_avg": 0.556,
                         "difficulty": {"1": 0.667,
                                     "2": 0.333,
@@ -174,15 +176,15 @@ class TestFunctions:
                         "num_correct": {"1": 1,
                                         "2": 2,
                                         "3": 1},
-                        "scores": {"1": 33.3,
-                                "2": 66.7,
-                                "3": 33.3},
+                        "scores": {"1": 0.333,
+                                "2": 0.667,
+                                "3": 0.333},
                         "topic_avgs": "No topics were found",
                         "topic_rights": "No topics were found",
-                        "weighted_avg": 40.0,
-                        "weighted_scores": {"1": 40.0,
-                                            "2": 60.0,
-                                            "3": 20.0}},
+                        "weighted_avg": 0.4,
+                        "weighted_scores": {"1": 0.4,
+                                            "2": 0.6,
+                                            "3": 0.2}},
                     }
         analysis = analyze_test(data)
 
@@ -266,7 +268,7 @@ class TestFunctions:
 
         expected = {"analysis": {"assumptions": {"2": {"assumed": ["2"]},
                                                  "3": {"assumed": ["1", "2"]}},
-                                "average": 16.7,
+                                "average": 0.167,
                                 "diff_avg": 0.834,
                                 "difficulty": {"1": 0.667, "2": 1.0},
                                 "exclude": "Invalid data - No mean",
@@ -276,11 +278,11 @@ class TestFunctions:
                                 "idr_avg": "Invalid data - No mean",
                                 "kr20": -0.0,
                                 "num_correct": {"1": 1, "2": 0},
-                                "scores": {"1": 50.0, "2": 0.0, "3": 0.0},
+                                "scores": {"1": 0.5, "2": 0.0, "3": 0.0},
                                 "topic_avgs": "No topics were found",
                                 "topic_rights": "No topics were found",
-                                "weighted_avg": 13.3,
-                                "weighted_scores": {"1": 40.0, "2": 0.0, "3": 0.0}}}
+                                "weighted_avg": 0.133,
+                                "weighted_scores": {"1": 0.4, "2": 0.0, "3": 0.0}}}
         analysis = analyze_test(data)
 
         assert analysis == expected
@@ -365,3 +367,91 @@ class TestFunctions:
         analysis = analyze_test(data)
 
         assert analysis == expected
+
+    def test_percentage_method(self):
+        data = {
+            "exam": {
+                "scoring_method": "percentage"
+            },
+            "student_list": [
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1}
+                    ]
+                }
+            ]
+        }
+
+        expected = ({'scores': {'1': 75.0, '2': 25.0}}, {'average': 50.0}, 
+                    {'weighted_scores': {'1': 50.0, '2': 0.0}}, {'weighted_avg': 25.0})
+        scoring = (calculate_scores(data), calculate_average(data), 
+                   calculate_weighted_scores(data), calculate_weighted_average(data))
+
+        assert scoring == expected
+
+    def test_absolute_method(self):
+        data = {
+            "exam": {
+                "scoring_method": "absolute"
+            },
+            "student_list": [
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1}
+                    ]
+                }
+            ]
+        }
+
+        expected = ({'scores': {'1': 3.0, '2': 1.0}}, {'average': 2.0}, 
+                    {'weighted_scores': {'1': 2.0, '2': 0.0}}, {'weighted_avg': 1.0})
+        scoring = (calculate_scores(data), calculate_average(data), 
+                   calculate_weighted_scores(data), calculate_weighted_average(data))
+
+        assert scoring == expected
+
+    def test_scaled_method(self):
+        data = {
+            "exam": {
+                "scoring_method": "scaled",
+                "scaled_factor": .79
+            },
+            "student_list": [
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0},
+                        {"item_id": 3, "response": 1},
+                        {"item_id": 4, "response": 1}
+                    ]
+                },
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1}
+                    ]
+                }
+            ]
+        }
+
+        expected = ({'scores': {'1': 0.593, '2': 0.198}}, {'average': 0.395}, 
+                    {'weighted_scores': {'1': 0.395, '2': 0.0}}, {'weighted_avg': 0.198})
+        scoring = (calculate_scores(data), calculate_average(data), 
+                   calculate_weighted_scores(data), calculate_weighted_average(data))
+
+        assert scoring == expected

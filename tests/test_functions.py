@@ -28,7 +28,7 @@ class TestFunctions:
         self.data = {
             "exam":
                 {
-                    "name": "test1"
+                    "name": "test1",
                 },
             "item_topics": [
                 {
@@ -278,21 +278,21 @@ class TestFunctions:
 
     # testing the scores
     def test_scores(self):
-        expected = {"1234": 57.1, "1235": 71.4, "1236": 42.9}
+        expected = {"1234": 0.571, "1235": 0.714, "1236": 0.429}
         scores = calculate_scores(self.data)["scores"]
 
         assert scores == expected
 
     # testing the average
     def test_average(self):
-        expected = 57.1
+        expected = 0.571
         average = calculate_average(self.data)["average"]
 
         assert average == expected
 
     # testing the weighted scores
     def test_weighted_scores(self):
-        expected = {"1234": 44.4, "1235": 55.5, "1236": 33.3}
+        expected = {"1234": 0.444, "1235": 0.555, "1236": 0.333}
         weighted_scores = calculate_weighted_scores(self.data)[
             "weighted_scores"]
 
@@ -300,7 +300,7 @@ class TestFunctions:
 
     # testing the weighted average
     def test_weighted_avg(self):
-        expected = 44.4
+        expected = 0.444
         weighted_average = calculate_weighted_average(self.data)[
             "weighted_avg"]
 

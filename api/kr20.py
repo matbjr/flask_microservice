@@ -40,5 +40,6 @@ def calculate_kr20(param):
     pq_sum = sum(pq_list)
 
     kr20_value = (num_items /(num_items - 1)) * (1 - (pq_sum / (score_std ** 2)))
+    kr20_value = round(kr20_value, 3)
 
-    return {service_key: round(kr20_value, 3)}
+    return {service_key: kr20_value}

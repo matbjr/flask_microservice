@@ -102,5 +102,6 @@ def calculate_idr_average(param):
     idr_list = list(list(idr_dict.values()))
     num_items = len(idr_list)
     idr_avg = sum(idr_list) / num_items
+    idr_avg = round(idr_avg, 3)
         
-    return {service_key: round(idr_avg, 3)}
+    return {service_key: idr_avg}

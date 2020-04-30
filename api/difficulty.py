@@ -63,5 +63,6 @@ def calculate_difficulty_average(param):
     diff_list = list(list(calculate_difficulty(inp).values())[0].values())
     num_items = len(diff_list)
     diff_avg = sum(diff_list) / num_items
+    diff_avg = round(diff_avg, 3)
         
-    return {service_key: round(diff_avg, 3)}
+    return {service_key: diff_avg}

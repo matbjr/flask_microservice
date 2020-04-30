@@ -328,7 +328,10 @@ class TestUtils:
                 }]}
 
         expected = {
-            "exam": {"name": "unknown"},
+            "exam": {
+                "name": "unknown",
+                "scoring_method": "unknown"
+                },
             "student_list": [
                 {
                     "group": ["unknown"],
@@ -602,3 +605,29 @@ class TestUtils:
         stud_ids = utils.get_student_ids(data)
 
         assert stud_ids == expected
+
+    # test getting scoring method
+    def test_get_scoring_method(self):
+        data = {
+            "exam": {
+                "scoring_method": "percentage"
+            },
+            "student_list": [
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1},
+                        {"item_id": 2, "response": 0}
+                    ]
+                },
+                {
+                    "item_responses": [
+                        {"item_id": 1, "response": 1}
+                    ]
+                }
+            ]
+        }
+
+        expected = ('percentage', 1)
+        method = utils.get_scoring_method(data)
+
+        assert method == expected
