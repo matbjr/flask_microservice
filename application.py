@@ -3,7 +3,7 @@ from flask_cors import cross_origin, CORS
 import json
 import sys
 
-from providers.google.get_credentials import GoogleCredentails
+from providers.google.get_credentials import GoogleCredentials
 from providers.google.google_classroom import list_courses
 
 from common.config import get_config, initialize_config
@@ -22,6 +22,8 @@ from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
 from api.analyze_grad_years import analyze_grad_years
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
+
+from quiz.quiz_queries import get_query_result, get_quizzes_by_names
 
 
 class RMApp(Flask):
@@ -78,12 +80,10 @@ def welcome():
 def get_tokens():
     id_token = request.args.get('id_token')
     access_token = request.args.get('access_token')
-    app.gc = GoogleCredentails()
+    app.gc = GoogleCredentials()
     creds, info = app.gc.get_credential_from_token(id_token, access_token)
     courses = list_courses(creds)
-    #print(courses)
     return jsonify({'user': info, 'courses': courses})
-    # return process_request(calculate_std)
 
 
 @app.route('/classroom/', methods=['POST', 'GET'])
@@ -91,7 +91,7 @@ def get_classes():
     id_token = request.args.get('id_token')
     access_token = request.args.get('access_token')
 
-    app.gc = GoogleCredentails()
+    app.gc = GoogleCredentials()
     if access_token and id_token:
         creds, info = app.gc.get_credential_from_token(id_token, access_token)
     else:
@@ -100,9 +100,17 @@ def get_classes():
                 'email': get_config("application_email")}
 
     courses = list_courses(creds)
-    #print(courses)
     return jsonify({'user': info, 'courses': courses})
-    # return process_request(calculate_std)
+
+
+@app.route('/quiz/', methods=['POST', 'GET'])
+def get_quiz():
+    name = request.args.get('name')
+    ignore_case = bool(request.args.get('ignore_case', 'true'))
+    all_responses = bool(request.args.get('all_responses', 'true'))
+    results = get_quizzes_by_names(name, ignore_case, all_responses)
+    return jsonify(results)
+
 
 @app.route('/std/', methods=['POST', 'GET'])
 def compute_std():

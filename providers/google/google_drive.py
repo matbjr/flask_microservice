@@ -2,7 +2,7 @@ import io
 from googleapiclient.discovery import build
 from common.config import get_config, initialize_config
 from googleapiclient.http import MediaIoBaseDownload
-from providers.google.get_credentials import GoogleCredentails
+from providers.google.get_credentials import GoogleCredentials
 
 #client.cr
 # This variable specifies the name of a file that contains the OAuth 2.0
@@ -22,7 +22,7 @@ token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY5ZDk3YjRjYWU5MGJjZDc2YWViMjAwMjZmNmI3NzB
 #creds = GoogleCredentails().get_credential_from_token(token)
 #print(creds.scopes)
 
-creds = GoogleCredentails().get_credential(token_file='token3.pickle')
+creds = GoogleCredentials().get_credential(token_file='token3.pickle')
 
 drive = build(API_SERVICE_NAME, API_VERSION, credentials=creds)
 files = drive.files().list().execute()

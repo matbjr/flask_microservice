@@ -18,7 +18,7 @@ class MySqlDB:
         )
 
     def query(self, sql):
-        my_cursor = self.my_db.cursor()
+        my_cursor = self.my_db.cursor(dictionary=True)
         my_cursor.execute(sql)
         my_result = my_cursor.fetchall()
 
@@ -29,8 +29,7 @@ class MySqlDB:
         if isinstance(values, tuple):
             my_cursor.execute(sql, values)
         elif isinstance(values, list):
-            for val in values:
-                my_cursor.execute(sql, val)
+            my_cursor.executemany(sql, values)
 
         self.my_db.commit()
         return my_cursor.rowcount
