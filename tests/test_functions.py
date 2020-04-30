@@ -10,7 +10,7 @@ from api.weighted_scores import calculate_weighted_scores, \
 from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
-from api.analyze_grad_years import analyze_grad_years
+from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 from common.config import get_service_config, initialize_config
 from common.sample import sample, sample_output
@@ -190,7 +190,7 @@ class TestFunctions:
             ],
             "student_list": [
                 {
-                    "grad_year": "2022",
+                    "group": ["2022", "class 1"],
                     "id": "1234",
                     "first_name": "John",
                     "last_name": "Smith",
@@ -204,7 +204,7 @@ class TestFunctions:
                         {"item_id": "6", "response": 1}
                     ]
                 },
-                {"grad_year": "2022",
+                {"group": ["2022"],
                  "id": "1235",
                  "first_name": "Jane",
                  "last_name": "Smath",
@@ -218,7 +218,7 @@ class TestFunctions:
                      {"item_id": "6", "response": 1}
                  ]
                  },
-                {"grad_year": "2024",
+                {"group": ["2024", "class 1"],
                  "id": "1236",
                  "first_name": "Jake",
                  "last_name": "Jakey",
@@ -341,10 +341,10 @@ class TestFunctions:
 
         assert assumption == expected
 
-    # testing analysis by grad year
-    def test_grad_analysis(self):
-        expected = exp.grad_analysis
-        analysis = analyze_grad_years(self.data)["grad_year_analysis"]
+    # testing analysis by group
+    def test_group_analysis(self):
+        expected = exp.group_analysis
+        analysis = analyze_groups(self.data)["group_analysis"]
 
         assert analysis == expected
 

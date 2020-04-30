@@ -1,12 +1,14 @@
 from api.idr import calculate_idr
 from api.analyze_test import analyze_test
-from api.analyze_grad_years import analyze_grad_years
+from api.analyze_groups import analyze_groups
+
+import tests.expecteds as exp
 
 
 class TestFunctions:
 
-    # testing with no grad year
-    def test_no_grad_year(self):
+    # testing with no group
+    def test_no_group(self):
         data = {
             "student_list": [
                 {
@@ -33,8 +35,8 @@ class TestFunctions:
             ]
         }
 
-        expected = "No graduation years were found, or all students are in the same graduation year"
-        analysis = analyze_grad_years(data)["grad_year_analysis"]
+        expected = "No groups were found, or all students are in the same group"
+        analysis = analyze_groups(data)["group_analysis"]
 
         assert analysis == expected
 
@@ -128,7 +130,7 @@ class TestFunctions:
 
         assert idr_1 != idr_2
 
-    # test analysis with no grad year, student id, or item id
+    # test analysis with no group, student id, or item id
     def test_optional_inputs(self):
         data = {
             "student_list": [
@@ -163,7 +165,7 @@ class TestFunctions:
                                     "2": 0.333,
                                     "3": 0.667},
                         "exclude": ["1"],
-                        "grad_year_analysis": "No graduation years were found, or all students are in the same graduation year",
+                        "group_analysis": "No groups were found, or all students are in the same group",
                         "idr": {"1": -0.037,
                                 "2": 0.037,
                                 "3": 0.074},
@@ -268,8 +270,8 @@ class TestFunctions:
                                 "diff_avg": 0.834,
                                 "difficulty": {"1": 0.667, "2": 1.0},
                                 "exclude": "Invalid data - No mean",
-                                "grad_year_analysis": "No graduation years were found, or all "
-                                                    "students are in the same graduation year",
+                                "group_analysis": "No groups were found, or all "
+                                                    "students are in the same group",
                                 "idr": "Invalid data - No mean",
                                 "idr_avg": "Invalid data - No mean",
                                 "kr20": -0.0,
@@ -327,18 +329,6 @@ class TestFunctions:
                 },
                 {
                     "item_id":"6",
-                    "tags":[
-                        {
-                        "topic_branch_hierarchy":{
-                            "0":"b",
-                            "1":"c"
-                        },
-                        "scored":"Y"
-                        },
-                        {
-                        "topic_tree":"M"
-                        }
-                    ]
                 },
             ],
             "student_list": [
@@ -352,7 +342,7 @@ class TestFunctions:
                         {"item_id": "6", "response": 1}
                     ]
                 },
-                { "grad_year": "2022",
+                { "group": ["2022"],
                   "email": "janesmath@email.com",
                   "item_responses": [
                         {"item_id": "4", "response": 1},
@@ -360,7 +350,7 @@ class TestFunctions:
                         {"item_id": "6", "response": 1}
                     ]
                 },
-                { "grad_year": "2024",
+                { "group": ["2024"],
                   "item_responses": [
                         {"item_id": "1", "response": 0},
                         {"item_id": "2", "response": 1},
@@ -371,242 +361,7 @@ class TestFunctions:
             ]
         }
 
-        expected = {"analysis": {"assumptions": {"2": {"assumed": ["1",
-                                                 "2",
-                                                 "3"]},
-                               "3": {"assumed": ["5",
-                                                 "6"]}},
-               "average": 44.5,
-               "diff_avg": 0.556,
-               "difficulty": {"1": 0.667,
-                              "2": 0.667,
-                              "3": 0.667,
-                              "4": 0.333,
-                              "5": 0.667,
-                              "6": 0.333},
-               "exclude": ["2",
-                           "5"],
-               "grad_year_analysis": {"2022": "Invalid data - Not enough "
-                                              "students",
-                                      "2024": "Invalid data - Not enough "
-                                              "students",
-                                      "unknown": "Invalid data - Not enough "
-                                                 "students"},
-               "idr": {"1": 0.196,
-                       "2": -0.245,
-                       "3": 0.196,
-                       "4": 0.245,
-                       "5": 0.049,
-                       "6": 0.245},
-               "idr_avg": 0.114,
-               "kr20": 0.171,
-               "num_correct": {"1": 1,
-                               "2": 1,
-                               "3": 1,
-                               "4": 2,
-                               "5": 1,
-                               "6": 2},
-               "scores": {"1": 66.7,
-                          "2": 50.0,
-                          "3": 16.7},
-               "topic_avgs": [{"topic_hierarchy": ((0,
-                                                    "unknown"),
-                                                   (1,
-                                                    "DNA")),
-                               "topic_rights": 0.333},
-                              {"topic_hierarchy": ((0,
-                                                    "Biology"),
-                                                   (1,
-                                                    "Cell biology"),
-                                                   (2,
-                                                    "Cells"),
-                                                   (3,
-                                                    "Organelles"),
-                                                   (4,
-                                                    "Ribosomes")),
-                               "topic_rights": 0.333},
-                              {"topic_hierarchy": ((0,
-                                                    "A"),
-                                                   (1,
-                                                    "B"),
-                                                   (2,
-                                                    "C"),
-                                                   (3,
-                                                    "D"),
-                                                   (4,
-                                                    "E"),
-                                                   (5,
-                                                    "f")),
-                               "topic_rights": 0.0},
-                              {"topic_hierarchy": ((0,
-                                                    "m"),
-                                                   (1,
-                                                    "unknown")),
-                               "topic_rights": 0.0},
-                              {"topic_hierarchy": ((0,
-                                                    "unknown"),
-                                                   (1,
-                                                    "b"),
-                                                   (2,
-                                                    "c"),
-                                                   (3,
-                                                    "unknown")),
-                               "topic_rights": 0.667},
-                              {"topic_hierarchy": ((0,
-                                                    "M"),
-                                                   (1,
-                                                    "unknown")),
-                               "topic_rights": 0.667}],
-               "topic_rights": {"1": [{"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "DNA")),
-                                       "topic_rights": 1},
-                                      {"topic_hierarchy": ((0,
-                                                            "Biology"),
-                                                           (1,
-                                                            "Cell biology"),
-                                                           (2,
-                                                            "Cells"),
-                                                           (3,
-                                                            "Organelles"),
-                                                           (4,
-                                                            "Ribosomes")),
-                                       "topic_rights": 1},
-                                      {"topic_hierarchy": ((0,
-                                                            "A"),
-                                                           (1,
-                                                            "B"),
-                                                           (2,
-                                                            "C"),
-                                                           (3,
-                                                            "D"),
-                                                           (4,
-                                                            "E"),
-                                                           (5,
-                                                            "f")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "m"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "b"),
-                                                           (2,
-                                                            "c"),
-                                                           (3,
-                                                            "unknown")),
-                                       "topic_rights": 1},
-                                      {"topic_hierarchy": ((0,
-                                                            "M"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 1}],
-                                "2": [{"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "DNA")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "Biology"),
-                                                           (1,
-                                                            "Cell biology"),
-                                                           (2,
-                                                            "Cells"),
-                                                           (3,
-                                                            "Organelles"),
-                                                           (4,
-                                                            "Ribosomes")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "A"),
-                                                           (1,
-                                                            "B"),
-                                                           (2,
-                                                            "C"),
-                                                           (3,
-                                                            "D"),
-                                                           (4,
-                                                            "E"),
-                                                           (5,
-                                                            "f")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "m"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "b"),
-                                                           (2,
-                                                            "c"),
-                                                           (3,
-                                                            "unknown")),
-                                       "topic_rights": 1},
-                                      {"topic_hierarchy": ((0,
-                                                            "M"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 1}],
-                                "3": [{"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "DNA")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "Biology"),
-                                                           (1,
-                                                            "Cell biology"),
-                                                           (2,
-                                                            "Cells"),
-                                                           (3,
-                                                            "Organelles"),
-                                                           (4,
-                                                            "Ribosomes")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "A"),
-                                                           (1,
-                                                            "B"),
-                                                           (2,
-                                                            "C"),
-                                                           (3,
-                                                            "D"),
-                                                           (4,
-                                                            "E"),
-                                                           (5,
-                                                            "f")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "m"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "unknown"),
-                                                           (1,
-                                                            "b"),
-                                                           (2,
-                                                            "c"),
-                                                           (3,
-                                                            "unknown")),
-                                       "topic_rights": 0},
-                                      {"topic_hierarchy": ((0,
-                                                            "M"),
-                                                           (1,
-                                                            "unknown")),
-                                       "topic_rights": 0}]},
-               "weighted_avg": 40.0,
-               "weighted_scores": {"1": 60.0,
-                                   "2": 40.0,
-                                   "3": 20.0}},
-           }
+        expected = exp.missing_data_2
         analysis = analyze_test(data)
 
         assert analysis == expected
-
