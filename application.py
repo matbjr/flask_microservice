@@ -20,7 +20,7 @@ from api.weighted_scores import calculate_weighted_scores, calculate_weighted_av
 from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
-from api.analyze_grad_years import analyze_grad_years
+from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 from quiz.quiz_queries import get_query_result, get_quizzes_by_names
@@ -193,9 +193,9 @@ def compute_assumptions():
     return process_request( get_assumptions)
 
 
-@app.route('/analyze_grad_years/', methods=['POST', 'GET'])
-def get_grad_year_analysis():
-    return process_request( analyze_grad_years)
+@app.route('/analyze_groups/', methods=['POST', 'GET'])
+def get_group_analysis():
+    return process_request( analyze_groups)
 
 
 @app.route('/topic_rights/', methods=['POST', 'GET'])

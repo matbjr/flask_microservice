@@ -4,7 +4,7 @@
   },
   "student_list": [
     {
-      "grad_year": "2022",
+      "group": ["2022"],
       "id": 1234,
       "first_name": "John",
       "last_name": "Smith",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "grad_year": "2022",
+      "group": ["2022"],
       "id": 1235,
       "first_name": "Jane",
       "last_name": "Smath",
@@ -70,7 +70,7 @@
       ]
     },
     {
-      "grad_year": "2022",
+      "group": ["2022"],
       "id": 1236,
       "first_name": "Jake",
       "last_name": "Jakey",

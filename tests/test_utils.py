@@ -1,6 +1,7 @@
 import common.utils as utils
 from common.config import initialize_config
 
+import tests.expecteds as exp
 
 class TestUtils:
     data = None
@@ -173,7 +174,7 @@ class TestUtils:
             ],
             "student_list": [
                 {
-                    "grad_year": "2022",
+                    "group": ["2022"],
                     "id": "1234",
                     "first_name": "John",
                     "last_name": "Smith",
@@ -187,7 +188,7 @@ class TestUtils:
                         {"item_id": "8", "response": 1}
                     ]
                 },
-                {"grad_year": "2022",
+                {"group": ["2022"],
                  "id": "1235",
                  "first_name": "Jane",
                  "last_name": "Smath",
@@ -201,7 +202,7 @@ class TestUtils:
                      {"item_id": "6", "response": 1}
                  ]
                  },
-                {"grad_year": "2024",
+                {"group": ["2024"],
                  "id": "1236",
                  "first_name": "Jake",
                  "last_name": "Jakey",
@@ -246,63 +247,19 @@ class TestUtils:
 
         assert expected == responses
 
-    # test getting grad years
-    def test_get_grad_year_list(self):
+    # test getting groups
+    def test_get_group_list(self):
         expected = ["2022", "2024"]
-        grad_year_list = utils.get_grad_year_list(self.data)
+        group_list = utils.get_group_list(self.data)
 
-        assert grad_year_list == expected
+        assert group_list == expected
 
-    # test sorting by grad years
-    def test_sort_students_by_grad_year(self):
-        expected = {
-            "2022": {
-                "student_list": [{
-                    "email": "johnsmith@email.com",
-                    "first_name": "John",
-                    "grad_year": "2022",
-                    "id": "1234",
-                    "item_responses": [{"item_id": "1", "response": 1},
-                                       {"item_id": "3", "response": 0},
-                                       {"item_id": "2", "response": 1},
-                                       {"item_id": "4", "response": 1},
-                                       {"item_id": "5", "response": 0},
-                                       {"item_id": "8", "response": 1},
-                                       {"item_id": "6", "response": 0},
-                                       {"item_id": "7", "response": 0}],
-                    "last_name": "Smith"},
-                    {"email": "janesmath@email.com",
-                     "first_name": "Jane",
-                     "grad_year": "2022",
-                     "id": "1235",
-                     "item_responses": [{"item_id": "1", "response": 0},
-                                        {"item_id": "2", "response": 1},
-                                        {"item_id": "3", "response": 1},
-                                        {"item_id": "4", "response": 1},
-                                        {"item_id": "5", "response": 1},
-                                        {"item_id": "6", "response": 1},
-                                        {"item_id": "7", "response": 0},
-                                        {"item_id": "8", "response": 0}],
-                     "last_name": "Smath"}]},
-            "2024": {
-                "student_list": [{
-                    "email": "jakejakey@email.com",
-                    "first_name": "Jake",
-                    "grad_year": "2024",
-                    "id": "1236",
-                    "item_responses": [{"item_id": "2", "response": 0},
-                                       {"item_id": "1", "response": 1},
-                                       {"item_id": "3", "response": 0},
-                                       {"item_id": "4", "response": 0},
-                                       {"item_id": "6", "response": 0},
-                                       {"item_id": "5", "response": 1},
-                                       {"item_id": "7", "response": 1},
-                                       {"item_id": "8", "response": 0}],
-                    "last_name": "Jakey"}]},
-        }
-        by_grad_year = utils.sort_students_by_grad_year(self.data)
+    # test sorting by groups
+    def test_sort_students_by_group(self):
+        expected = exp.sort_by_group
+        by_group = utils.sort_students_by_group(self.data)
 
-        assert by_grad_year == expected
+        assert by_group == expected
 
     # test getting student ids
     def test_get_student_ids(self):
@@ -316,7 +273,7 @@ class TestUtils:
         expected = [
             {"email": "johnsmith@email.com",
              "first_name": "John",
-             "grad_year": "2022",
+             "group": ["2022"],
              "id": "1234",
              "item_responses": [{"item_id": "1", "response": 1},
                                 {"item_id": "3", "response": 0},
@@ -327,7 +284,7 @@ class TestUtils:
              "last_name": "Smith"},
             {"email": "janesmath@email.com",
              "first_name": "Jane",
-             "grad_year": "2022",
+             "group": ["2022"],
              "id": "1235",
              "item_responses": [{"item_id": "1", "response": 0},
                                 {"item_id": "2", "response": 1},
@@ -338,7 +295,7 @@ class TestUtils:
              "last_name": "Smath"},
             {"email": "jakejakey@email.com",
              "first_name": "Jake",
-             "grad_year": "2024",
+             "group": ["2024"],
              "id": "1236",
              "item_responses": [{"item_id": "2", "response": 0},
                                 {"item_id": "1", "response": 1},
@@ -374,7 +331,7 @@ class TestUtils:
             "exam": {"name": "unknown"},
             "student_list": [
                 {
-                    "grad_year": "unknown",
+                    "group": ["unknown"],
                     "id": "1",
                     "item_responses": [
                         {"item_id": "1", "response": 1},
@@ -382,7 +339,7 @@ class TestUtils:
                     ]
                 },
                 {
-                    "grad_year": "unknown",
+                    "group": ["unknown"],
                     "id": "2",
                     "item_responses": [
                         {"item_id": "1", "response": 1},

@@ -44,7 +44,7 @@ default_config = {
             "response": "response",
             "exclude_items": "exclude_items",
             "id": "id",
-            "grad_year": "grad_year",
+            "group": "group",
             "exclude_students": "exclude_students",
 
             "item_topics": "item_topics",
@@ -67,7 +67,7 @@ default_config = {
             "bad_num_items": "Invalid data - Not enough items",
             "bad_std": "Invalid data - No Std. Dev.",
             "bad_mean": "Invalid data - No mean",
-            "no_grad_year": "No graduation years were found, or all students are in the same graduation year",
+            "no_group": "No groups were found, or all students are in the same group",
             "no_assumptions": "No student response assumptions were made",
             "no_topics": "No topics were found",
             "no_students": "No student information was found",
@@ -176,10 +176,10 @@ default_config = {
         },
         {
             "id": 14,
-            "name": "analysis_by_graduation_year",
-            "short_name": "grad_year_analysis",
+            "name": "analysis_by_group",
+            "short_name": "group_analysis",
             "description": "Analysis of students\" responses based on "
-                           "their graduation year",
+                           "their group",
             "type": "dictionary of exam analyses"
         },
         {
