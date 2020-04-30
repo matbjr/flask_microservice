@@ -43,24 +43,33 @@ def get_quizzes_by_names(name, ignore_case=False, get_questions=False):
     # print(query, name)
     sql = query.format(name if not ignore_case else name.lower())
     results = connect_and_execute(sql)
+    total = 0
+    topics = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
+    no_quizzes = len(results)
+    topic_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0, 'Seerah': 0, 'History': 0}
     for quiz in results:
         your_answers = json.loads(quiz['responses'])
         score = int(quiz['marks'].split('/')[0].strip())
         quiz['score'] = score
+        total += score
         if 'questions' in quiz:
             questions = json.loads(quiz['questions'])
             quiz.pop('questions')
             quiz['responses'] = []
-            for q, c, a in zip(questions['questions'],
+            for q, c, a, t in zip(questions['questions'],
                                questions['correct_answers'],
-                               your_answers):
+                               your_answers, topics):
+                point = 1 if a == c else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,
                     'your_answer': a,
-                    'point': 1 if a == c else 0})
+                    'point': point})
+                topic_scores[t] += point
 
-    return results
+    total_scores = {'No. of Quizzes': no_quizzes, 'Combined score': total,
+                    'Topic Scores': topic_scores}
+    return {"quizzes": results, "total_scores": total_scores}
 
 
 def get_query_result(query):
