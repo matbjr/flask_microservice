@@ -1,4 +1,4 @@
-from common.utils import get_sorted_responses, update_input, get_student_ids, get_error
+from common.utils import get_sorted_responses, update_input, get_student_ids, get_error, get_scoring_method
 from common.config import get_service_config, get_keyword_value
 
 
@@ -20,6 +20,7 @@ def calculate_scores(param):
     inp = update_input(param)
     sorted_resp = get_sorted_responses(inp)
     student_ids = get_student_ids(inp) 
+    scoring_method = get_scoring_method(inp)
     num_items = len (sorted_resp[0])
     score_dict = {}
 
@@ -30,7 +31,14 @@ def calculate_scores(param):
     for i in score_dict:
         num_right = sum(sorted_resp[k])
         score = num_right / num_items
-        score = round(score * 100, 1)
+        if scoring_method[0] == get_keyword_value("percentage"):
+            score = round(score * 100, 3)
+        elif scoring_method[0] == get_keyword_value("absolute"):
+            score = round(score * num_items, 3)
+        elif scoring_method[0] == get_keyword_value("scaled"):
+            score = round(score * scoring_method[1], 3)
+        else:
+            score = round(score, 3)
         score_dict[i] = score
         k += 1
 
@@ -54,6 +62,8 @@ def calculate_average(param):
     inp = update_input(param)
     score_list = list(list(calculate_scores(inp).values())[0].values())
     num_students = len(score_list)
+
     average = sum(score_list) / num_students
+    average = round(average, 3)
         
-    return {service_key: round(average, 1)}
+    return {service_key: average}

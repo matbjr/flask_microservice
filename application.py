@@ -23,7 +23,8 @@ from api.assumptions import get_assumptions
 from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
-from quiz.quiz_queries import get_query_result, get_quizzes_by_names
+from quiz.quiz_queries import get_query_result, \
+    get_quizzes_by_names
 
 
 class RMApp(Flask):
@@ -106,9 +107,14 @@ def get_classes():
 @app.route('/quiz/', methods=['POST', 'GET'])
 def get_quiz():
     name = request.args.get('name')
+    stat = request.args.get('stat')
+    age = request.args.get('age')
     ignore_case = bool(request.args.get('ignore_case', 'true'))
     all_responses = bool(request.args.get('all_responses', 'true'))
-    results = get_quizzes_by_names(name, ignore_case, all_responses)
+    if stat:
+        results = get_query_result(id=stat)
+    else:
+        results = get_quizzes_by_names(name, ignore_case, all_responses, age)
     return jsonify(results)
 
 

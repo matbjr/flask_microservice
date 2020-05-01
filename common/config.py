@@ -38,14 +38,20 @@ default_config = {
     "keywords": {
             "exam": "exam",
             "name": "name",
+            "scoring_method": "scoring_method",
+            "absolute": "absolute",
+            "percentage": "percentage",
+            "scaled": "scaled",
+            "scaled_factor": "scaled_factor",
+            "exclude_students": "exclude_students",
+            "exclude_items": "exclude_items",
+
             "item_responses": "item_responses",
             "student_list": "student_list",
             "item_id": "item_id",
             "response": "response",
-            "exclude_items": "exclude_items",
             "id": "id",
             "group": "group",
-            "exclude_students": "exclude_students",
 
             "item_topics": "item_topics",
             "tags": "tags",
