@@ -22,7 +22,7 @@ def get_config_file(cloud_config):
         try:
             return json.loads(data.decode())
         except Exception as exc:
-            print(exc)
+            #print(exc)
             return data
 
 

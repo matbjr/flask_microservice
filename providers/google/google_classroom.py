@@ -34,13 +34,13 @@ def list_courses(creds=None):
     results = service.courses().list(pageSize=10).execute()
     courses = results.get('courses', [])
 
-    if not courses:
-        print('No courses found.')
-    else:
-        print('Courses:')
-        print(courses)
-        for course in courses:
-            print("\t", course['id'], course['name'], course['courseState'])
+    # if not courses:
+    #     print('No courses found.')
+    # else:
+    #     print('Courses:')
+    #     print(courses)
+    #     for course in courses:
+    #         print("\t", course['id'], course['name'], course['courseState'])
 
     return courses
 
