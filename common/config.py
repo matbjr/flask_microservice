@@ -168,7 +168,7 @@ default_config = {
             "id": 12,
             "name": "number_of_correct_responses",
             "short_name": "num_correct",
-            "description": "The absolute number of an item\"s "
+            "description": "The absolute number of an item\'s "
                            "correct responses",
             "type": "list of ints"
         },
@@ -184,7 +184,7 @@ default_config = {
             "id": 14,
             "name": "analysis_by_group",
             "short_name": "group_analysis",
-            "description": "Analysis of students\" responses based on "
+            "description": "Analysis of students\' responses based on "
                            "their group",
             "type": "dictionary of exam analyses"
         },
@@ -192,7 +192,7 @@ default_config = {
             "id": 15,
             "name": "topic_right_responses",
             "short_name": "topic_rights",
-            "description": "Each students\" number of right responses in each topic",
+            "description": "Each students\' number of right responses in each topic",
             "type": "dictionary of topic rights"
         },
         {

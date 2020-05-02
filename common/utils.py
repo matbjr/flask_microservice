@@ -529,6 +529,9 @@ def get_scoring_method(param):
             standard json format
     :return: a string: containing the scoring method. 
     """
+    catch_error = get_error(param)
+    if catch_error[0]:
+        return catch_error[1]
     inp = update_input(param)
     scoring_method = inp[get_keyword_value("exam")][
         get_keyword_value("scoring_method")]

@@ -627,7 +627,20 @@ class TestUtils:
             ]
         }
 
-        expected = ('percentage', 1)
+        expected = ("percentage", 1)
+        method = utils.get_scoring_method(data)
+
+        assert method == expected
+
+    # test getting scoring with no students
+    def test_get_scoring_method_no_students(self):
+        data = {
+            "exam": {
+                "scoring_method": "percentage"
+            }
+        }
+
+        expected = "Invalid data - Not enough students"
         method = utils.get_scoring_method(data)
 
         assert method == expected
