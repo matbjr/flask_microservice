@@ -24,6 +24,7 @@ default_config = {
     "application_client_id": "xxxxx."
                              "apps.googleusercontent.com",
     "service_url": "http://api.reliabilitymeasures.com/",
+    "service2_url": "http://api2.reliabilitymeasures.com/",
     "test_url": "http://localhost:5000/",
     "login_method": "login/",
     "classroom_method": "classroom/",

@@ -46,8 +46,8 @@ sum(case when marks='1 / 5' then 1 else 0 end) as one_correct,
 sum(case when marks='1 / 5' then 1 else 0 end) * 100.0/count(*) as one_correct_perc,
 sum(case when marks='0 / 5' then 1 else 0 end) as zero_correct,
 sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_perc 
-FROM `students` group by description""",
-    "select name, external_link from quizzes"
+FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
+    "select name, external_link, cast(substring(name, 5) as unsigned) as number from quizzes order by cast(substring(name, 5) as unsigned)"
     ]
 
 
@@ -107,7 +107,7 @@ def get_quizzes_by_names(name, ignore_case=False,
             for q, c, a, t in zip(questions['questions'],
                                   questions['correct_answers'],
                                   your_answers, questions['topics']):
-                point = 1 if a == c else 0
+                point = 1 if a in c.split(";") else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,

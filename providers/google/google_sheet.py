@@ -14,7 +14,11 @@ quiz_links = [
     "https://docs.google.com/forms/d/e/1FAIpQLSesHSSk1u_4zhiKXo3-lUgfjlTn6ikA9wmVDT7YcQp1ezZlgQ/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSe7xCDXY--JZD8dssvW1lK1fSlOYh9GULE7uxYF6d4EUZ7P1Q/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSfgniIGN07J7Mb3pYqS0BGNMJ2SOpWrTA8_gVCimcb25NC1FA/viewform?usp=sf_link",
-    "https://docs.google.com/forms/d/e/1FAIpQLSerQjGhaU1oAtZXNNvwgOAaogGpRzLErF8lAKntKCqHoZePbg/viewform?usp=sf_link"
+    "https://docs.google.com/forms/d/e/1FAIpQLSerQjGhaU1oAtZXNNvwgOAaogGpRzLErF8lAKntKCqHoZePbg/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfhW7pZ2oHsPZngvSOydJ0VpfVVgEbtedW01JaQVtNHnbLgGw/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfnLwbUmRt2_l-b0uVH8BVnYDHPl9cDIN_sf6QwzCC9KvIEHg/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdstQSpDJgDtHUqLH7g2T7HYq1-yivr24u_U0-FyVZ3QfY9KA/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSf0StazPDOJsUP94S0TiFG-zaIwLtQk_cM3oHFGohY8qus-yA/viewform?usp=sf_link"
 ]
 
 QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
@@ -24,7 +28,11 @@ QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
           '1BR88xMigzYiA_eN3h5S-8sUI1QIDwAs02gfuuanJ13o',
           '1Z75Hg9k3TTMF4ZPSMOMn_2Ccs5wHsbkxBU_MHMWOEo8',
           '1l6dRb24i38a1Lcy3qrGpnKErnjhyNqMh2kiq_V01vsk',
-          '1yGlgUxZmnDLMHk-8qN86OLEEVp-M4zUZLXFFPab_PXw'
+          '1yGlgUxZmnDLMHk-8qN86OLEEVp-M4zUZLXFFPab_PXw',
+          '1uuWQ7wz3GbyegY-YF2qz4RNVh1yAosvDDZEaKauKpyY',
+          '16Kh0jZNmRXlnnat-RJiu0ssL6uaav5OKM_Ran5xeDqA',
+          '1PuTHHfVh75OyxYdYfrefUexJcR01nBX4FU8h5VC-3ps',
+          '1PFpwrmL9xOrgJ0OztwyDin8YXpORA0vgG_JYl3_fmrI'
           ]
 
 topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
@@ -111,6 +119,8 @@ if __name__ == '__main__':
             questions.append(h)
 
         for a in answers[start:]:
+            if index == 12 and a == 'D) All of the above':
+                a += ";E) A and B only"
             correct_answers.append(a)
             choices.append(set())
 
