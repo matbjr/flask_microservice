@@ -17,6 +17,7 @@ class MySqlDB:
           database=db_config.get("db_name")
         )
 
+    # query the DB to get JSON data (dict)
     def query(self, sql, is_dict=True):
         my_cursor = self.my_db.cursor(dictionary=is_dict)
         my_cursor.execute(sql)
@@ -24,6 +25,7 @@ class MySqlDB:
 
         return my_result
 
+    # insert into a DB  table
     def insert(self, sql, values):
         my_cursor = self.my_db.cursor()
         if isinstance(values, tuple):
@@ -34,6 +36,7 @@ class MySqlDB:
         self.my_db.commit()
         return my_cursor.rowcount
 
+    # other SQL commands like delete/Alter
     def query_commit(self, sql):
         my_cursor = self.my_db.cursor()
         my_cursor.execute(sql)

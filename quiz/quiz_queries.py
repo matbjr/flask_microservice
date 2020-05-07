@@ -141,6 +141,20 @@ def get_query_result(query=None, id=None):
         return {}
 
 
+# function to process the question from UI
+def insert_item(item_data):
+    sql = "INSERT INTO `questions`(`id`, `text`, `subject`, `subject_id`, " \
+          "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
+          "`metadata`, `choices`, `answer`)"
+
+    values = (1, )   # need to add data
+
+    db = MySqlDB()
+    db.connect()
+    return db.insert(sql, values)
+
+
+
 if __name__ == '__main__':
     initialize_config()
     # print(get_quizzes_by_names('Nazli'))

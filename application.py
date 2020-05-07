@@ -4,7 +4,8 @@ import json
 import sys
 
 from providers.google.get_credentials import GoogleCredentials
-from providers.google.google_classroom import list_courses
+from providers.google.google_classroom import list_courses, \
+    list_students_teachers
 
 from common.config import get_config, initialize_config
 from common.sample import sample
@@ -24,7 +25,7 @@ from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 from quiz.quiz_queries import get_query_result, \
-    get_quizzes_by_names
+    get_quizzes_by_names, insert_item
 
 
 class RMApp(Flask):
@@ -104,6 +105,19 @@ def get_classes():
     return jsonify({'user': info, 'courses': courses})
 
 
+@app.route('/classroom/people', methods=['POST', 'GET'])
+def get_people():
+    course_id = request.args.get('course_id')
+    people = request.args.get('people', 0)  # students by default
+    app.gc = GoogleCredentials()
+    creds = app.gc.get_credential()  # RM organization courses
+
+    result = list_students_teachers(creds,
+                                    teachers=bool(people),
+                                    course_id=course_id)
+    return jsonify(result)
+
+
 @app.route('/quiz/', methods=['POST', 'GET'])
 def get_quiz():
     name = request.args.get('name')
@@ -124,7 +138,7 @@ def compute_std():
 
 
 @app.route('/summation/', methods=['POST', 'GET'])
-def compute_summation(json_data):
+def compute_summation():
     return process_request(calculate_summation)
 
 
@@ -160,7 +174,6 @@ def compute_average():
 
 @app.route('/analyzeTest/', methods=['POST', 'GET'])
 def get_analysis():
-
     return process_request(analyze_test)
 
 
@@ -176,12 +189,12 @@ def compute_weighted_avg():
 
 @app.route('/excludes/', methods=['POST', 'GET'])
 def compute_excludes():
-    return process_request( get_exclude_recos)
+    return process_request(get_exclude_recos)
 
 
 @app.route('/difficulty_avg/', methods=['POST', 'GET'])
 def compute_diff_avg():
-    return process_request( calculate_difficulty_average)
+    return process_request(calculate_difficulty_average)
 
 
 @app.route('/idr_avg/', methods=['POST', 'GET'])
@@ -211,7 +224,7 @@ def get_topic_rights():
 
 @app.route('/topic_averages/', methods=['POST', 'GET'])
 def get_topic_averages():
-    return process_request( calculate_topic_averages)
+    return process_request(calculate_topic_averages)
 
 
 @app.route('/sample', methods=['POST', 'GET'])
@@ -219,6 +232,13 @@ def get_topic_averages():
 @cross_origin()
 def get_sample_analysis():
     return process_request(analyze_test, json.dumps(sample))
+
+
+@app.route('/item', methods=['POST'])
+@app.route('/item/', methods=['POST'])
+@cross_origin()
+def put_item():
+    return process_request(insert_item)
 
 
 if __name__ == '__main__':
