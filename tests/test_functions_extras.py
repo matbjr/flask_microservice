@@ -390,8 +390,8 @@ class TestFunctions:
             ]
         }
 
-        expected = ({'scores': {'1': 75.0, '2': 25.0}}, {'average': 50.0}, 
-                    {'weighted_scores': {'1': 50.0, '2': 0.0}}, {'weighted_avg': 25.0})
+        expected = ({"scores": {"1": 75.0, "2": 25.0}}, {"average": 50.0}, 
+                    {"weighted_scores": {"1": 50.0, "2": 0.0}}, {"weighted_avg": 25.0})
         scoring = (calculate_scores(data), calculate_average(data), 
                    calculate_weighted_scores(data), calculate_weighted_average(data))
 
@@ -419,8 +419,8 @@ class TestFunctions:
             ]
         }
 
-        expected = ({'scores': {'1': 3.0, '2': 1.0}}, {'average': 2.0}, 
-                    {'weighted_scores': {'1': 2.0, '2': 0.0}}, {'weighted_avg': 1.0})
+        expected = ({"scores": {"1": 3.0, "2": 1.0}}, {"average": 2.0}, 
+                    {"weighted_scores": {"1": 2.0, "2": 0.0}}, {"weighted_avg": 1.0})
         scoring = (calculate_scores(data), calculate_average(data), 
                    calculate_weighted_scores(data), calculate_weighted_average(data))
 
@@ -449,8 +449,8 @@ class TestFunctions:
             ]
         }
 
-        expected = ({'scores': {'1': 0.593, '2': 0.198}}, {'average': 0.395}, 
-                    {'weighted_scores': {'1': 0.395, '2': 0.0}}, {'weighted_avg': 0.198})
+        expected = ({"scores": {"1": 0.593, "2": 0.198}}, {"average": 0.395}, 
+                    {"weighted_scores": {"1": 0.395, "2": 0.0}}, {"weighted_avg": 0.198})
         scoring = (calculate_scores(data), calculate_average(data), 
                    calculate_weighted_scores(data), calculate_weighted_average(data))
 
