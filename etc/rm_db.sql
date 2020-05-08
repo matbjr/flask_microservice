@@ -122,4 +122,7 @@ ALTER TABLE `students`
 --
 ALTER TABLE `students`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `questions` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT;
+
 COMMIT;

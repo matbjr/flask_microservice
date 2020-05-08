@@ -147,12 +147,11 @@ def insert_item(item_data):
           "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
           "`metadata`, `choices`, `answer`)"
 
-    values = (1, )   # need to add data
+    values = ('',  )   # need to add data
 
     db = MySqlDB()
     db.connect()
-    return db.insert(sql, values)
-
+    return {'response': db.insert(sql, values)}
 
 
 if __name__ == '__main__':
