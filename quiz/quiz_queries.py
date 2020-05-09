@@ -143,11 +143,30 @@ def get_query_result(query=None, id=None):
 
 # function to process the question from UI
 def insert_item(item_data):
-    sql = "INSERT INTO `questions`(`id`, `text`, `subject`, `subject_id`, " \
+    sql = "INSERT INTO `questions` (`id`, `text`, `subject`, `subject_id`, " \
           "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
-          "`metadata`, `choices`, `answer`)"
+          "`metadata`, `choices`, `answer`) " \
+          "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    values = ('',  )   # need to add data
+    details = item_data.get('item_details', {})
+    item_choices = item_data.get('item_choices', [])
+    choice_list = []
+    answer = ''
+
+    for i in item_choices:
+        choice_list.append(i.get('choice', ''))
+        if i.get('correct', 0) == 1:
+            answer = i.get('choice')
+    separator = ', '
+    choices = separator.join(choice_list)
+    details_str = json.dumps(details)
+
+    values = (item_data.get('id', ''), item_data.get('item_text', ''), details.get('subject', ''),
+              details.get('subject_id'), details.get('topic'), details.get('topic_id'),
+              details.get('sub_topics'), details.get('sub_topics_id'), details.get('item_type'),
+              details_str, choices, answer)
+
+    # print("PRINT VALUES: ", values)
 
     db = MySqlDB()
     db.connect()
@@ -155,10 +174,14 @@ def insert_item(item_data):
 
 
 if __name__ == '__main__':
+    from quiz.item import item
     initialize_config()
     # print(get_quizzes_by_names('Nazli'))
     # print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
 
     # print(get_query_result(queries[1].format('Matin'.lower())))
 
-    print(get_query_result(id=5))
+    # sql = "SELECT * FROM `questions`"
+    # db = MySqlDB()
+    # db.connect()
+    # print(db.query(sql, True))
