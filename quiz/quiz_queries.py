@@ -149,7 +149,7 @@ def insert_item(item_data):
           "`metadata`, `choices`, `answer`) " \
           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    # Getting choices, answer, and metadata
+    # Getting choices and answer
     item_choices = item_data.get('item_choices', [])
     choice_list = []
     answer = ''
@@ -158,6 +158,8 @@ def insert_item(item_data):
         if i.get('correct', 0) == '1':
             answer = i.get('choice')
     choices = ', '.join(choice_list)
+
+    # Getting metadata
     metadata = json.dumps(item_data)
 
     # Getting type info
