@@ -149,9 +149,8 @@ def insert_item(item_data):
           "`metadata`, `choices`, `answer`) " \
           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    item_choices = item_data.get('item_choices', [])
-
     # Getting choices, answer, and metadata
+    item_choices = item_data.get('item_choices', [])
     choice_list = []
     answer = ''
     for i in item_choices:
