@@ -202,8 +202,13 @@ def insert_item(item_data):
                     for j in children:
                         if topic_id == children.index(j):
                             topic = j.get('label')
-                sub_topics = ', '.join(sub_topics)
-                sub_ids = ', '.join(list(map(str, sub_ids)))
+                    sub_topics = ', '.join(sub_topics)
+                    sub_ids = ', '.join(list(map(str, sub_ids)))
+                else:
+                    children = i.get('children')
+                    for j in children:
+                        if topic_id == children.index(j):
+                            topic = j.get('label')
                 break
 
     values = (item_data.get('id', ''), item_data.get('item_text', ''), subject, subject_id, topic,
