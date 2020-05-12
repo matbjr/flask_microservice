@@ -2,6 +2,7 @@ import json
 import decimal
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
+from quiz.subjects import subjects as subjects_json
 
 queries = [
     "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') as created_at,"
@@ -148,25 +149,64 @@ def insert_item(item_data):
           "`metadata`, `choices`, `answer`) " \
           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    details = item_data.get('item_details', {})
     item_choices = item_data.get('item_choices', [])
+
+    # Getting choices, answer, and metadata
     choice_list = []
     answer = ''
-
     for i in item_choices:
         choice_list.append(i.get('choice', ''))
-        if i.get('correct', 0) == 1:
+        if i.get('correct', 0) == '1':
             answer = i.get('choice')
-    separator = ', '
-    choices = separator.join(choice_list)
-    details_str = json.dumps(details)
+    choices = ', '.join(choice_list)
+    metadata = json.dumps(item_data)
 
-    values = (item_data.get('id', ''), item_data.get('item_text', ''), details.get('subject', ''),
-              details.get('subject_id'), details.get('topic'), details.get('topic_id'),
-              details.get('sub_topics'), details.get('sub_topics_id'), details.get('item_type'),
-              details_str, choices, answer)
+    # Getting type info
+    item_type = -1
+    if item_data.get('item_type', '') == 'Multiple Choice':
+        item_type = 0
 
-    # print("PRINT VALUES: ", values)
+    # Getting subject, topic, and hierarchy info
+    subject_list = subjects_json.get('subject_list')
+    path = item_data.get('item_path')
+    subject = 'None'
+    subject_id = None
+    topic = None
+    topic_id = None
+    sub_topics = None
+    sub_ids = None
+    if path is not None:
+        path = path.replace('children', '')
+        split_path = path.split('.')
+        subject_id = int(split_path[0])
+        topic_id = int(split_path[len(split_path)-1])
+        del split_path[len(split_path)-1]
+        del split_path[0]
+        if split_path:
+            sub_ids = list(map(int, split_path))
+
+        for i in subject_list:
+            if i.get('subject_id') == subject_id:
+                subject = i.get('label')
+                if sub_ids:
+                    sub_topics = []
+                    children = i.get('children')
+                    for j in sub_ids:
+                        for k in children:
+                            if j == children.index(k):
+                                child = children[j]
+                                sub_topics.append(child.get('label'))
+                                children = child.get('children')
+                                break
+                    for j in children:
+                        if topic_id == children.index(j):
+                            topic = j.get('label')
+                sub_topics = ', '.join(sub_topics)
+                sub_ids = ', '.join(list(map(str, sub_ids)))
+                break
+
+    values = (item_data.get('id', ''), item_data.get('item_text', ''), subject, subject_id, topic,
+              topic_id, sub_topics, sub_ids, item_type, metadata, choices, answer)
 
     db = MySqlDB()
     db.connect()
@@ -174,14 +214,33 @@ def insert_item(item_data):
 
 
 if __name__ == '__main__':
-    from quiz.item import item
     initialize_config()
     # print(get_quizzes_by_names('Nazli'))
     # print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
 
     # print(get_query_result(queries[1].format('Matin'.lower())))
 
+    # item = {
+    #   'id': '',
+    #   'subject_id': '',
+    #   'user_data': [],
+    #   'item_path': '0.children0.children0.children0',
+    #   'item_type': 'Multiple Choice',
+    #   'item_weight': 1,
+    #   'grade_min': 1,
+    #   'grade_max': 12,
+    #   'item_text': 'TEXT',
+    #   'item_choices': [
+    #     {'choice': 'CHOICE1', 'correct': 0},
+    #     {'choice': 'CHOICE2', 'correct': 0},
+    #     {'choice': 'CHOICE3', 'correct': 0},
+    #     {'choice': 'CHOICE4', 'correct': '1'}
+    #   ]
+    # }
+
+    # insert_item(item)
     # sql = "SELECT * FROM `questions`"
     # db = MySqlDB()
     # db.connect()
+    # # db.query("TRUNCATE TABLE `questions`", False)
     # print(db.query(sql, True))
