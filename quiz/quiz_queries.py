@@ -3,6 +3,7 @@ import decimal
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
 from quiz.subjects import subjects as subjects_json
+from quiz.type_map import get_type_id
 
 queries = [
     "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') as created_at,"
@@ -149,13 +150,15 @@ def insert_item(item_data):
           "`metadata`, `choices`, `answer`) " \
           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
+    tags = item_data.get('tags')
+
     # Getting choices and answer
     item_choices = item_data.get('item_choices', [])
     choice_list = []
     answer_list = []
     for i in item_choices:
         choice_list.append(i.get('choice', ''))
-        if i.get('correct') == '1':
+        if i.get('correct') == 1:
             answer_list.append(i.get('choice'))
     choices = ', '.join(choice_list)
     answers = ', '.join(answer_list)
@@ -164,14 +167,12 @@ def insert_item(item_data):
     metadata = json.dumps(item_data)
 
     # Getting type info
-    item_type = -1
-    if item_data.get('item_type', '') == 'Multiple Choice':
-        item_type = 0
+    item_type = get_type_id(tags.get('item_type'))
 
     # Getting subject, topic, and hierarchy info
     subject_list = subjects_json.get('subject_list')
-    paths = item_data.get('paths')
-    subject = item_data.get('subject')
+    paths = tags.get('paths')
+    subject = tags.get('subject')
     subject_id = None
     topic = None
     topic_id = None
@@ -236,7 +237,7 @@ def insert_item(item_data):
         sub_topics = json.dumps(sub_topics)
         sub_ids = json.dumps(sub_ids)
 
-    values = (item_data.get('id', ''), item_data.get('item_text', ''), subject, subject_id, topic,
+    values = (tags.get('id', ''), tags.get('item_text', ''), subject, subject_id, topic,
               topic_id, sub_topics, sub_ids, item_type, metadata, choices, answers)
 
     db = MySqlDB()
@@ -252,21 +253,34 @@ if __name__ == '__main__':
     # print(get_query_result(queries[1].format('Matin'.lower())))
 
     item = {
-      'id': '',
-      'subject_id': '',
-      'subject': 'Mathematics',
-      'user_data': [],
-      'paths': ['0.children.0.children.0.children.0', '0.children.2'],
-      'item_type': 'Multiple Choice',
-      'item_weight': 1,
-      'grade_min': 1,
-      'grade_max': 12,
-      'item_text': 'TEXT',
-      'item_choices': [
-        {'choice': 'CHOICE1', 'correct': 0},
-        {'choice': 'CHOICE2', 'correct': 0},
-        {'choice': 'CHOICE3', 'correct': 0},
-        {'choice': 'CHOICE4', 'correct': '1'}
+      "tags": {
+        "item_text": "123123123",
+        "subject": "Biology",
+        "item_type": "Multiple Choice",
+        "grade_min": "1",
+        "grade_max": "12",
+        "privacy": 1,
+        "paths": [
+          "1.children.1"
+        ]
+      },
+      "item_choices": [
+        {
+          "correct": 0,
+          "choice": "123"
+        },
+        {
+          "correct": 1,
+          "choice": "123"
+        },
+        {
+          "correct": 0,
+          "choice": "123123"
+        },
+        {
+          "correct": 0,
+          "choice": "234234"
+        }
       ]
     }
 
