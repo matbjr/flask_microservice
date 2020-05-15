@@ -1,9 +1,11 @@
 import json
+import time
 from datetime import datetime
 
 from googleapiclient.discovery import build
 from providers.google.get_credentials import GoogleCredentials
 from providers.myssql_db import MySqlDB
+from providers.google.google_run_app_script import run_app_script
 from common.config import initialize_config
 
 quiz_links = [
@@ -21,7 +23,13 @@ quiz_links = [
     "https://docs.google.com/forms/d/e/1FAIpQLSf0StazPDOJsUP94S0TiFG-zaIwLtQk_cM3oHFGohY8qus-yA/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSfkUt8oABZNsp5NhWYwSm8ZdxSqzTahvNcw8Gd7HJUdDfMr-Q/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSerk_I5wnlbccm0DF3V4Aki3FxG07YvJXNriFiOnng3ElEK6g/viewform?usp=sf_link",
-    "https://docs.google.com/forms/d/e/1FAIpQLSfREh-kwG56ARUeIYqqYQk3i6NPZT_Cf4lyFpr5MinhM-U7uA/viewform?usp=sf_link"
+    "https://docs.google.com/forms/d/e/1FAIpQLSfREh-kwG56ARUeIYqqYQk3i6NPZT_Cf4lyFpr5MinhM-U7uA/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSekPY3BgHr2Qbp-Snv8pC1Ge-79xaf15K3SL1rAAfCp6xLbJA/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfrE1mlxJ3ABLddoKU87ica8YbwMHap9JPSDsxtItAsDoyiPA/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSeTBjhMU9J4KskMHFS-kHEzHZYNRoU7jiruUwf_NRYbKC8rMA/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfStls1KxaIDrjWGNMLrA_tbd-OA2IlIXw6v2EfXkl_Ys2aDw/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSc5KPE7yb8hu5-_MpZ8i87UC84SLAUJKIocGS6AMUpuQUrIgQ/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSf27hpXbxiem626bCMVQzKN0T_1EfxQVUp3_8d3itM3tdqsFg/viewform?usp=sf_link"
 ]
 
 QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
@@ -38,13 +46,21 @@ QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
           '1PFpwrmL9xOrgJ0OztwyDin8YXpORA0vgG_JYl3_fmrI',
           '1MfmZ9xpe3D_QLPAYk0R-_v3oF9wHNf-ljwdRWT2KbQU',
           '1hKwnTaLQ96Qn5SeNnU58Lo58Q9C3fRqOOhJj3JPyEAI',
-          '1gckVo4zHSLt5okHteOBnjg9evU0mtR4aujjiKLIs-G4'
+          '1gckVo4zHSLt5okHteOBnjg9evU0mtR4aujjiKLIs-G4',
+          '1ogFFuUcMYzBoiqT8jQWGz8WuFGxTyFlsShPvhRR0aEM',
+          '1HMBOOhOQqY08wIJhU7mowqsoW_twAEIQAHKRQjg5DuI',
+          '1b85yUdBkMR2oUnurBwTKcmCUwPnwi1Az7HpjrhtTAZY',
+          '1bnLWVv8nlAUIuuagWnQCFAabdW6x7fi1WI0sH65dgpk',
+          '1gZTh2GYZxgL4VWmH2qlBx0KLgBoulXM7tYMNKqydUvU',
+          '1HdTosObBNpC1n84SooWCL_iByaNKJPeC3VhyLmgKIV0'
           ]
 
 topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
 topics1 = ['History', 'Aqeedah', 'Seerah', 'Fiqh', 'Qur`an']
 topics2 = ['Seerah', 'Fiqh', 'Qur`an', 'Qur`an', 'Seerah']
 topics3 = ['Aqeedah', 'Qur`an', 'Fiqh', 'Fiqh', 'Qur`an']
+
+item_type = {'undefined': 0, 'multiple choice': 1}
 
 del_dup = """select * from students where name in (
 SELECT name
@@ -60,7 +76,7 @@ def datetime_format(datestr, fr="%m/%d/%Y %H:%M:%S", to="%Y-%m-%d %H:%M:%S"):
 
 def get_sheet(creds=None, sheet_id=None, col_range=None):
     if not creds:
-        creds = GoogleCredentials().get_cred()
+        creds = GoogleCredentials().get_credential_local()
 
     service = build('sheets', 'v4', credentials=creds)
 
@@ -78,35 +94,42 @@ def get_sheet(creds=None, sheet_id=None, col_range=None):
 
 
 if __name__ == '__main__':
-
-    initialize_config()
-    creds = GoogleCredentials().get_cred()
-    db = MySqlDB()
-    # print(db)
-    db.connect()
-
-    print(db.query("show tables"))
-    print(db.query_commit("delete from quizzes"))
-    print(db.query_commit("delete from students"))
-    print(db.query_commit("ALTER TABLE students AUTO_INCREMENT=1"))
-
-    close = 0
-    index = 1
     sql_quiz = "INSERT INTO quizzes(`id`, `provider_id`, `name`, " \
                "`desciption`, `metadata`, `type`, `no_of_questions`, " \
                "`total_marks`, `questions`, `timestamp`, `responses`, " \
                "`external_link`) " \
                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    sql_ques = "INSERT INTO `questions`(`id`, `text`, `subject`, " \
-               "`subject_id`, `topic`, `topic_id`, `sub_topics`, " \
-               "`sub_topics_id`, `type`, `metadata`, `choices`, " \
-               "`answer`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql_ques = "INSERT INTO `quiz_questions`(`id`, `text`, `subject`, " \
+               "`topic`, `type`, `metadata`, `choices`, `answer`) " \
+               "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     sql_responses = "INSERT INTO `students`(`id`, `creation_date`,`marks`, `name`, " \
                   "`description`,`age`, `city`, `state`, " \
                   "`school`, `responses`) VALUES " \
                   "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    for quiz in QUIZES:
+    initialize_config()
+    creds = GoogleCredentials().get_credential_local()
+    db = MySqlDB()
+    # print(db)
+    db.connect()
+
+    # for quiz in quiz_links:
+    #     params = [quiz, False]
+    #     results = run_app_script(creds, function_name='getQuizDetails',
+    #                              params=params)
+
+    print(db.query("show tables"))
+    print(db.query_commit("delete from quizzes"))
+    print(db.query_commit("delete from students"))
+    print(db.query_commit("delete from quiz_questions"))
+    print(db.query_commit("ALTER TABLE students AUTO_INCREMENT=1"))
+    print(db.query_commit("ALTER TABLE quiz_questions AUTO_INCREMENT=1"))
+
+    close = 0
+    q_type = item_type['multiple choice']
+    index = 1
+
+    for quiz in QUIZES[index-1:]:
         rows = get_sheet(creds, sheet_id=quiz,
                               col_range="Form Responses 1")
         print("Quiz ", index, quiz, len(rows))
@@ -177,12 +200,23 @@ if __name__ == '__main__':
                      'topics': topics
                      }
         values = (index, quiz, 'Quiz ' + str(index), '', json.dumps(metadata),
-                  1, len(head[:start]), 5, json.dumps(ques_dict),
+                  q_type, len(head[:start]), 5, json.dumps(ques_dict),
                   datetime_format(answers[0]), len(rows)-1,
                   quiz_links[index - 1])
 
         print(sql_quiz + str(values))
 
         print(db.insert(sql_quiz, values))
+        metadata = {'timestamp': datetime_format(answers[0]),
+                    'quiz': 'Quiz ' + str(index),
+                    'weight': 1,
+                    'external_link': quiz_links[index - 1]}
+        for q, c, o, t in zip(questions, correct_answers, options, topics):
+            values = ('', q, 'Islam', t, q_type, json.dumps(metadata),
+                      json.dumps(o), json.dumps(c))
+            print(values)
+            print(db.insert(sql_ques, values))
 
         index += 1
+
+        time.sleep(5)

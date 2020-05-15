@@ -22,7 +22,7 @@ token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY5ZDk3YjRjYWU5MGJjZDc2YWViMjAwMjZmNmI3NzB
 #creds = GoogleCredentails().get_credential_from_token(token)
 #print(creds.scopes)
 
-creds = GoogleCredentials().get_credential(token_file='token3.pickle')
+creds = GoogleCredentials().get_credential()
 
 drive = build(API_SERVICE_NAME, API_VERSION, credentials=creds)
 files = drive.files().list().execute()
@@ -34,7 +34,7 @@ print(len(file_list))
 print(file_list[0])
 for file in file_list:
 
-    if 'pdf' in file['mimeType']:
+    if '.json' in file['name']:
         print(file['kind'], file['name'], file['mimeType'], file['id'])
         print("**************************************")
         id = file['id']
@@ -51,6 +51,6 @@ for file in file_list:
         while done is False:
             status, done = downloader.next_chunk()
             print("Download %d%%." % int(status.progress() * 100))
-        break
+        print(fh.readlines())
 
 

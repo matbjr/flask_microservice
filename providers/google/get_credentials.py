@@ -20,7 +20,11 @@ SCOPES = ['https://www.googleapis.com/auth/classroom.courses',
           'https://www.googleapis.com/auth/classroom.profile.emails',
           'https://www.googleapis.com/auth/spreadsheets.readonly',
           'https://www.googleapis.com/auth/forms',
-          'https://www.googleapis.com/auth/drive']
+          'https://www.googleapis.com/auth/drive',
+          'https://www.googleapis.com/auth/script.projects',
+          'https://www.googleapis.com/auth/script.external_request',
+          'https://www.googleapis.com/auth/script.scriptapp'
+          ]
 
 # https://www.googleapis.com/auth/classroom.topics
 # https://www.googleapis.com/auth/classroom.push-notifications
@@ -54,7 +58,8 @@ class GoogleCredentials:
 
         return self.credential, id_info
 
-    def get_cred(self, token_file='token2.pickle', credential_file='client.json'):
+    def get_credential_local(self, token_file='token2.pickle',
+                             credential_file='client.json'):
         """allow access using local token file or client json file
         """
         creds = None
@@ -81,10 +86,6 @@ class GoogleCredentials:
 
 if __name__ == '__main__':
 
-    # creds = get_cred()
-    # add_course()
-
-    #creds = get_credential('token2.pickle')
     gc = GoogleCredentials()
 
     token_id = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY5ZDk3YjRjYWU5MGJjZDc2YWViMjAwMjZmNmI3NzBjYWMyMjE3ODMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODA3Njg2NTA0MTk4LWs5b2I1czRnNGt1bnVma3J0YjZtYjlzNnNyM2RrYXR1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODA3Njg2NTA0MTk4LWs5b2I1czRnNGt1bnVma3J0YjZtYjlzNnNyM2RrYXR1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyOTE5Njg2OTIwNjYxNzU2NTU1IiwiZW1haWwiOiJmYXJydWtoNTAzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoibGowV0psNE84ZEdBRU1GU0RCbjR6USIsIm5hbWUiOiJGYXJydWtoIFNoYWh6YWQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2dqeUlLMU13WGNRd1RvRm9lM3dkV0oxMDRRN1NLalF3X0tIcmR3N0E9czk2LWMiLCJnaXZlbl9uYW1lIjoiRmFycnVraCIsImZhbWlseV9uYW1lIjoiU2hhaHphZCIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNTg3ODQwNTkzLCJleHAiOjE1ODc4NDQxOTMsImp0aSI6ImY0MmE0ZDZkNWRjMTBjMjE0MGM5ZmJmYTRhY2I3YWM3MWMzOTZmZWYifQ.fDKjBjHimag1HUBA5B24JHQIR6UmywkbyDOj6mJ_mjGRwxKH8kCm3tb-IMy3B13BKb98z48_VbuCKXPS-Xdel9O2pV29qOg3jzcwAmO6_32IttzCKQheIOQ-zEWe0_URjZrKQWht99_Pk-XMM81g-q6V33u0_JNUvAvE6xqSAo8Z-vW6caatIuAVJ7AccxuyVxEHcRNYktaeyUanpt7jJ6lQTKQrS-URubWBrMsBD7FXD6pI34ArCtPXsEmtW3ckm1ercTpjBU3fhH0imAbDidco4kw3e3_SxeKZ-Iwm_frODfN3fl8bKZwkOzPS1AKMQb8ONglc1e9Uu3EFE1xEDA"
