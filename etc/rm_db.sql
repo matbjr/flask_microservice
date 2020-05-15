@@ -1,5 +1,15 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: May 07, 2020 at 10:16 AM
+-- Server version: 5.6.47-cll-lve
+-- PHP Version: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
@@ -36,13 +46,16 @@ CREATE TABLE `questions` (
 CREATE TABLE `quizzes` (
   `id` int(11) NOT NULL,
   `provider_id` varchar(256) DEFAULT NULL,
-  `tilte` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `desciption` varchar(500) DEFAULT NULL,
   `metadata` mediumtext COMMENT 'in json',
   `type` tinyint(4) DEFAULT NULL,
   `no_of_questions` tinyint(4) NOT NULL DEFAULT '1',
   `total_marks` decimal(10,0) DEFAULT '100',
-  `questions` mediumtext COMMENT 'in json'
+  `questions` mediumtext COMMENT 'in json',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `responses` smallint(6) NOT NULL DEFAULT '0',
+  `external_link` varchar(500) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -53,10 +66,10 @@ CREATE TABLE `quizzes` (
 
 CREATE TABLE `students` (
   `id` int(8) NOT NULL,
-  `family_id` int(8) NOT NULL DEFAULT '1',
+  `provider_id` varchar(256) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
-  `creation_date` datetime NOT NULL,
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `address` varchar(200) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
@@ -66,10 +79,12 @@ CREATE TABLE `students` (
   `contact_person2` varchar(50) DEFAULT NULL,
   `phone` varchar(25) DEFAULT NULL,
   `phone2` varchar(25) DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
-  `teacher` varchar(200) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `age` int(3) DEFAULT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '1',
-  `school` tinyint(2) NOT NULL DEFAULT '1'
+  `school` varchar(50) DEFAULT NULL,
+  `responses` text,
+  `marks` varchar(15) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Student Info';
 
 --
@@ -107,3 +122,7 @@ ALTER TABLE `students`
 --
 ALTER TABLE `students`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `questions` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT;
+
+COMMIT;

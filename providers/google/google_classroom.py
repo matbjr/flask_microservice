@@ -34,13 +34,13 @@ def list_courses(creds=None):
     results = service.courses().list(pageSize=10).execute()
     courses = results.get('courses', [])
 
-    if not courses:
-        print('No courses found.')
-    else:
-        print('Courses:')
-        print(courses)
-        for course in courses:
-            print("\t", course['id'], course['name'], course['courseState'])
+    # if not courses:
+    #     print('No courses found.')
+    # else:
+    #     print('Courses:')
+    #     print(courses)
+    #     for course in courses:
+    #         print("\t", course['id'], course['name'], course['courseState'])
 
     return courses
 
@@ -132,18 +132,19 @@ def list_students_teachers(creds=None, teachers=False, course_id="78180851867"):
     #print(len(submissions))
     student_dict = {}
     if not students:
-        print('No ', 'student' if not teachers else 'teacher',' found.')
+        #print('No ', 'student' if not teachers else 'teacher',' found.')
+        student_dict = {}
     else:
-        print('Teachers' if teachers else 'Students:')
+        #print('Teachers' if teachers else 'Students:')
         for student in students:
             student_dict[student['userId']] = {
                 'name': student['profile'].get('name'),
                 'email': student['profile'].get('emailAddress'),
                 'user_id': student['userId']}
 
-            print("\t", student['profile'].get('emailAddress'),
-                  student['profile'].get('name'),
-                  student['userId'])
+            #print("\t", student['profile'].get('emailAddress'),
+            #      student['profile'].get('name'),
+            #      student['userId'])
 
     return student_dict
 

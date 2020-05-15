@@ -3,36 +3,37 @@ import decimal
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
 
-queries = ["select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') as created_at,"
-           "`marks`, `name`, `description`,`age`, `city`, `state`, " \
-           "`school`, `responses` from students where name='{0}'",
+queries = [
+    "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') as created_at,"
+    "`marks`, `name`, `description`,`age`, `city`, `state`, " \
+    "`school`, `responses` from students where name='{0}'",
 
-           "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
-           "as created_at,`marks`, `name`, " \
-           "`description`,`age`, `city`, `state`, " \
-           "`school`, `responses` from students where lower(name)='{0}'",
+    "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
+    "as created_at,`marks`, `name`, " \
+    "`description`,`age`, `city`, `state`, " \
+    "`school`, `responses` from students where lower(name)='{0}'",
 
-           "select s.`id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
-           "as created_at, `marks`, s.`name`, `description`, "
-           "`age`, `city`, `state`, `school`, s.`responses`, questions "
-           "from students s inner join quizzes q on s.description=q.name "
-           "where s.name='{0}'",
+    "select s.`id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
+    "as created_at, `marks`, s.`name`, `description`, "
+    "`age`, `city`, `state`, `school`, s.`responses`, questions "
+    "from students s inner join quizzes q on s.description=q.name "
+    "where s.name='{0}'",
 
-           "select s.`id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
-           "as created_at, `marks`, s.`name`, `description`, "
-           "`age`, `city`, `state`, `school`, s.`responses`, questions "
-           "from students s inner join quizzes q on s.description=q.name "
-           "where s.name like '{0}%' and age={1}",
+    "select s.`id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') "
+    "as created_at, `marks`, s.`name`, `description`, "
+    "`age`, `city`, `state`, `school`, s.`responses`, questions "
+    "from students s inner join quizzes q on s.description=q.name "
+    "where s.name like '{0}%' and age={1}",
 
-           "SELECT count(*) as count, COUNT(DISTINCT(name)) as names, "
-           "COUNT(DISTINCT(school)) as schools, "
-           "COUNT(DISTINCT(state)) as states, "
-           "COUNT(DISTINCT(description)) as quizzes,"
-           "COUNT(DISTINCT(city)) as cities, min(age) as min_age, "
-           "max(age) as max_age, round(avg(age), 2) as avg_age "
-           "FROM `students` where age>4 and age<100",
+    "SELECT count(*) as count, COUNT(DISTINCT(name)) as names, "
+    "COUNT(DISTINCT(school)) as schools, "
+    "COUNT(DISTINCT(state)) as states, "
+    "COUNT(DISTINCT(description)) as quizzes,"
+    "COUNT(DISTINCT(city)) as cities, min(age) as min_age, "
+    "max(age) as max_age, round(avg(age), 2) as avg_age "
+    "FROM `students` where age>4 and age<100",
 
-           """SELECT  count(*) as count, description as quiz,
+    """SELECT  count(*) as count, description as quiz,
 sum(case when marks='5 / 5' then 1 else 0 end) as all_correct,
 sum(case when marks='5 / 5' then 1 else 0 end) * 100.0/count(*) as all_correct_perc,
 sum(case when marks='4 / 5' then 1 else 0 end) as four_correct,
@@ -45,8 +46,10 @@ sum(case when marks='1 / 5' then 1 else 0 end) as one_correct,
 sum(case when marks='1 / 5' then 1 else 0 end) * 100.0/count(*) as one_correct_perc,
 sum(case when marks='0 / 5' then 1 else 0 end) as zero_correct,
 sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_perc 
-FROM `students` group by description"""
-           ]
+FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
+    "select name, external_link, cast(substring(name, 5) as unsigned) as number from quizzes order by cast(substring(name, 5) as unsigned)"
+    ]
+
 
 db = None
 
@@ -65,7 +68,7 @@ def connect_and_execute(sql, is_dict=True):
     try:
         results = db.query(sql, is_dict)
     except Exception as exc:
-        print(exc)
+        # print(exc)
         db.connect()
         results = db.query(sql, is_dict)
 
@@ -91,7 +94,7 @@ def get_quizzes_by_names(name, ignore_case=False,
     topic_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
                     'Seerah': 0, 'History': 0}
     topic_max_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
-                    'Seerah': 0, 'History': 0}
+                        'Seerah': 0, 'History': 0}
     for quiz in results:
         your_answers = json.loads(quiz['responses'])
         score = int(quiz['marks'].split('/')[0].strip())
@@ -102,9 +105,9 @@ def get_quizzes_by_names(name, ignore_case=False,
             quiz.pop('questions')
             quiz['responses'] = []
             for q, c, a, t in zip(questions['questions'],
-                               questions['correct_answers'],
-                               your_answers, questions['topics']):
-                point = 1 if a == c else 0
+                                  questions['correct_answers'],
+                                  your_answers, questions['topics']):
+                point = 1 if a in c.split(";") else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,
@@ -117,7 +120,7 @@ def get_quizzes_by_names(name, ignore_case=False,
     total_scores = {'No. of Quizzes': no_quizzes,
                     'Combined score': total,
                     'Combined score Percentage':
-                        round(total * 100.0/(5 * no_quizzes), 2),
+                        round(total * 100.0 / (5 * no_quizzes), 2),
                     'Topic Scores': topic_scores,
                     'Topic Max Scores': topic_max_scores
                     }
@@ -125,7 +128,6 @@ def get_quizzes_by_names(name, ignore_case=False,
 
 
 def get_query_result(query=None, id=None):
-
     id = int(id)
     if id >= len(queries):
         return {'error': 'No queries'}
@@ -139,12 +141,24 @@ def get_query_result(query=None, id=None):
         return {}
 
 
+# function to process the question from UI
+def insert_item(item_data):
+    sql = "INSERT INTO `questions`(`id`, `text`, `subject`, `subject_id`, " \
+          "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
+          "`metadata`, `choices`, `answer`)"
+
+    values = ('',  )   # need to add data
+
+    db = MySqlDB()
+    db.connect()
+    return {'response': db.insert(sql, values)}
+
 
 if __name__ == '__main__':
     initialize_config()
-    #print(get_quizzes_by_names('Nazli'))
-    #print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
+    # print(get_quizzes_by_names('Nazli'))
+    # print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
 
-    #print(get_query_result(queries[1].format('Matin'.lower())))
+    # print(get_query_result(queries[1].format('Matin'.lower())))
 
     print(get_query_result(id=5))
