@@ -2,6 +2,8 @@ import json
 import decimal
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
+from providers.google.google_run_app_script import run_app_script, \
+    GoogleCredentials
 
 queries = [
     "select `id`, date_format(`creation_date`, '%Y-%c-%d %H:%i:%s') as created_at,"
@@ -47,7 +49,8 @@ sum(case when marks='1 / 5' then 1 else 0 end) * 100.0/count(*) as one_correct_p
 sum(case when marks='0 / 5' then 1 else 0 end) as zero_correct,
 sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_perc 
 FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
-    "select name, external_link, cast(substring(name, 5) as unsigned) as number from quizzes order by cast(substring(name, 5) as unsigned)"
+    "select name, external_link, cast(substring(name, 5) as unsigned) as number from quizzes order by cast(substring(name, 5) as unsigned)",
+    "select text, topic, metadata, choices, answer from quiz_questions where topic='{0}'"
     ]
 
 
@@ -107,7 +110,10 @@ def get_quizzes_by_names(name, ignore_case=False,
             for q, c, a, t in zip(questions['questions'],
                                   questions['correct_answers'],
                                   your_answers, questions['topics']):
-                point = 1 if a in c.split(";") else 0
+                if quiz['description']== 'Quiz 12':
+                    point = 1 if a in c.split(";") else 0
+                else:
+                    point = 1 if a == c else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,
@@ -141,6 +147,35 @@ def get_query_result(query=None, id=None):
         return {}
 
 
+def create_quiz():
+    topic = 'Aqeedah'
+    sql = queries[7].format(topic)
+    results = connect_and_execute(sql)
+    questions = []
+    index = 1
+    for result in results:
+        metadata = json.loads(result['metadata'])
+        choices = json.loads(result['choices'])
+        answer = json.loads(result['answer'])
+        correct = []
+        for ch in choices:
+            point = 1 if ch in answer.split(";") else 0
+            correct.append(point)
+        item = {'question': str(index) + ". " + result['text'].split(".", 1)[1],
+                'desc': metadata['quiz'] + "-" + result['topic'],
+                'options': choices, 'correct': correct}
+        print(item)
+        questions.append(item)
+        index += 1
+
+    creds = GoogleCredentials().get_credential()
+    params = ['Ramadan 2020 Quiz Review 1',
+              "All " + topic + " Questions (" + str(len(results)) + ") "
+              "See all quizzes here: http://muslimscholars.info/quiz/",
+              questions]
+    run_app_script(creds, function_name='createQuiz', params=params)
+
+
 # function to process the question from UI
 def insert_item(item_data):
     sql = "INSERT INTO `questions`(`id`, `text`, `subject`, `subject_id`, " \
@@ -156,9 +191,11 @@ def insert_item(item_data):
 
 if __name__ == '__main__':
     initialize_config()
-    # print(get_quizzes_by_names('Nazli'))
-    # print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
+    #print(get_quizzes_by_names('FS', get_questions=True, age=50))
+    print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
+    #sql = queries[3].format('FS', 50)
+    #results = connect_and_execute(sql)
+    #print(results)
 
-    # print(get_query_result(queries[1].format('Matin'.lower())))
+    #results = get_query_result(id=7)
 
-    print(get_query_result(id=5))
