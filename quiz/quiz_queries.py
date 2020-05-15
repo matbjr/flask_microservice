@@ -2,6 +2,8 @@ import json
 import decimal
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
+from quiz.subjects import subjects as subjects_json
+from quiz.type_map import get_type_id
 from providers.google.google_run_app_script import run_app_script, \
     GoogleCredentials
 
@@ -50,7 +52,8 @@ sum(case when marks='0 / 5' then 1 else 0 end) as zero_correct,
 sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_perc 
 FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
     "select name, external_link, cast(substring(name, 5) as unsigned) as number from quizzes order by cast(substring(name, 5) as unsigned)",
-    "select text, topic, metadata, choices, answer from quiz_questions where topic='{0}'"
+    "select text, topic, metadata, choices, answer from quiz_questions where subject='{0}'"
+    "select text, topic, metadata, choices, answer from quiz_questions where subject='{0}' and topic='{1}'"
     ]
 
 
@@ -110,10 +113,7 @@ def get_quizzes_by_names(name, ignore_case=False,
             for q, c, a, t in zip(questions['questions'],
                                   questions['correct_answers'],
                                   your_answers, questions['topics']):
-                if quiz['description']== 'Quiz 12':
-                    point = 1 if a in c.split(";") else 0
-                else:
-                    point = 1 if a == c else 0
+                point = 1 if a in c.split(";") else 0
                 quiz['responses'].append({
                     'question': q,
                     'correct': c,
@@ -147,9 +147,11 @@ def get_query_result(query=None, id=None):
         return {}
 
 
-def create_quiz():
-    topic = 'Aqeedah'
-    sql = queries[7].format(topic)
+def create_quiz(subject='Islam', topic=None):
+    sql = queries[7].format(subject)
+    if topic:
+        sql = queries[8].format(subject, topic)
+
     results = connect_and_execute(sql)
     questions = []
     index = 1
@@ -178,11 +180,100 @@ def create_quiz():
 
 # function to process the question from UI
 def insert_item(item_data):
-    sql = "INSERT INTO `questions`(`id`, `text`, `subject`, `subject_id`, " \
+    sql = "INSERT INTO `questions` (`id`, `text`, `subject`, `subject_id`, " \
           "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
-          "`metadata`, `choices`, `answer`)"
+          "`metadata`, `choices`, `answer`) " \
+          "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-    values = ('',  )   # need to add data
+    tags = item_data.get('tags')
+
+    # Getting choices and answer
+    item_choices = item_data.get('item_choices', [])
+    choice_list = []
+    answer_list = []
+    for i in item_choices:
+        choice_list.append(i.get('choice', ''))
+        if i.get('correct') == 1:
+            answer_list.append(i.get('choice'))
+    choices = ', '.join(choice_list)
+    answers = ', '.join(answer_list)
+
+    # Getting metadata
+    metadata = json.dumps(item_data)
+
+    # Getting type info
+    item_type = get_type_id(tags.get('item_type'))
+
+    # Getting subject, topic, and hierarchy info
+    subject_list = subjects_json.get('subject_list')
+    paths = tags.get('paths')
+    subject = tags.get('subject')
+    subject_id = None
+    topic = None
+    topic_id = None
+    sub_topics = None
+    sub_ids = None
+    if paths is not None:
+        topic = {}
+        topic_id = {}
+        sub_topics = {}
+        sub_ids = {}
+        for sub in subject_list:
+            if sub.get('label') == subject:
+                subject_id = sub.get('subject_id')
+                break
+
+        index = 0
+        for path in paths:
+            curr_topic = None
+            curr_topic_id = None
+            curr_sub_topics = None
+            curr_sub_ids = None
+            path = path.replace('children.', '')
+            split_path = path.split('.')
+            del split_path[0]
+            if split_path:
+                curr_topic_id = int(split_path[len(split_path)-1])
+                del split_path[len(split_path)-1]
+            if split_path:
+                curr_sub_ids = list(map(int, split_path))
+
+            for i in subject_list:
+                if i.get('subject_id') == subject_id:
+                    if curr_sub_ids:
+                        curr_sub_topics = []
+                        children = i.get('children')
+                        for j in curr_sub_ids:
+                            for k in children:
+                                if j == children.index(k):
+                                    child = children[j]
+                                    curr_sub_topics.append(child.get('label'))
+                                    children = child.get('children')
+                                    break
+                        for j in children:
+                            if curr_topic_id == children.index(j):
+                                curr_topic = j.get('label')
+                    elif curr_topic_id:
+                        children = i.get('children')
+                        for j in children:
+                            if curr_topic_id == children.index(j):
+                                curr_topic = j.get('label')
+                                break
+                    break
+
+            topic[index] = curr_topic
+            topic_id[index] = curr_topic_id
+            sub_topics[index] = curr_sub_topics
+            sub_ids[index] = curr_sub_ids
+            index += 1
+
+        topic = json.dumps(topic)
+        topic_id = json.dumps(topic_id)
+        sub_topics = json.dumps(sub_topics)
+        sub_ids = json.dumps(sub_ids)
+
+    values = (tags.get('id', ''), tags.get('item_text', ''), subject, subject_id, topic,
+              topic_id, sub_topics, sub_ids, item_type, metadata, choices, answers)
 
     db = MySqlDB()
     db.connect()
@@ -191,11 +282,46 @@ def insert_item(item_data):
 
 if __name__ == '__main__':
     initialize_config()
-    #print(get_quizzes_by_names('FS', get_questions=True, age=50))
-    print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
-    #sql = queries[3].format('FS', 50)
-    #results = connect_and_execute(sql)
-    #print(results)
+    # print(get_quizzes_by_names('Nazli'))
+    # print(json.dumps(get_quizzes_by_names('FS admin', True, True), indent=4))
 
-    #results = get_query_result(id=7)
+    # print(get_query_result(queries[1].format('Matin'.lower())))
 
+    item = {
+      "tags": {
+        "item_text": "123123123",
+        "subject": "Biology",
+        "item_type": "Multiple Choice",
+        "grade_min": "1",
+        "grade_max": "12",
+        "privacy": 1,
+        "paths": [
+          "1.children.1"
+        ]
+      },
+      "item_choices": [
+        {
+          "correct": 0,
+          "choice": "123"
+        },
+        {
+          "correct": 1,
+          "choice": "123"
+        },
+        {
+          "correct": 0,
+          "choice": "123123"
+        },
+        {
+          "correct": 0,
+          "choice": "234234"
+        }
+      ]
+    }
+
+    insert_item(item)
+    sql = "SELECT * FROM `questions`"
+    db = MySqlDB()
+    db.connect()
+    # db.query("TRUNCATE TABLE `questions`", False)
+    print(db.query(sql, True))

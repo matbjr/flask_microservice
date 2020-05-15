@@ -3,10 +3,12 @@ flask_cors
 bottle
 fastapi
 requests
-Werkzeug==0.16.1
+Werkzeug
 pytest
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
 mysql-connector
 psycopg2
+uwsgi==2.0.17
+
