@@ -1,5 +1,6 @@
 import json
 import decimal
+
 from providers.myssql_db import MySqlDB
 from common.config import initialize_config
 from quiz.subjects import subjects as subjects_json
