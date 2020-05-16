@@ -29,7 +29,8 @@ quiz_links = [
     "https://docs.google.com/forms/d/e/1FAIpQLSeTBjhMU9J4KskMHFS-kHEzHZYNRoU7jiruUwf_NRYbKC8rMA/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSfStls1KxaIDrjWGNMLrA_tbd-OA2IlIXw6v2EfXkl_Ys2aDw/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSc5KPE7yb8hu5-_MpZ8i87UC84SLAUJKIocGS6AMUpuQUrIgQ/viewform?usp=sf_link",
-    "https://docs.google.com/forms/d/e/1FAIpQLSf27hpXbxiem626bCMVQzKN0T_1EfxQVUp3_8d3itM3tdqsFg/viewform?usp=sf_link"
+    "https://docs.google.com/forms/d/e/1FAIpQLSf27hpXbxiem626bCMVQzKN0T_1EfxQVUp3_8d3itM3tdqsFg/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLScBou4QKNcBr7yXbwEhxcNGIk6J0QowKTEPx_uJ5ja8NtiOJw/viewform?usp=sf_link"
 ]
 
 QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
@@ -52,7 +53,8 @@ QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
           '1b85yUdBkMR2oUnurBwTKcmCUwPnwi1Az7HpjrhtTAZY',
           '1bnLWVv8nlAUIuuagWnQCFAabdW6x7fi1WI0sH65dgpk',
           '1gZTh2GYZxgL4VWmH2qlBx0KLgBoulXM7tYMNKqydUvU',
-          '1HdTosObBNpC1n84SooWCL_iByaNKJPeC3VhyLmgKIV0'
+          '1HdTosObBNpC1n84SooWCL_iByaNKJPeC3VhyLmgKIV0',
+          '1rrpinZ2RgKnR8PPxzahYwr3l7Sc_BvseDtHtjDzbQOo'
           ]
 
 topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
