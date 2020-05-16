@@ -39,4 +39,5 @@ def get_type_id(item_type):
     for i in type_map['type_list']:
         if item_type in [i['type'], i['google_form']]:
             return i['id']
+
     return type_id
