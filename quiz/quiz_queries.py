@@ -195,11 +195,11 @@ def insert_item(item_data):
         choice_list.append(i.get('choice', ''))
         if i.get('correct') == 1:
             answer_list.append(i.get('choice'))
-    choices = ', '.join(choice_list)
-    answers = ', '.join(answer_list)
+    choices = json.dumps(choice_list, indent=4)
+    answers = json.dumps(answer_list, indent=4)
 
     # Getting metadata
-    metadata = json.dumps(item_data)
+    metadata = json.dumps(item_data, indent=4)
 
     # Getting type info
     item_type = get_type_id(tags.get('item_type'))
@@ -272,8 +272,10 @@ def insert_item(item_data):
         sub_topics = json.dumps(sub_topics)
         sub_ids = json.dumps(sub_ids)
 
-    values = (tags.get('id', ''), tags.get('item_text', ''), subject, subject_id, topic,
-              topic_id, sub_topics, sub_ids, item_type, metadata, choices, answers)
+    values = (tags.get('id', ''), tags.get('item_text', ''),
+              subject, subject_id, topic,
+              topic_id, sub_topics, sub_ids, item_type,
+              metadata, choices, answers)
 
     db = MySqlDB()
     db.connect()
