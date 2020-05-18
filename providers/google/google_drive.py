@@ -31,26 +31,31 @@ file_list = files.get('files', [])
 print(len(file_list))
 
 #print(files)
-print(file_list[0])
-for file in file_list:
+#print(file_list[0])
+index = 0
+flist = []
+for file in file_list[::-1]:
 
-    if '.json' in file['name']:
-        print(file['kind'], file['name'], file['mimeType'], file['id'])
-        print("**************************************")
+    if ('Islamic Quiz' in file['name']) and ('form' in file['mimeType']):
+        n = '"https://docs.google.com/forms/d/'+file['id']+'/edit"'
+        flist.append({'quiz': file['name'], 'link': n})
+        print(n, file['name'])
+        #print("**************************************")
         id = file['id']
         #drive = build(API_SERVICE_NAME, API_VERSION, credentials=creds)
-        get_file = drive.files()
-        get_file = get_file.get(fileId=id).execute()
-        print(get_file)
-        request = drive.files().get_media(fileId=id)
-        #request = drive.files().export_media(fileId=id,
-        #                                  mimeType='application/pdf')
-        fh = io.BytesIO()
-        downloader = MediaIoBaseDownload(fh, request)
-        done = False
-        while done is False:
-            status, done = downloader.next_chunk()
-            print("Download %d%%." % int(status.progress() * 100))
-        print(fh.readlines())
+        #get_file = drive.files()
+        #get_file = get_file.get(fileId=id).execute()
+        index += 1
+        # print(get_file)
+        # request = drive.files().get_media(fileId=id)
+        # #request = drive.files().export_media(fileId=id,
+        # #                                  mimeType='application/pdf')
+        # fh = io.BytesIO()
+        # downloader = MediaIoBaseDownload(fh, request)
+        # done = False
+        # while done is False:
+        #     status, done = downloader.next_chunk()
+        #     print("Download %d%%." % int(status.progress() * 100))
+        # print(fh.readlines())
 
-
+print(flist)

@@ -30,7 +30,10 @@ quiz_links = [
     "https://docs.google.com/forms/d/e/1FAIpQLSfStls1KxaIDrjWGNMLrA_tbd-OA2IlIXw6v2EfXkl_Ys2aDw/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSc5KPE7yb8hu5-_MpZ8i87UC84SLAUJKIocGS6AMUpuQUrIgQ/viewform?usp=sf_link",
     "https://docs.google.com/forms/d/e/1FAIpQLSf27hpXbxiem626bCMVQzKN0T_1EfxQVUp3_8d3itM3tdqsFg/viewform?usp=sf_link",
-    "https://docs.google.com/forms/d/e/1FAIpQLScBou4QKNcBr7yXbwEhxcNGIk6J0QowKTEPx_uJ5ja8NtiOJw/viewform?usp=sf_link"
+    "https://docs.google.com/forms/d/e/1FAIpQLScBou4QKNcBr7yXbwEhxcNGIk6J0QowKTEPx_uJ5ja8NtiOJw/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdKH3BiypPpap5e62-mk2ONl8vqz1HJaPHbmFYDGvkuIE9www/viewform",
+    "https://docs.google.com/forms/d/e/1FAIpQLSe67Nak0k70l8Yzxnl8shff15u344NNrwLwXi1uU8KA8uFuRg/viewform?usp=sf_link",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdSHMgGFf5nMJ8MLqdz1B4UVZ3BkNw0bG4RKMd2PxiZHA5ptA/viewform?usp=sf_link"
 ]
 
 QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
@@ -54,13 +57,18 @@ QUIZES = ['1wxJ2TAM75oPu_JM8g6OfHHmq-Zy2K4H0hj3RzEoWrko',
           '1bnLWVv8nlAUIuuagWnQCFAabdW6x7fi1WI0sH65dgpk',
           '1gZTh2GYZxgL4VWmH2qlBx0KLgBoulXM7tYMNKqydUvU',
           '1HdTosObBNpC1n84SooWCL_iByaNKJPeC3VhyLmgKIV0',
-          '1rrpinZ2RgKnR8PPxzahYwr3l7Sc_BvseDtHtjDzbQOo'
+          '1rrpinZ2RgKnR8PPxzahYwr3l7Sc_BvseDtHtjDzbQOo',
+          '1MwB2ZJ_Uops4g59p3PsOF1ChscM6amZRlxwP9zt26-E',
+          '1LjyKKi-Nsn5uFtrWOEBsl5PBnNfAbnQRJ0YoGByUV3I',
+          '12DOYvBCBIxfKKtSZ0dlS4Yalf-i0oS8YAe_TnWHF484'
           ]
 
 topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
 topics1 = ['History', 'Aqeedah', 'Seerah', 'Fiqh', 'Qur`an']
 topics2 = ['Seerah', 'Fiqh', 'Qur`an', 'Qur`an', 'Seerah']
 topics3 = ['Aqeedah', 'Qur`an', 'Fiqh', 'Fiqh', 'Qur`an']
+topics_25 = ['Aqeedah', 'Aqeedah', 'Qur`an', 'Qur`an', 'Fiqh', 'Fiqh',
+             'Seerah', 'Seerah', 'History', 'History']
 
 item_type = {'undefined': 0, 'multiple choice': 1}
 
@@ -115,11 +123,6 @@ if __name__ == '__main__':
     # print(db)
     db.connect()
 
-    # for quiz in quiz_links:
-    #     params = [quiz, False]
-    #     results = run_app_script(creds, function_name='getQuizDetails',
-    #                              params=params)
-
     print(db.query("show tables"))
     print(db.query_commit("delete from quizzes"))
     print(db.query_commit("delete from students"))
@@ -129,7 +132,7 @@ if __name__ == '__main__':
 
     close = 0
     q_type = item_type['multiple choice']
-    index = 1
+    index = 25
 
     for quiz in QUIZES[index-1:]:
         rows = get_sheet(creds, sheet_id=quiz,
@@ -142,14 +145,25 @@ if __name__ == '__main__':
         questions = []
         correct_answers = []
         metadata = []
+        topic_list = [topics1, topics2, topics3]
+        topics = topics_new
+        if index <= 3:
+            topics = topic_list[index - 1]
         start = 5
+        end = 10
+        count = 5
+        if index == 25:
+            end = 15
+            count = 10
+            topics = topics_25
+
         for h in head[:start]:
             metadata.append(h)
 
-        for h in head[start:]:
+        for h in head[start:end]:
             questions.append(h)
 
-        for a in answers[start:]:
+        for a in answers[start:end]:
             if index == 12 and a == 'D) All of the above':
                 a += ";E) A and B only"
             correct_answers.append(a)
@@ -174,7 +188,7 @@ if __name__ == '__main__':
                 values += (location[0].strip(),)
 
             responses = []
-            for a in row[start:]:
+            for a in row[start:end]:
                 choices[i].add(a)
                 responses.append(a)
                 i += 1
@@ -191,22 +205,17 @@ if __name__ == '__main__':
             print(len(op), op)
             options.append(op)
 
-        topic_list = [topics1, topics2, topics3]
-        topics = topics_new
-        if index <= 3:
-            topics = topic_list[index - 1]
-
         ques_dict = {'questions': questions,
                      'correct_answers': correct_answers,
                      'choices': options,
                      'topics': topics
                      }
         values = (index, quiz, 'Quiz ' + str(index), '', json.dumps(metadata),
-                  q_type, len(head[:start]), 5, json.dumps(ques_dict),
+                  q_type, len(head[:start]), count, json.dumps(ques_dict),
                   datetime_format(answers[0]), len(rows)-1,
                   quiz_links[index - 1])
 
-        print(sql_quiz + str(values))
+        #print(sql_quiz + str(values))
 
         print(db.insert(sql_quiz, values))
         metadata = {'timestamp': datetime_format(answers[0]),

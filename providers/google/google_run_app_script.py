@@ -10,7 +10,6 @@ from providers.google.get_credentials import GoogleCredentials
 from common.config import initialize_config
 from providers.myssql_db import MySqlDB
 
-
 SCRIPT_ID = '1FJi_cMqS8i1g5tvDMZa7qC60NW0vWSDf4pIOeggLSt5eIwbuPuyjJrB2'
 
 
@@ -26,7 +25,7 @@ def run_app_script(credentials=None, script_id=SCRIPT_ID,
     #     creds = tools.run_flow(flow, store)
 
     if not credentials:
-       credentials = GoogleCredentials().get_credential_local()
+        credentials = GoogleCredentials().get_credential_local()
     service = build('script', 'v1', credentials=credentials)
 
     # Call the Apps Script API
@@ -35,7 +34,7 @@ def run_app_script(credentials=None, script_id=SCRIPT_ID,
         # Create an execution request object.
         request = {"function": function_name, "parameters": params}
         response = service.scripts().run(body=request,
-                scriptId=script_id).execute()
+                                         scriptId=script_id).execute()
 
         # print("..................")
 
@@ -61,8 +60,8 @@ def run_app_script(credentials=None, script_id=SCRIPT_ID,
             result = response['response'].get('result', {})
             if not result:
                 print('No result returned!')
-            else:
-                print("Result: ", result)
+            #else:
+            #    print("Result: ", result)
 
     except errors.HttpError as e:
         # The API encountered a problem before the script started executing.
@@ -73,87 +72,159 @@ def run_app_script(credentials=None, script_id=SCRIPT_ID,
 
 
 if __name__ == '__main__':
+    from quiz.type_map import get_type_id
     initialize_config()
     creds = GoogleCredentials().get_credential_local()
     db = MySqlDB()
     db.connect()
 
-    #print(db.query_commit("delete from quizzes"))
-    #print(db.query_commit("delete from quiz_questions"))
-    #print(db.query_commit("ALTER TABLE quiz_questions AUTO_INCREMENT=1"))
-
+    #print(db.query_commit("delete from ramadan_quizzes"))
+    #print(db.query_commit("delete from items"))
+    #print(db.query_commit("ALTER TABLE items AUTO_INCREMENT=1"))
+    topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
+    topics1 = ['History', 'Aqeedah', 'Seerah', 'Fiqh', 'Qur`an']
+    topics2 = ['Seerah', 'Fiqh', 'Qur`an', 'Qur`an', 'Seerah']
+    topics3 = ['Aqeedah', 'Qur`an', 'Fiqh', 'Fiqh', 'Qur`an']
     quiz_links = [
-        "https://docs.google.com/forms/d/1psEEWT9X0VfmKjE97OrYza3vnYsHyZWMkqhGkMB5N-I/edit",
-        "https://docs.google.com/forms/d/e/1FAIpQLSePfn6rVDPSnlzPwZ-J4iT-I8Etdnma0zr2sJGNbvk9W9itXQ/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSdpSo8mekRI7jScqNtfuX_nUBOpOGnuuARkR1b8wSvDB26nsw/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSel8jWSvqc0jinJwsCQ2mJNDQ5zPsV1a4esQRA5GkXz-iKFdw/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSesHSSk1u_4zhiKXo3-lUgfjlTn6ikA9wmVDT7YcQp1ezZlgQ/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSe7xCDXY--JZD8dssvW1lK1fSlOYh9GULE7uxYF6d4EUZ7P1Q/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfgniIGN07J7Mb3pYqS0BGNMJ2SOpWrTA8_gVCimcb25NC1FA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSerQjGhaU1oAtZXNNvwgOAaogGpRzLErF8lAKntKCqHoZePbg/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfhW7pZ2oHsPZngvSOydJ0VpfVVgEbtedW01JaQVtNHnbLgGw/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfnLwbUmRt2_l-b0uVH8BVnYDHPl9cDIN_sf6QwzCC9KvIEHg/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSdstQSpDJgDtHUqLH7g2T7HYq1-yivr24u_U0-FyVZ3QfY9KA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSf0StazPDOJsUP94S0TiFG-zaIwLtQk_cM3oHFGohY8qus-yA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfkUt8oABZNsp5NhWYwSm8ZdxSqzTahvNcw8Gd7HJUdDfMr-Q/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSerk_I5wnlbccm0DF3V4Aki3FxG07YvJXNriFiOnng3ElEK6g/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfREh-kwG56ARUeIYqqYQk3i6NPZT_Cf4lyFpr5MinhM-U7uA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSekPY3BgHr2Qbp-Snv8pC1Ge-79xaf15K3SL1rAAfCp6xLbJA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfrE1mlxJ3ABLddoKU87ica8YbwMHap9JPSDsxtItAsDoyiPA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSeTBjhMU9J4KskMHFS-kHEzHZYNRoU7jiruUwf_NRYbKC8rMA/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSfStls1KxaIDrjWGNMLrA_tbd-OA2IlIXw6v2EfXkl_Ys2aDw/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSc5KPE7yb8hu5-_MpZ8i87UC84SLAUJKIocGS6AMUpuQUrIgQ/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLSf27hpXbxiem626bCMVQzKN0T_1EfxQVUp3_8d3itM3tdqsFg/viewform?usp=sf_link",
-        "https://docs.google.com/forms/d/e/1FAIpQLScBou4QKNcBr7yXbwEhxcNGIk6J0QowKTEPx_uJ5ja8NtiOJw/viewform?usp=sf_link"
-    ]
-    sql_quiz = "INSERT INTO quizzes(`id`, `provider_id`, `name`, " \
+        {'quiz': 'Islamic Quiz 1',
+         'link': "https://docs.google.com/forms/d/1psEEWT9X0VfmKjE97OrYza3vnYsHyZWMkqhGkMB5N-I/edit"},
+        {'quiz': 'Islamic Quiz 2',
+         'link': "https://docs.google.com/forms/d/1tcpyuVpRZ7a2LpubcstPLoKenBNSCa4W5U0HScepR8M/edit"},
+        {'quiz': 'Islamic Quiz 3',
+         'link': "https://docs.google.com/forms/d/1hfr0gYey6Ppx1v3TFeD1i3je7FD16Vi81GNH3s0NnH4/edit"},
+        {'quiz': 'Islamic Quiz 4',
+         'link': "https://docs.google.com/forms/d/1hEhs_a3R60_ZqbDrf4jriIeZv0azvNTpYFTFdgEiFYA/edit"},
+        {'quiz': 'Islamic Quiz 5',
+         'link': "https://docs.google.com/forms/d/1Yv4nRvN8muj7_WQkWkmhzBmj8WtBZBaFHrxI-WA5oI0/edit"},
+        {'quiz': 'Islamic Quiz 6',
+         'link': "https://docs.google.com/forms/d/1XN7XS9D-ERLh9FJxNC6CJyoj2ZFVA0E8ajSJJfvfr2A/edit"},
+        {'quiz': 'Islamic Quiz 7',
+         'link': "https://docs.google.com/forms/d/1iw32wwPUk-0CxyY-ljKi7oqgeeLjH1jJrYrt3sR6XiI/edit"},
+        {'quiz': 'Islamic Quiz 8',
+         'link': "https://docs.google.com/forms/d/1i8hM9CGVFFZRbZHxleDdUbplfL1SxiQe8GmJZ-klpKs/edit"},
+        {'quiz': 'Islamic Quiz 9',
+         'link': "https://docs.google.com/forms/d/1-ZqklLDv0sm1enuCObxTJgxE3kOYl-WmDXHsipUjalU/edit"},
+        {'quiz': 'Islamic Quiz 10',
+         'link': "https://docs.google.com/forms/d/1I2FafY9YqNwvtsVnwA_WPDjuFVL8WxLUlpJgKp4MCBA/edit"},
+        {'quiz': 'Islamic Quiz 11',
+         'link': "https://docs.google.com/forms/d/1-xvpY6Z8VAyW3tTLdKD6jwuMgth-YsMP6GNbBRcdBdw/edit"},
+        {'quiz': 'Islamic Quiz 12',
+         'link': "https://docs.google.com/forms/d/1dF8UnzD-pcmQUqu8CtF5CeFlsiKkHO4CyMotxEaK8T4/edit"},
+        {'quiz': 'Islamic Quiz 13',
+         'link': "https://docs.google.com/forms/d/1wrPdT2UNdEwOcZg9mPvYE9X-CF1j-620TgJBI92avxQ/edit"},
+        {'quiz': 'Islamic Quiz 14',
+         'link': "https://docs.google.com/forms/d/1GFJ9ArW0oNUaEPe2GZjAZAbySzVkrIcYoQ1WNpY0z7U/edit"},
+        {'quiz': 'Islamic Quiz 15',
+         'link': "https://docs.google.com/forms/d/1dsm3NZ4NuwaI86F2k2cuJQR7x8Y-snc3ZOMP204pNLQ/edit"},
+        {'quiz': 'Islamic Quiz 16',
+         'link': "https://docs.google.com/forms/d/1rlwAmNrZmd2OuW79I6sf8CwLCJpsplHVTAnbV5QYCwo/edit"},
+        {'quiz': 'Islamic Quiz 17',
+         'link': "https://docs.google.com/forms/d/1bwT7VoX_6SD22TdvOySqBtWE7ACV9A2QzkUwtgHsxd4/edit"},
+        {'quiz': 'Islamic Quiz 18',
+         'link': "https://docs.google.com/forms/d/1IwByAkcyEsGZmuNTZKCavfQ2GxAPvr4_20wC-wnOCa0/edit"},
+        {'quiz': 'Islamic Quiz 19',
+         'link': "https://docs.google.com/forms/d/1YCZrH6hwcarGcl7u2ZgiZZUkZq3FfKgDlJc70EtcaKA/edit"},
+        {'quiz': 'Islamic Quiz 20',
+         'link': "https://docs.google.com/forms/d/1Osk4V_cUjIk_Hs_dwk4iHhrmfqvnkEFE2TgiGl4JVJk/edit"},
+        {'quiz': 'Islamic Quiz 21',
+         'link': "https://docs.google.com/forms/d/1Kgv4w0cwSiqREZHkxsDT7YVfpU-PTYuz4OneAfBpv-I/edit"},
+        {'quiz': 'Islamic Quiz 22',
+         'link': "https://docs.google.com/forms/d/1L17t8-CDQq0G_Mcj2czcy1_xOz0-8c5tg4Xe2b0-lI4/edit"},
+        {
+            'quiz': 'Islamic Quiz 23',
+            'link': "https://docs.google.com/forms/d/1-OepgpNqVpHU45OE_Sn4IZJAviOCF_E_Jd1wkTt2pHM/edit"
+        },
+        {
+            'quiz': 'Islamic Quiz 24',
+            'link': "https://docs.google.com/forms/d/1eJgoRzOq00jv2D32Jyav7o6cElJ9sdORU_oUrJQj69c/edit"
+        },
+        # "https://docs.google.com/forms/d/1Lm78M2TWNct_DWKY2DKS8gQNKxBUcL2nBt7fxg8XvHU/edit" Final Islamic Quiz 25
+        ]
+    
+    sql_quiz = "INSERT INTO ramadan_quizzes(`id`, `provider_id`, `name`, " \
                "`desciption`, `metadata`, `type`, `no_of_questions`, " \
                "`total_marks`, `questions`, `timestamp`, `responses`, " \
                "`external_link`) " \
                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    sql_ques = "INSERT INTO `quiz_questions`(`id`, `text`, `subject`, `subject_id` " \
-               "`topic`, `type`, `metadata`, `choices`, `answer`) " \
-               "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    index = 1
-    for quiz in quiz_links[0:1]:
+    sql_ques = "INSERT INTO `items`(`id`, `text`, `subject`, `subject_id`, " \
+               "`topic`, `type`, `metadata`, `choices`, `answer`, " \
+               "`user_profile`, `user_id`, " \
+               "`timestamp_created`, `timestamp_updated`) " \
+               "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    index = 24
+    topic_list = [topics1, topics2, topics3]
+
+    user_profile = {"googleId": "xxxx",
+                    "imageUrl": "yyy",
+                    "email": "info@reliabilitymeasures.com",
+                    "name": "reliabilitymeasures.com",
+                    "givenName": "Reliability Measures"
+                    }
+
+    for q in quiz_links[index-1:]:
+        if index <= 3:
+            topics = topic_list[index - 1]
+        else:
+            topics = topics_new
+
+        quiz = q['link']
+        quiz_name = q['quiz']
         params = [quiz, False]
         results = run_app_script(creds, function_name='getQuizDetails',
-                             params=params)
+                                 params=params)
         print(json.dumps(results, indent=4))
+
         updated = results.get('updated')
-        metadata_quiz = \
-        {
-             'updated_timestamp': updated,
-             'created_timestamp': results.get('created'),
-             'quiz': results.get('title'),
-             'description': results.get('description'),
-             'weight': 1,
-             'id': results.get('id'),
-             'external_link': quiz
-        }
+        metadata_quiz = results.get('metadata')
+        i = 0
+        other_fields = []
+        questions = []
+        correct_answers = []
         for item in results.get('items'):
+            if item.get('type') == 'TEXT':
+                other_fields.append(item.get('title'))
+                continue
+
+            questions.append(item.get('title'))
+            answer = item.get('answer')
+            if index == 12 and answer == 'D) All of the above':
+                answer += ";E) A and B only"
+            correct_answers.append(answer)
             metadata = {
+                'timestamp': updated,
+                'quiz': results.get('title'),
                 'description': item.get('description'),
                 'points': item.get('points'),
                 'feedback_correct': item.get('feedback_correct'),
                 'feedback_incorrect': item.get('feedback_incorrect')
             }
             values = ('', item.get('title'), 'Islam', 5,
-                      item.get('description'),
-                      item.get('type'), json.dumps(metadata, indent=4),
+                      topics[i], get_type_id(item.get('type')),
+                      json.dumps(metadata, indent=4),
                       json.dumps(item.get('choices'), indent=4),
-                      json.dumps(item.get('answer'), indent=4)
+                      json.dumps([answer], indent=4),
+                      json.dumps(user_profile, indent=4),
+                      user_profile.get('email'),
+                      results.get('created'), updated
                       )
-            print(values)
+            # print(values)
+            i += 1
             #print(db.insert(sql_ques, values))
-
-        values = (index, results.get('id'), 'Quiz ' + str(index),
+        metadata_quiz['other_fields'] = other_fields
+        questions = {
+            'questions': questions,
+            'correct_answers': correct_answers,
+            'topics': topics,
+            'items': results.get('items')
+        }
+        values = (index, results.get('id'), results.get('title'),
                   results.get('description'),
-                  json.dumps(metadata_quiz),
-                  1, results.get('count_items'),
+                  json.dumps(metadata_quiz, indent=4),
+                  1, json.dumps(results.get('count_items')),
                   results.get('total_points'),
-                  json.dumps(results.get('items'), indent=4),
-                  updated, results.get('responses'),
-                  quiz)
+                  json.dumps(questions, indent=4),
+                  updated, results.get('responses_count'),
+                  results.get('Published_URL'))
         print(values)
         #print(db.insert(sql_quiz, values))
+        index += 1
