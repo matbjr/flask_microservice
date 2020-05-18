@@ -65,7 +65,6 @@ def process_request(fn, json_data=None):
 
         ans = fn(inp)  # calling function 'fn'
         ans['Input'] = inp
-        #print(inp)
     except Exception as exc:
         ans = {"error": str(exc), 'input': json_data}
     if pretty_json == 1:
@@ -241,13 +240,13 @@ def get_sample_analysis():
     return process_request(analyze_test, json.dumps(sample))
 
 
-@app.route('/item', methods=['POST'])
-@app.route('/create_item', methods=['POST'])
+@app.route('/item/', methods=['POST'])
+@app.route('/create_item/', methods=['POST'])
 def put_item():
     return process_request(insert_item)
 
 
-@app.route('/get_items', methods=['POST', 'GET'])
+@app.route('/get_items/', methods=['POST', 'GET'])
 def get_items():
     return process_request(get_items_db)
 
@@ -260,7 +259,7 @@ def get_items_sample():
     )
 
 
-@app.route('/create_form', methods=['POST'])
+@app.route('/create_form/', methods=['POST'])
 def create_form():
     return process_request(create_quiz_form_db)
 
