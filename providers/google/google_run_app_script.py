@@ -78,13 +78,15 @@ if __name__ == '__main__':
     db = MySqlDB()
     db.connect()
 
-    #print(db.query_commit("delete from ramadan_quizzes"))
-    #print(db.query_commit("delete from items"))
-    #print(db.query_commit("ALTER TABLE items AUTO_INCREMENT=1"))
+    print(db.query_commit("delete from ramadan_quizzes"))
+    print(db.query_commit("delete from items"))
+    print(db.query_commit("ALTER TABLE items AUTO_INCREMENT=1"))
     topics_new = ['Aqeedah', 'Qur`an', 'Fiqh', 'Seerah', 'History']
     topics1 = ['History', 'Aqeedah', 'Seerah', 'Fiqh', 'Qur`an']
     topics2 = ['Seerah', 'Fiqh', 'Qur`an', 'Qur`an', 'Seerah']
     topics3 = ['Aqeedah', 'Qur`an', 'Fiqh', 'Fiqh', 'Qur`an']
+    topics_25 = ['Aqeedah', 'Aqeedah', 'Qur`an', 'Qur`an', 'Fiqh', 'Fiqh',
+                 'Seerah', 'Seerah', 'History', 'History']
     quiz_links = [
         {'quiz': 'Islamic Quiz 1',
          'link': "https://docs.google.com/forms/d/1psEEWT9X0VfmKjE97OrYza3vnYsHyZWMkqhGkMB5N-I/edit"},
@@ -151,7 +153,7 @@ if __name__ == '__main__':
                "`user_profile`, `user_id`, " \
                "`timestamp_created`, `timestamp_updated`) " \
                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    index = 24
+    index = 1
     topic_list = [topics1, topics2, topics3]
 
     user_profile = {"googleId": "xxxx",
@@ -166,6 +168,8 @@ if __name__ == '__main__':
             topics = topic_list[index - 1]
         else:
             topics = topics_new
+        if index == 25:
+            topics = topics_25
 
         quiz = q['link']
         quiz_name = q['quiz']
@@ -173,15 +177,16 @@ if __name__ == '__main__':
         results = run_app_script(creds, function_name='getQuizDetails',
                                  params=params)
         print(json.dumps(results, indent=4))
-
-        updated = results.get('updated')
         metadata_quiz = results.get('metadata')
+        updated = metadata_quiz.get('updated')
+
         i = 0
         other_fields = []
         questions = []
         correct_answers = []
         for item in results.get('items'):
-            if item.get('type') == 'TEXT':
+            if not item.get('points') or \
+                    (item.get('type') not in ['CHECKBOX', 'MULTIPLE_CHOICE']):
                 other_fields.append(item.get('title'))
                 continue
 
@@ -198,6 +203,10 @@ if __name__ == '__main__':
                 'feedback_correct': item.get('feedback_correct'),
                 'feedback_incorrect': item.get('feedback_incorrect')
             }
+            # choices = {
+            #     'options': item.get('choices'),
+            #     'corrects': item.get('corrects')
+            # }
             values = ('', item.get('title'), 'Islam', 5,
                       topics[i], get_type_id(item.get('type')),
                       json.dumps(metadata, indent=4),
@@ -209,22 +218,24 @@ if __name__ == '__main__':
                       )
             # print(values)
             i += 1
-            #print(db.insert(sql_ques, values))
+            print(db.insert(sql_ques, values))
         metadata_quiz['other_fields'] = other_fields
+        metadata_quiz['user_profile'] = user_profile
         questions = {
             'questions': questions,
             'correct_answers': correct_answers,
             'topics': topics,
             'items': results.get('items')
         }
-        values = (index, results.get('id'), results.get('title'),
+        values = (index, metadata_quiz.get('id'),
+                  results.get('title'),
                   results.get('description'),
                   json.dumps(metadata_quiz, indent=4),
-                  1, json.dumps(results.get('count_items')),
-                  results.get('total_points'),
+                  1, metadata_quiz.get('count_items'),
+                  metadata_quiz.get('total_points'),
                   json.dumps(questions, indent=4),
                   updated, results.get('responses_count'),
-                  results.get('Published_URL'))
+                  metadata_quiz.get('published_url'))
         print(values)
-        #print(db.insert(sql_quiz, values))
+        print(db.insert(sql_quiz, values))
         index += 1
