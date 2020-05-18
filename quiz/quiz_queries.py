@@ -35,8 +35,8 @@ queries = [
     "FROM `students` where age>4 and age<100",
 
     """SELECT  count(*) as count, description as quiz,
-sum(case when marks='5 / 5' then 1 else 0 end) as all_correct,
-sum(case when marks='5 / 5' then 1 else 0 end) * 100.0/count(*) as all_correct_perc,
+sum(case when marks in ('5 / 5', '10 / 10') then 1 else 0 end) as all_correct,
+sum(case when marks in ('5 / 5', '10 / 10') then 1 else 0 end) * 100.0/count(*) as all_correct_perc,
 sum(case when marks='4 / 5' then 1 else 0 end) as four_correct,
 sum(case when marks='4 / 5' then 1 else 0 end) * 100.0/count(*) as four_correct_perc,
 sum(case when marks='3 / 5' then 1 else 0 end) as three_correct,
@@ -59,6 +59,8 @@ FROM `students` group by description order by cast(substring(description, 5) as 
     "select id, text, subject, topic, sub_topics, type, choices, answer "
         "from items where subject='{0}' and topic='{1}'",
     "select * from items where id in ({0})"  # for creating quiz
+    "SELECT sum(cast(substring(marks, 1) as unsigned)) as total, count(*), name "
+    "FROM `students` group by name order by total desc"
     ]
 
 insert_sqls = [
@@ -123,23 +125,28 @@ def get_quizzes_by_names(name, ignore_case=False,
     results = connect_and_execute(sql)
     total = 0
     no_quizzes = len(results)
-    print(json.dumps(results, indent=4))
+    total_items = 5 * no_quizzes
+    # print(json.dumps(results, indent=4))
     topic_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
                     'Seerah': 0, 'History': 0}
     topic_max_scores = {'Aqeedah': 0, 'Qur`an': 0, 'Fiqh': 0,
                         'Seerah': 0, 'History': 0}
     index = 1
+    total_items = 0
     for quiz in results:
+
         your_answers = json.loads(quiz['responses'])
         score = int(quiz['marks'].split('/')[0].strip())
+        total_items += int(quiz['marks'].split('/')[1].strip())
         quiz['score'] = score
         total += score
         if 'questions' in quiz:
             questions = json.loads(quiz['questions'])
-            print(your_answers)
-            print(questions['correct_answers'])
+            #print(your_answers)
+            #print(questions['correct_answers'])
             quiz.pop('questions')
             quiz['responses'] = []
+
             for q, c, a, t in zip(questions['questions'],
                                   questions['correct_answers'],
                                   your_answers, questions['topics']):
@@ -155,12 +162,14 @@ def get_quizzes_by_names(name, ignore_case=False,
                     'point': point})
                 topic_scores[t] += point
                 topic_max_scores[t] += 1
-        index += 1
 
+        index += 1
+    # print(total_items)
     total_scores = {'No. of Quizzes': no_quizzes,
                     'Combined score': total,
+                    'Total items': total_items,
                     'Combined score Percentage':
-                        round(total * 100.0 / (5 * no_quizzes), 2),
+                        round(total * 100.0 / total_items, 2),
                     'Topic Scores': topic_scores,
                     'Topic Max Scores': topic_max_scores
                     }

@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
     close = 0
     q_type = item_type['multiple choice']
-    index = 25
+    index = 1
 
     for quiz in QUIZES[index-1:]:
         rows = get_sheet(creds, sheet_id=quiz,

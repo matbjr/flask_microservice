@@ -26,7 +26,11 @@ from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 from quiz.quiz_queries import get_query_result, \
-    get_quizzes_by_names, insert_item, create_form_db, get_items_db
+    get_quizzes_by_names
+
+from quiz.create_item import insert_item
+from quiz.create_quiz import get_items_db, create_quiz_form_db
+
 
 
 class RMApp(Flask):
@@ -258,7 +262,7 @@ def get_items_sample():
 
 @app.route('/create_form', methods=['POST'])
 def create_form():
-    return process_request(create_form_db)
+    return process_request(create_quiz_form_db)
 
 
 if __name__ == '__main__':
