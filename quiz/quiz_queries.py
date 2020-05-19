@@ -50,14 +50,14 @@ sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_
 FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
     "select name, external_link, cast(substring(name, 5) as unsigned) as number "
         "from quizzes order by cast(substring(name, 5) as unsigned)",
-    "select text, topic, metadata, choices, answer, user_profile from items "
+    "select text, topic, type, metadata, choices, answer, user_profile from items "
         "where subject='{0}'",
-    "select text, topic, metadata, choices, answer, user_profile from items "
+    "select text, topic, type, metadata, choices, answer, user_profile from items "
         "where subject='{0}' and topic='{1}'",
     "select id, text, subject, topic, sub_topics, type, choices, answer "
-        "from items where subject='{0}' limit {1}",
+        "from items where subject='{0}' ORDER BY RAND() limit {1}",
     "select id, text, subject, topic, sub_topics, type, choices, answer "
-        "from items where subject='{0}' and topic='{1}' limit {2}",
+        "from items where subject='{0}' and topic='{1}' ORDER BY RAND() limit {2}",
     "select * from items where id in ({0})"  # for creating quiz
     "SELECT sum(cast(substring(marks, 1) as unsigned)) as total, count(*), name "
     "FROM `students` group by name order by total desc"

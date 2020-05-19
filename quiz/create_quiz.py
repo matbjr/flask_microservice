@@ -40,9 +40,11 @@ def process_items(results):
             'desc': metadata['quiz'] + "-" + result['topic'],
             'options': choices,
             'points': metadata['points'],
-            'type': get_type_from_id(result.get('type'), 'google_form')
+            'type': get_type_from_id(result.get('type'), 'google_form'),
+            'feedback_correct': metadata['feedback_correct'],
+            'feedback_incorrect': metadata['feedback_incorrect'],
         }
-        #print(item)
+        print(item)
         questions.append(item)
         index += 1
     return questions
@@ -71,7 +73,6 @@ def create_quiz_form_db(json_data):
 # sample quiz
 def create_quiz(subject='Islam', topic=None):
     q = queries[7]
-    print(q)
     sql = q.format(subject)
     if topic:
         sql = queries[8].format(subject, topic)
@@ -83,13 +84,20 @@ def create_quiz(subject='Islam', topic=None):
         result['user_profile'] = json.loads(result['user_profile'])
         result['answer'] = json.loads(result['answer'])
 
-    print(json.dumps(results, indent=4))
+    # print(json.dumps(results, indent=4))
     items = process_items(results)
-
+    pt = "We are compiling the results for 25 Quizzes. " \
+         "Please complete any missed one before the 29th of Ramadan.<br><br>" \
+         "We are very grateful for your overwhelming response, " \
+         "support and feedback to our daily Ramadan quizzes. " \
+         "Ramadan will shortly be over but our striving to gain knowledge " \
+         "should continue. We will soon be introducing a feature to allow " \
+         "you to contribute your own questions and create your own quizzes. " \
+         "Please look out for more updates on this soon."
     creds = GoogleCredentials().get_credential()
     params = ['Ramadan 2020 Quiz Review 1',
               "All " + topic + " Questions (" + str(len(results)) + "). "
-              "See all quizzes here: http://muslimscholars.info/quiz/",
+              "See all quizzes here: http://muslimscholars.info/quiz/<br><hr>" + pt,
               None,  items]
     return run_app_script(creds, function_name='createQuiz', params=params)
 
