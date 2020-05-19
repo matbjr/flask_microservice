@@ -140,7 +140,10 @@ if __name__ == '__main__':
             'quiz': 'Islamic Quiz 24',
             'link': "https://docs.google.com/forms/d/1eJgoRzOq00jv2D32Jyav7o6cElJ9sdORU_oUrJQj69c/edit"
         },
-        # "https://docs.google.com/forms/d/1Lm78M2TWNct_DWKY2DKS8gQNKxBUcL2nBt7fxg8XvHU/edit" Final Islamic Quiz 25
+        {
+            'quiz': 'Islamic Quiz 25',
+            'link': "https://docs.google.com/forms/d/1Lm78M2TWNct_DWKY2DKS8gQNKxBUcL2nBt7fxg8XvHU/edit"
+        },
         ]
     
     sql_quiz = "INSERT INTO ramadan_quizzes(`id`, `provider_id`, `name`, " \

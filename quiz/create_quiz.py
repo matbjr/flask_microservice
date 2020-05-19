@@ -52,18 +52,18 @@ def process_items(results):
 
 # create quiz from user provided data
 def create_quiz_form_db(json_data):
-    title = json_data.get('title')
-    desc = json_data.get('description')
-    ids = json_data.get('ids')
+    title = json_data.get('quiz_name')
+    desc = json_data.get('quiz_description')
+    ids = json_data.get('item_ids')
     user_data = json_data.get('user_data')
 
     # get items from list of ids
-    sql = queries[11].format(ids)
+    sql = queries[11].format(','.join(map(str, ids)))
     results = connect_and_execute(sql)
     items = process_items(results)
 
     creds = GoogleCredentials().get_credential()
-    params = [title, desc, items]
+    params = [title, desc, user_data, items]
     results = run_app_script(creds, function_name='createQuiz', params=params)
     # TODO: save in DB
 
@@ -86,8 +86,9 @@ def create_quiz(subject='Islam', topic=None):
 
     # print(json.dumps(results, indent=4))
     items = process_items(results)
+    user = results[0]['user_profile']
     pt = "We are compiling the results for 25 Quizzes. " \
-         "Please complete any missed one before the 29th of Ramadan.<br><br>" \
+         "Please complete any missed one before the 29th of Ramadan.\n" \
          "We are very grateful for your overwhelming response, " \
          "support and feedback to our daily Ramadan quizzes. " \
          "Ramadan will shortly be over but our striving to gain knowledge " \
@@ -95,13 +96,19 @@ def create_quiz(subject='Islam', topic=None):
          "you to contribute your own questions and create your own quizzes. " \
          "Please look out for more updates on this soon."
     creds = GoogleCredentials().get_credential()
-    params = ['Ramadan 2020 Quiz Review 1',
+    params = ['Ramadan 2020 Quiz Review 2',
               "All " + topic + " Questions (" + str(len(results)) + "). "
               "See all quizzes here: http://muslimscholars.info/quiz/<br><hr>" + pt,
-              None,  items]
+              user, items]
     return run_app_script(creds, function_name='createQuiz', params=params)
 
 
 if __name__ == '__main__':
     initialize_config()
-    print(json.dumps(create_quiz(topic='Aqeedah'), indent=4))
+    #print(json.dumps(create_quiz(topic='Fiqh'), indent=4))
+    ids = [2, 3, 6]
+    sql = "select id, text, subject, topic, sub_topics, type, choices, answer" \
+          " from items where id in ({0})".format(','.join(map(str, ids)))
+    print(sql)
+    results = connect_and_execute(sql)
+    print(json.dumps(results, indent=4))

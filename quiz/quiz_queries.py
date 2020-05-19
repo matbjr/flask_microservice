@@ -51,9 +51,9 @@ FROM `students` group by description order by cast(substring(description, 5) as 
     "select name, external_link, cast(substring(name, 5) as unsigned) as number "
         "from quizzes order by cast(substring(name, 5) as unsigned)",
     "select text, topic, type, metadata, choices, answer, user_profile from items "
-        "where subject='{0}'",
+        "where subject='{0}' ORDER BY RAND()",
     "select text, topic, type, metadata, choices, answer, user_profile from items "
-        "where subject='{0}' and topic='{1}'",
+        "where subject='{0}' and topic='{1}' ORDER BY RAND()",
     "select id, text, subject, topic, sub_topics, type, choices, answer "
         "from items where subject='{0}' ORDER BY RAND() limit {1}",
     "select id, text, subject, topic, sub_topics, type, choices, answer "
