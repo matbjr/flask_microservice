@@ -11,8 +11,10 @@ from quiz.quiz_queries import insert_sqls
 # function to process the question from UI
 def insert_item(item_data):
     sql = insert_sqls[0]
+    sql2 = insert_sqls[1]
 
     tags = item_data.get('tags')
+    private = tags.get('privacy', 0)
 
     # Getting choices and answer
     item_choices = item_data.get('item_choices', [])
@@ -24,6 +26,8 @@ def insert_item(item_data):
             answer_list.append(i.get('choice'))
     choices = json.dumps(choice_list, indent=4)
     answers = json.dumps(answer_list, indent=4)
+
+    user_profile = item_data.get('user_profile', {})
 
     # Getting metadata
     metadata = json.dumps(item_data, indent=4)
@@ -106,6 +110,16 @@ def insert_item(item_data):
 
     db = MySqlDB()
     db.connect()
+
+    values2 = (tags.get('id', ''), tags.get('item_text', ''),
+               subject, subject_id, topic,
+               topic_id, sub_topics, sub_ids, item_type,
+               metadata, json.dumps(item_choices, indent=4), answers,
+               json.dumps(user_profile, indent=4),
+               user_profile.get('email'), private
+               )
+
+    db.insert(sql2, values2)
     return {'response': db.insert(sql, values)}
 
 
@@ -151,8 +165,8 @@ if __name__ == '__main__':
     }
 
     insert_item(item)
-    sql = "SELECT * FROM `questions`"
-    db = MySqlDB()
-    db.connect()
+    #sql = "SELECT * FROM `questions`"
+    #db = MySqlDB()
+    #db.connect()
     # db.query("TRUNCATE TABLE `questions`", False)
     #print(db.query(sql, True))

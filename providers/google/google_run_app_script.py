@@ -210,7 +210,13 @@ if __name__ == '__main__':
             #     'options': item.get('choices'),
             #     'corrects': item.get('corrects')
             # }
-            values = ('', item.get('title'), 'Islam', 5,
+            text = item.get('title')
+            # remove no.
+            arr = text.split(".", 1)
+            if len(arr[0]) < 3:
+                text = arr[1].strip()
+
+            values = ('', text, 'Islam', 5,
                       topics[i], get_type_id(item.get('type')),
                       json.dumps(metadata, indent=4),
                       json.dumps(item.get('choices'), indent=4),

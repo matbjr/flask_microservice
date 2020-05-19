@@ -50,16 +50,26 @@ sum(case when marks='0 / 5' then 1 else 0 end) * 100.0/count(*) as zero_correct_
 FROM `students` group by description order by cast(substring(description, 5) as unsigned)""",
     "select name, external_link, cast(substring(name, 5) as unsigned) as number "
         "from quizzes order by cast(substring(name, 5) as unsigned)",
-    "select text, topic, type, metadata, choices, answer, user_profile from items "
-        "where subject='{0}' ORDER BY RAND()",
-    "select text, topic, type, metadata, choices, answer, user_profile from items "
-        "where subject='{0}' and topic='{1}' ORDER BY RAND()",
+
+    # works with subject text or id and partial topic
+    "select text, topic, type, metadata, choices, answer, user_profile "
+    "from items where (subject='{0}' or subject_id='{0}') ORDER BY RAND()",
+
+    "select text, topic, type, metadata, choices, answer, user_profile "
+    "from items where (subject='{0}' or subject_id='{0}') and "
+    "topic like '%{1}%' ORDER BY RAND()",
+
     "select id, text, subject, topic, sub_topics, type, choices, answer "
-        "from items where subject='{0}' ORDER BY RAND() limit {1}", # (9)
+    "from items where (subject='{0}' or subject_id='{0}') "
+    "ORDER BY RAND() limit {1}", # (9)
+
     "select id, text, subject, topic, sub_topics, type, choices, answer "
-        "from items where subject='{0}' and topic='{1}' ORDER BY RAND() limit {2}",
+    "from items where (subject='{0}' or subject_id='{0}') and "
+    "topic like '%{1}%' ORDER BY RAND() limit {2}",
+
     "select id, text, subject, topic, sub_topics, type, choices, answer, metadata "
     "from items where id in ({0})", # for creating quiz (11)
+
     "SELECT sum(cast(substring(marks, 1) as unsigned)) as total, count(*), name "
     "FROM `students` group by name order by total desc"
     ]
@@ -69,7 +79,10 @@ insert_sqls = [
           "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
           "`metadata`, `choices`, `answer`) " \
           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-
+    "INSERT INTO `items` (`id`, `text`, `subject`, `subject_id`, " \
+    "`topic`, `topic_id`, `sub_topics`, `sub_topics_id`, `type`, " \
+    "`metadata`, `choices`, `answer`, `user_profile`, `user_id`, `private`) " \
+    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 ]
 
 db = None

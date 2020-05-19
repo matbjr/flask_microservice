@@ -6,7 +6,6 @@ from providers.google.google_run_app_script import run_app_script, \
     GoogleCredentials
 from quiz.type_map import get_type_from_id
 
-
 # returns items from DB for specific filters
 def get_items_db(json_data):
     subject = json_data.get('subject')
@@ -18,7 +17,10 @@ def get_items_db(json_data):
     results = connect_and_execute(sql)
     for result in results:
         result['choices'] = json.loads(result['choices'])
+        result['topic'] = json.loads(result['topic'])
+        result['sub_topics'] = json.loads(result['sub_topics'])
         result['answer'] = json.loads(result['answer'])
+
     return {'items': results, 'total_items': len(results)}
 
 
@@ -55,7 +57,7 @@ def create_quiz_form_db(json_data):
     title = json_data.get('quiz_name')
     desc = json_data.get('quiz_description')
     ids = json_data.get('item_ids')
-    user_data = json_data.get('user_data')
+    user_profile = json_data.get('user_profile')
 
     # get items from list of ids
     sql = queries[11].format(','.join(map(str, ids)))
@@ -63,7 +65,7 @@ def create_quiz_form_db(json_data):
     items = process_items(results)
 
     creds = GoogleCredentials().get_credential()
-    params = [title, desc, user_data, items, 0]
+    params = [title, desc, user_profile, items, 0]
     results = run_app_script(creds, function_name='createQuiz', params=params)
     # TODO: save in DB
 
@@ -100,13 +102,17 @@ def create_quiz(subject='Islam', topic=None):
 
 if __name__ == '__main__':
     initialize_config()
-    print(json.dumps(create_quiz(topic='Seerah'), indent=4))
+    #print(json.dumps(create_quiz(topic='Seerah'), indent=4))
 
     ids = [1, 3, 6, 9, 25]
     json_data = {'quiz_description': 'Test', 'quiz_name': 'Form 2',
                  'item_ids': ids}
 
     #print(json.dumps(create_quiz_form_db(json_data), indent=4))
+
+    json_data = {'subject': 1, 'topic': 'Cell',
+                 'limit': 5}
+    print(json.dumps(get_items_db(json_data), indent=4))
 
     # sql = queries[11].format(','.join(map(str, ids)))
     # print(sql)
