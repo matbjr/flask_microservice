@@ -63,7 +63,7 @@ def create_quiz_form_db(json_data):
     items = process_items(results)
 
     creds = GoogleCredentials().get_credential()
-    params = [title, desc, user_data, items]
+    params = [title, desc, user_data, items, 0]
     results = run_app_script(creds, function_name='createQuiz', params=params)
     # TODO: save in DB
 
@@ -91,22 +91,22 @@ def create_quiz(subject='Islam', topic=None):
          "Please look out for more updates on this soon."
 
     creds = GoogleCredentials().get_credential()
-    params = ['Ramadan 2020 Quiz Review 2',
+    params = ['Ramadan 2020 Quiz Review 4',
               "All " + topic + " Questions (" + str(len(results)) + "). "
               "See all quizzes here: http://muslimscholars.info/quiz/\n\n" + pt,
-              user, items]
+              user, items, 0]
     return run_app_script(creds, function_name='createQuiz', params=params)
 
 
 if __name__ == '__main__':
     initialize_config()
-    #print(json.dumps(create_quiz(topic='Qur`an'), indent=4))
+    print(json.dumps(create_quiz(topic='Seerah'), indent=4))
 
     ids = [1, 3, 6, 9, 25]
     json_data = {'quiz_description': 'Test', 'quiz_name': 'Form 2',
                  'item_ids': ids}
 
-    print(json.dumps(create_quiz_form_db(json_data), indent=4))
+    #print(json.dumps(create_quiz_form_db(json_data), indent=4))
 
     # sql = queries[11].format(','.join(map(str, ids)))
     # print(sql)
