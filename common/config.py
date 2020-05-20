@@ -30,6 +30,10 @@ default_config = {
     "classroom_method": "classroom/",
     "sample_method": "sample/",
     "quiz_method": "quiz/",
+    "item": "item/",
+    "create_item": "create_item/",
+    "get_items": "get_items/",
+    "create_form": "create_form/",
     "db_provider": {
         "db_host": "",
         "db_user": "",

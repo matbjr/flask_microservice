@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import cross_origin, CORS
 import json
 import sys
+import logging
 
 from providers.google.get_credentials import GoogleCredentials
 from providers.google.google_classroom import list_courses, \
@@ -32,7 +33,6 @@ from quiz.create_item import insert_item
 from quiz.create_quiz import get_items_db, create_quiz_form_db
 
 
-
 class RMApp(Flask):
 
     def __init__(self, *args, **kwargs):
@@ -44,6 +44,14 @@ app = RMApp(__name__)
 
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app)
+
+logger = logging.getLogger(__name__)
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    logger.error('Unhandled Exception: %s' % str(e))
+    return index(str(e), 500)
 
 
 def process_request(fn, json_data=None):
@@ -74,12 +82,14 @@ def process_request(fn, json_data=None):
 
 
 @app.route('/', methods=['POST', 'GET'])
-def welcome():
+def index(error=None, code=200):
     return jsonify(
         {
             "message": "Welcome from Reliability Measures!",
             "version": get_config('application_version'),
-            'python_version': sys.version.split()[0]
+            'python_version': sys.version.split()[0],
+            "error": error,
+            "status_code": code
         }
     )
 
@@ -259,7 +269,7 @@ def get_items_sample():
     )
 
 
-@app.route('/create_form/', methods=['POST'])
+@app.route('/create_form/', methods=['POST', 'GET'])
 def create_form():
     return process_request(create_quiz_form_db)
 

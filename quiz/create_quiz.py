@@ -49,7 +49,7 @@ def process_items(results):
             'feedback_correct': metadata['feedback_correct'],
             'feedback_incorrect': metadata['feedback_incorrect'],
         }
-        print(item)
+        #print(item)
         questions.append(item)
         index += 1
     return questions
@@ -106,7 +106,7 @@ def create_quiz(subject='Islam', topic=None):
 if __name__ == '__main__':
     initialize_config()
     #print(json.dumps(create_quiz(topic='Seerah'), indent=4))
-
+     # http://api2.reliabilitymeasures.com/create_form/?input={"quiz_description":"Test","quiz_name":"Form 1","item_ids":[1,3,6,9,25]}
     ids = [1, 3, 6, 9, 25]
     json_data = {'quiz_description': 'Test', 'quiz_name': 'Form 2',
                  'item_ids': ids}
