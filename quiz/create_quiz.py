@@ -6,19 +6,23 @@ from providers.google.google_run_app_script import run_app_script, \
     GoogleCredentials
 from quiz.type_map import get_type_from_id
 
+
 # returns items from DB for specific filters
 def get_items_db(json_data):
     subject = json_data.get('subject')
     topic = json_data.get('topic')
-    limit = json_data.get('limit', 100)
+    limit = json_data.get('limit', 50)
     sql = queries[9].format(subject, limit)
     if topic:
         sql = queries[10].format(subject, topic, limit)
     results = connect_and_execute(sql)
     for result in results:
         result['choices'] = json.loads(result['choices'])
-        result['topic'] = json.loads(result['topic'])
-        result['sub_topics'] = json.loads(result['sub_topics'])
+        try:
+            result['topic'] = json.loads(result['topic'])
+            result['sub_topics'] = json.loads(result['sub_topics'])
+        except:
+            pass
         result['answer'] = json.loads(result['answer'])
 
     return {'items': results, 'total_items': len(results)}
@@ -31,15 +35,15 @@ def process_items(results):
     for result in results:
         metadata = json.loads(result['metadata'])
         choices = json.loads(result['choices'])
-        # answer = json.loads(result['answer'])
-        # correct = []
-        # for ch in choices:
-        #     point = 1 if ch in answer[0].split(";") else 0
-        #     correct.append(point)
+        topic = result.get('topic')
+        try:
+            topic = json.loads(topic)
+        except:
+            pass
         item = {
             'question': str(index) + ". " +
                         result['text'].split(".", 1)[1],
-            'desc': metadata['quiz'] + "-" + result['topic'],
+            'desc': metadata['quiz'] + "-" + topic,
             'options': choices,
             'points': metadata['points'],
             'type': get_type_from_id(result.get('type'), 'google_form'),
@@ -110,7 +114,7 @@ if __name__ == '__main__':
 
     #print(json.dumps(create_quiz_form_db(json_data), indent=4))
 
-    json_data = {'subject': 1, 'topic': 'Cell',
+    json_data = {'subject': 1,
                  'limit': 5}
     print(json.dumps(get_items_db(json_data), indent=4))
 
