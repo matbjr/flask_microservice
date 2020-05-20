@@ -41,8 +41,7 @@ def process_items(results):
         except:
             pass
         item = {
-            'question': str(index) + ". " +
-                        result['text'].split(".", 1)[1],
+            'question': str(index) + ". " + result['text'],
             'desc': metadata['quiz'] + "-" + topic,
             'options': choices,
             'points': metadata['points'],
@@ -112,11 +111,10 @@ if __name__ == '__main__':
     json_data = {'quiz_description': 'Test', 'quiz_name': 'Form 2',
                  'item_ids': ids}
 
-    #print(json.dumps(create_quiz_form_db(json_data), indent=4))
+    print(json.dumps(create_quiz_form_db(json_data), indent=4))
 
-    json_data = {'subject': 1,
-                 'limit': 5}
-    print(json.dumps(get_items_db(json_data), indent=4))
+    json_data = {'subject': 1,  'limit': 5}
+    #print(json.dumps(get_items_db(json_data), indent=4))
 
     # sql = queries[11].format(','.join(map(str, ids)))
     # print(sql)
