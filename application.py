@@ -17,7 +17,8 @@ from api.idr import calculate_idr ,calculate_idr_average
 from api.difficulty import calculate_difficulty, calculate_difficulty_average
 from api.scores import calculate_scores, calculate_average
 from api.analyze_test import analyze_test
-from api.weighted_scores import calculate_weighted_scores, calculate_weighted_average
+from api.weighted_scores import calculate_weighted_scores, \
+    calculate_weighted_average
 from api.excludes import get_exclude_recos
 from api.num_correct import calculate_num_correct
 from api.assumptions import get_assumptions
@@ -25,7 +26,11 @@ from api.analyze_groups import analyze_groups
 from api.topic_rights import calculate_topic_rights, calculate_topic_averages
 
 from quiz.quiz_queries import get_query_result, \
-    get_quizzes_by_names, insert_item
+    get_quizzes_by_names
+
+from quiz.create_item import insert_item
+from quiz.create_quiz import get_items_db, create_quiz_form_db
+
 
 
 class RMApp(Flask):
@@ -57,6 +62,7 @@ def process_request(fn, json_data=None):
             json_data = request.args.get('input') or request.args.get('json')
         # print(pretty_json, json_data)
         inp = json.loads(json_data)
+
         ans = fn(inp)  # calling function 'fn'
         ans['Input'] = inp
     except Exception as exc:
@@ -234,11 +240,28 @@ def get_sample_analysis():
     return process_request(analyze_test, json.dumps(sample))
 
 
-@app.route('/item', methods=['POST'])
 @app.route('/item/', methods=['POST'])
-@cross_origin()
+@app.route('/create_item/', methods=['POST'])
 def put_item():
     return process_request(insert_item)
+
+
+@app.route('/get_items/', methods=['POST', 'GET'])
+def get_items():
+    return process_request(get_items_db)
+
+
+@app.route('/get_items_sample', methods=['POST', 'GET'])
+def get_items_sample():
+    return process_request(
+        get_items_db,
+        json.dumps({'subject': 'Islam', 'topic': 'Aqeedah'})
+    )
+
+
+@app.route('/create_form/', methods=['POST'])
+def create_form():
+    return process_request(create_quiz_form_db)
 
 
 if __name__ == '__main__':

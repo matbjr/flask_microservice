@@ -1,5 +1,11 @@
 import mysql.connector
 from common.config import get_config
+from datetime import datetime
+
+
+def datetime_format(datestr, fr="%m/%d/%Y %H:%M:%S", to="%Y-%m-%d %H:%M:%S"):
+    dt = datetime.strptime(datestr, fr)
+    return datetime.strftime(dt, to)
 
 
 class MySqlDB:

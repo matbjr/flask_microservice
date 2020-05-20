@@ -16,7 +16,7 @@ cloud_provider = {
 # default
 default_config = {
     "application_id": "rm_01",
-    "application_version": "0.2.3",
+    "application_version": "0.4.1",
     "application_name": "Reliability Measures microservices",
     "application_org": "Reliability Measures",
     "application_email": "info@reliabilitymeasures.com",
